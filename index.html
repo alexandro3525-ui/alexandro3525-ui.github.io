@@ -7,260 +7,139 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="ШейкерКвиз">
-<meta name="mobile-web-app-capable" content="yes">
 <link rel="manifest" href="manifest.json">
 <title>ШейкерКвиз 🌍</title>
 <style>
-:root {
-  --sat: env(safe-area-inset-top,    0px);
-  --sab: env(safe-area-inset-bottom, 0px);
-  --sal: env(safe-area-inset-left,   0px);
-  --sar: env(safe-area-inset-right,  0px);
-  --gold:  #ffd200;
-  --green: #4dffb0;
-  --red:   #ff6b6b;
-  --blue:  #aad4f5;
-  --bg1:   #0d1b2a;
-  --bg2:   #1a3a5c;
-  --card:  rgba(255,255,255,0.07);
-  --border:rgba(255,255,255,0.13);
-  --sub:   rgba(255,255,255,0.55);
-  --r: 18px;
+:root{
+  --sat:env(safe-area-inset-top,0px);--sab:env(safe-area-inset-bottom,0px);
+  --sal:env(safe-area-inset-left,0px);--sar:env(safe-area-inset-right,0px);
+  --gold:#ffd200;--green:#4dffb0;--red:#ff6b6b;--blue:#aad4f5;
+  --bg1:#0d1b2a;--bg2:#1a3a5c;--card:rgba(255,255,255,.07);
+  --border:rgba(255,255,255,.13);--sub:rgba(255,255,255,.55);--r:18px;
 }
-
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-
-html,body{
-  height:100%;
-  overflow:hidden;
-  background:linear-gradient(160deg,var(--bg1),var(--bg2));
-  font-family:-apple-system,'Nunito',system-ui,sans-serif;
-  color:#fff;
-  overscroll-behavior:none;
-  -webkit-user-select:none;
-  user-select:none;
-}
-
-/* ── APP SHELL ─────────────────────────────── */
-.app{
-  display:flex;
-  flex-direction:column;
-  height:100%;
-  height:100dvh;
-  padding:
-    calc(14px + var(--sat))
-    max(14px, var(--sar))
-    calc(14px + var(--sab))
-    max(14px, var(--sal));
-  gap:10px;
-  overflow:hidden;
-}
-
-/* ── INSTALL BANNER ────────────────────────── */
-.banner{
-  display:none;
-  background:rgba(255,210,0,.1);
-  border:1px solid rgba(255,210,0,.25);
-  border-radius:14px;
-  padding:9px 12px;
-  align-items:center;
-  gap:10px;
-  flex-shrink:0;
-}
+html,body{height:100%;overflow:hidden;background:linear-gradient(160deg,var(--bg1),var(--bg2));
+  font-family:-apple-system,'Nunito',system-ui,sans-serif;color:#fff;
+  overscroll-behavior:none;-webkit-user-select:none;user-select:none;}
+.app{display:flex;flex-direction:column;height:100%;height:100dvh;
+  padding:calc(14px + var(--sat)) max(14px,var(--sar)) calc(14px + var(--sab)) max(14px,var(--sal));
+  gap:10px;overflow:hidden;}
+/* BANNER */
+.banner{display:none;background:rgba(255,210,0,.1);border:1px solid rgba(255,210,0,.25);
+  border-radius:14px;padding:9px 12px;align-items:center;gap:10px;flex-shrink:0;}
 .banner.on{display:flex;animation:fadein .3s ease;}
 .banner p{font-size:.78rem;font-weight:700;color:var(--gold);flex:1;line-height:1.3;}
-.banner .ibtn{
-  background:var(--gold);border:none;border-radius:9px;
-  padding:6px 12px;font-size:.78rem;font-weight:900;
-  font-family:inherit;color:#0d1b2a;cursor:pointer;white-space:nowrap;
-}
+.banner .ibtn{background:var(--gold);border:none;border-radius:9px;padding:6px 12px;
+  font-size:.78rem;font-weight:900;font-family:inherit;color:#0d1b2a;cursor:pointer;white-space:nowrap;}
 .banner .xbtn{background:none;border:none;color:var(--sub);font-size:1.1rem;cursor:pointer;padding:2px 6px;}
-
-/* ── HEADER ────────────────────────────────── */
-.header{
-  display:flex;align-items:center;
-  justify-content:space-between;flex-shrink:0;
-}
-.logo{font-size:1.25rem;font-weight:900;letter-spacing:.4px;}
+/* HEADER */
+.header{display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.logo{font-size:1.2rem;font-weight:900;letter-spacing:.4px;}
 .logo span{color:var(--gold);}
-
-.pring{position:relative;width:42px;height:42px;flex-shrink:0;}
-.pring svg{width:100%;height:100%;transform:rotate(-90deg);}
-.pring circle{fill:none;stroke-width:3;stroke-linecap:round;}
-.pring .tr{stroke:rgba(255,255,255,.1);}
-.pring .fi{stroke:var(--gold);transition:stroke-dashoffset .5s ease;}
-.pring-lbl{
-  position:absolute;inset:0;
-  display:flex;align-items:center;justify-content:center;
-  font-size:.6rem;font-weight:900;color:var(--gold);
-}
-
-/* ── SCORES ────────────────────────────────── */
+.bank-badge{background:rgba(255,210,0,.12);border:1px solid rgba(255,210,0,.25);
+  color:var(--gold);font-size:.68rem;font-weight:800;padding:4px 10px;border-radius:20px;
+  white-space:nowrap;}
+/* SCORES */
 .scores{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;flex-shrink:0;}
-.sc{
-  background:var(--card);border:1px solid var(--border);
-  border-radius:14px;padding:7px 4px;text-align:center;
-  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
-}
+.sc{background:var(--card);border:1px solid var(--border);border-radius:14px;
+  padding:7px 4px;text-align:center;backdrop-filter:blur(10px);}
 .sc .v{font-size:1.35rem;font-weight:900;line-height:1;}
 .sc .l{font-size:.6rem;color:var(--sub);text-transform:uppercase;letter-spacing:.7px;margin-top:2px;}
-.sc.c .v{color:var(--green);}
-.sc.w .v{color:var(--red);}
-.sc.s .v{color:var(--gold);}
-
-/* ── SHAKER ZONE ───────────────────────────── */
-.zone{
-  flex:1;
-  display:flex;flex-direction:column;
-  align-items:center;justify-content:center;
-  gap:8px;position:relative;overflow:hidden;
-}
+.sc.c .v{color:var(--green);}.sc.w .v{color:var(--red);}.sc.s .v{color:var(--gold);}
+/* PROGRESS */
+.prog-wrap{flex-shrink:0;}
+.prog-track{background:rgba(255,255,255,.08);border-radius:50px;height:5px;overflow:hidden;}
+.prog-fill{height:100%;background:linear-gradient(90deg,#f7971e,var(--gold));
+  border-radius:50px;transition:width .4s ease;width:0%;}
+.prog-lbl{display:flex;justify-content:space-between;margin-top:4px;}
+.prog-lbl span{font-size:.65rem;color:var(--sub);font-weight:700;}
+/* SHAKER */
+.zone{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:8px;overflow:hidden;}
 .hint{font-size:.78rem;color:var(--sub);font-weight:600;text-align:center;}
-
 .cup-wrap{position:relative;cursor:pointer;display:flex;align-items:center;justify-content:center;}
-.ring{
-  position:absolute;
-  width:120%;height:120%;
-  border-radius:50%;
-  border:2.5px solid rgba(255,210,0,.45);
-  opacity:0;pointer-events:none;
-}
+.ring{position:absolute;width:120%;height:120%;border-radius:50%;
+  border:2.5px solid rgba(255,210,0,.45);opacity:0;pointer-events:none;}
 .ring.pulse{animation:ringout .55s ease-out forwards;}
 @keyframes ringout{0%{transform:scale(.75);opacity:.9}100%{transform:scale(1.7);opacity:0}}
-
-.cup{
-  font-size:clamp(72px,20vw,112px);
-  display:block;line-height:1;
-  filter:drop-shadow(0 0 22px rgba(255,210,0,.4));
-  animation:afloat 3.5s ease-in-out infinite;
-}
-@keyframes afloat{
-  0%,100%{transform:translateY(0) rotate(0deg);}
-  50%{transform:translateY(-12px) rotate(4deg);}
-}
+.cup{font-size:clamp(70px,18vw,108px);display:block;line-height:1;
+  filter:drop-shadow(0 0 22px rgba(255,210,0,.4));animation:afloat 3.5s ease-in-out infinite;}
+@keyframes afloat{0%,100%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(-12px) rotate(4deg);}}
 @keyframes bigshake{
-  0%  {transform:rotate(0deg)   translateY(0)     scale(1);}
-  12% {transform:rotate(-22deg) translateY(-10px) scale(1.06);}
-  28% {transform:rotate(22deg)  translateY(-18px) scale(1.12);}
-  44% {transform:rotate(-17deg) translateY(-9px)  scale(1.06);}
-  58% {transform:rotate(17deg)  translateY(-13px) scale(1.09);}
-  72% {transform:rotate(-11deg) translateY(-5px)  scale(1.02);}
-  86% {transform:rotate(7deg)   translateY(-2px)  scale(1);}
-  100%{transform:rotate(0deg)   translateY(0)     scale(1);}
-}
-.cup.sh{
-  animation:bigshake .78s cubic-bezier(.36,.07,.19,.97) forwards;
-  filter:drop-shadow(0 0 40px rgba(255,210,0,.9));
-}
-
-/* ── CARD ──────────────────────────────────── */
-.card-wrap{
-  flex:0 0 auto;max-height:52vh;
-  overflow-y:auto;-webkit-overflow-scrolling:touch;
-  overscroll-behavior:contain;scrollbar-width:none;
-}
+  0%{transform:rotate(0deg) translateY(0) scale(1);}
+  12%{transform:rotate(-22deg) translateY(-10px) scale(1.06);}
+  28%{transform:rotate(22deg) translateY(-18px) scale(1.12);}
+  44%{transform:rotate(-17deg) translateY(-9px) scale(1.06);}
+  58%{transform:rotate(17deg) translateY(-13px) scale(1.09);}
+  72%{transform:rotate(-11deg) translateY(-5px) scale(1.02);}
+  86%{transform:rotate(7deg) translateY(-2px) scale(1);}
+  100%{transform:rotate(0deg) translateY(0) scale(1);}}
+.cup.sh{animation:bigshake .78s cubic-bezier(.36,.07,.19,.97) forwards;
+  filter:drop-shadow(0 0 40px rgba(255,210,0,.9));}
+/* CARD */
+.card-wrap{flex:0 0 auto;max-height:52vh;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  overscroll-behavior:contain;scrollbar-width:none;}
 .card-wrap::-webkit-scrollbar{display:none;}
-
-.card{
-  background:var(--card);border:1px solid var(--border);
-  border-radius:var(--r);padding:16px;
-  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
-}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);
+  padding:16px;backdrop-filter:blur(16px);}
 @keyframes cardin{from{opacity:0;transform:translateY(18px) scale(.97)}to{opacity:1;transform:none}}
 .card.new{animation:cardin .35s ease;}
-
 .empty{text-align:center;padding:22px 12px;color:var(--sub);font-size:.9rem;font-weight:600;line-height:1.6;}
 .empty .big{font-size:2.2rem;margin-bottom:6px;}
-
 .qmeta{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px;}
-.ctag{
-  background:rgba(255,209,0,.15);border:1px solid rgba(255,209,0,.3);
-  color:var(--gold);font-size:.68rem;font-weight:800;
-  padding:3px 9px;border-radius:20px;
-  text-transform:uppercase;letter-spacing:.6px;
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-}
+.ctag{background:rgba(255,209,0,.15);border:1px solid rgba(255,209,0,.3);color:var(--gold);
+  font-size:.68rem;font-weight:800;padding:3px 9px;border-radius:20px;
+  text-transform:uppercase;letter-spacing:.6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .dtag{font-size:.68rem;font-weight:800;padding:3px 9px;border-radius:20px;white-space:nowrap;}
-.easy  {background:rgba(77,255,176,.14);color:var(--green);border:1px solid rgba(77,255,176,.3);}
-.medium{background:rgba(255,200,50,.14);color:#ffc832;    border:1px solid rgba(255,200,50,.3);}
-.hard  {background:rgba(255,107,107,.14);color:var(--red); border:1px solid rgba(255,107,107,.3);}
-
-.qtext{
-  font-size:clamp(.92rem,3.2vw,1.05rem);font-weight:700;
-  line-height:1.45;margin-bottom:14px;color:#fff;
-}
-
+.easy{background:rgba(77,255,176,.14);color:var(--green);border:1px solid rgba(77,255,176,.3);}
+.medium{background:rgba(255,200,50,.14);color:#ffc832;border:1px solid rgba(255,200,50,.3);}
+.hard{background:rgba(255,107,107,.14);color:var(--red);border:1px solid rgba(255,107,107,.3);}
+.qtext{font-size:clamp(.92rem,3.2vw,1.05rem);font-weight:700;line-height:1.45;margin-bottom:14px;color:#fff;}
 .opts{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-.opt{
-  padding:12px 9px;font-size:.86rem;font-weight:700;font-family:inherit;
+.opt{padding:12px 9px;font-size:.86rem;font-weight:700;font-family:inherit;
   background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.13);
-  border-radius:12px;color:#ddeeff;cursor:pointer;
-  text-align:left;line-height:1.3;
+  border-radius:12px;color:#ddeeff;cursor:pointer;text-align:left;line-height:1.3;
   transition:background .15s,border-color .15s,transform .1s;
-  min-height:50px;display:flex;align-items:center;
-}
+  min-height:50px;display:flex;align-items:center;}
 .opt:active:not(:disabled){transform:scale(.97);}
 .opt.ok{background:rgba(77,255,176,.2);border-color:var(--green);color:var(--green);animation:popin .3s ease;}
 .opt.no{background:rgba(255,107,107,.15);border-color:var(--red);color:#ff9f9f;animation:wrongsh .3s ease;}
 @keyframes popin{0%{transform:scale(.96)}60%{transform:scale(1.04)}100%{transform:scale(1)}}
 @keyframes wrongsh{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
 .opt:disabled{cursor:default;}
-
-.fb{margin-top:11px;padding:11px 13px;border-radius:12px;font-size:.82rem;font-weight:700;line-height:1.4;display:none;}
+.fb{margin-top:11px;padding:11px 13px;border-radius:12px;font-size:.82rem;font-weight:700;
+  line-height:1.4;display:none;}
 .fb.on{display:block;animation:fadein .3s ease;}
 .fb.ok{background:rgba(77,255,176,.11);border:1px solid rgba(77,255,176,.32);color:var(--green);}
 .fb.no{background:rgba(255,107,107,.09);border:1px solid rgba(255,107,107,.28);color:#ffaaaa;}
-
-/* ── MAIN BUTTON ───────────────────────────── */
-.mbtn{
-  width:100%;padding:15px;font-size:.98rem;font-weight:900;font-family:inherit;
-  background:linear-gradient(135deg,#f7971e,var(--gold));
-  border:none;border-radius:16px;color:#0d1b2a;cursor:pointer;
-  box-shadow:0 4px 20px rgba(255,210,0,.32);
-  transition:transform .1s,box-shadow .1s,opacity .2s;
-  letter-spacing:.3px;flex-shrink:0;
-}
-.mbtn:active{transform:scale(.98);box-shadow:0 2px 10px rgba(255,210,0,.25);}
+/* MAIN BUTTON */
+.mbtn{width:100%;padding:15px;font-size:.98rem;font-weight:900;font-family:inherit;
+  background:linear-gradient(135deg,#f7971e,var(--gold));border:none;border-radius:16px;
+  color:#0d1b2a;cursor:pointer;box-shadow:0 4px 20px rgba(255,210,0,.32);
+  transition:transform .1s,box-shadow .1s,opacity .2s;letter-spacing:.3px;flex-shrink:0;}
+.mbtn:active{transform:scale(.98);}
 .mbtn:disabled{opacity:.45;}
-
-/* ── STREAK BADGE ──────────────────────────── */
-.sbadge{
-  position:fixed;top:50%;left:50%;
-  transform:translate(-50%,-50%) scale(0);
-  background:linear-gradient(135deg,#f7971e,var(--gold));
-  color:#0d1b2a;font-size:1.05rem;font-weight:900;
-  padding:13px 26px;border-radius:50px;z-index:50;
-  pointer-events:none;white-space:nowrap;
-  box-shadow:0 8px 28px rgba(255,210,0,.5);
-}
+/* STREAK BADGE */
+.sbadge{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);
+  background:linear-gradient(135deg,#f7971e,var(--gold));color:#0d1b2a;
+  font-size:1.05rem;font-weight:900;padding:13px 26px;border-radius:50px;
+  z-index:50;pointer-events:none;white-space:nowrap;box-shadow:0 8px 28px rgba(255,210,0,.5);}
 .sbadge.pop{animation:sbpop 1.6s ease forwards;}
 @keyframes sbpop{
   0%{transform:translate(-50%,-50%) scale(0);opacity:0;}
   20%{transform:translate(-50%,-50%) scale(1.1);opacity:1;}
   35%{transform:translate(-50%,-50%) scale(1);opacity:1;}
   80%{transform:translate(-50%,-50%) scale(1);opacity:1;}
-  100%{transform:translate(-50%,-50%) scale(.8);opacity:0;}
-}
-
-/* ── OVERLAY / RESULTS ─────────────────────── */
-.overlay{
-  display:none;position:fixed;inset:0;
-  background:rgba(0,0,0,.75);
-  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-  z-index:100;align-items:flex-end;justify-content:center;
-  padding:0 16px calc(20px + var(--sab));
-}
+  100%{transform:translate(-50%,-50%) scale(.8);opacity:0;}}
+/* OVERLAY */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);
+  backdrop-filter:blur(12px);z-index:100;align-items:flex-end;justify-content:center;
+  padding:0 16px calc(20px + var(--sab));}
 .overlay.on{display:flex;animation:fadein .35s ease;}
 @keyframes fadein{from{opacity:0}to{opacity:1}}
-
-.rsheet{
-  background:linear-gradient(160deg,#1a2d42,#0d1b2a);
-  border:1px solid rgba(255,255,255,.17);
-  border-radius:26px 26px 20px 20px;
-  padding:30px 22px 26px;
-  width:100%;max-width:430px;text-align:center;
-  animation:slideup .4s cubic-bezier(.34,1.56,.64,1);
-}
+.rsheet{background:linear-gradient(160deg,#1a2d42,#0d1b2a);border:1px solid rgba(255,255,255,.17);
+  border-radius:26px 26px 20px 20px;padding:30px 22px 26px;width:100%;max-width:430px;
+  text-align:center;animation:slideup .4s cubic-bezier(.34,1.56,.64,1);}
 @keyframes slideup{from{transform:translateY(90px);opacity:0}to{transform:none;opacity:1}}
 .rsheet .re{font-size:3.2rem;margin-bottom:8px;}
 .rsheet .rt{font-size:1.45rem;font-weight:900;margin-bottom:4px;}
@@ -268,62 +147,44 @@ html,body{
 .rstats{display:flex;justify-content:center;gap:22px;margin-bottom:26px;}
 .rstat .rv{font-size:2rem;font-weight:900;color:var(--gold);}
 .rstat .rl{font-size:.62rem;color:var(--sub);text-transform:uppercase;letter-spacing:1px;margin-top:2px;}
-.rbtn{
-  width:100%;padding:15px;font-size:.98rem;font-weight:900;font-family:inherit;
-  background:linear-gradient(135deg,#f7971e,var(--gold));
-  border:none;border-radius:14px;color:#0d1b2a;cursor:pointer;
-  box-shadow:0 4px 18px rgba(255,210,0,.32);
-}
-
-/* ── CONFETTI ───────────────────────────────── */
-.conf{
-  position:fixed;border-radius:3px;
-  pointer-events:none;z-index:200;
-  animation:cffall linear forwards;
-}
+.rbtn{width:100%;padding:15px;font-size:.98rem;font-weight:900;font-family:inherit;
+  background:linear-gradient(135deg,#f7971e,var(--gold));border:none;border-radius:14px;
+  color:#0d1b2a;cursor:pointer;box-shadow:0 4px 18px rgba(255,210,0,.32);}
+/* CONFETTI */
+.conf{position:fixed;border-radius:3px;pointer-events:none;z-index:200;animation:cffall linear forwards;}
 @keyframes cffall{to{transform:translateY(110vh) rotate(900deg);opacity:0}}
 </style>
 </head>
 <body>
-
 <div class="app">
-
-  <!-- INSTALL BANNER -->
   <div class="banner" id="banner">
-    <p>📲 Установи как приложение на экран!</p>
+    <p>📲 Установи как приложение!</p>
     <button class="ibtn" onclick="installPWA()">Установить</button>
     <button class="xbtn" onclick="closeBanner()">✕</button>
   </div>
-
-  <!-- HEADER -->
   <div class="header">
     <div class="logo">🌍 Шейкер<span>Квиз</span></div>
-    <div class="pring">
-      <svg viewBox="0 0 44 44">
-        <circle class="tr" cx="22" cy="22" r="18" stroke-dasharray="113" stroke-dashoffset="0"/>
-        <circle class="fi" cx="22" cy="22" r="18" stroke-dasharray="113" stroke-dashoffset="113" id="pcirc"/>
-      </svg>
-      <div class="pring-lbl" id="plbl">0%</div>
-    </div>
+    <div class="bank-badge" id="bankBadge">📚 0 вопросов</div>
   </div>
-
-  <!-- SCORES -->
   <div class="scores">
     <div class="sc c"><div class="v" id="sv0">0</div><div class="l">✅ Верно</div></div>
     <div class="sc w"><div class="v" id="sv1">0</div><div class="l">❌ Ошибки</div></div>
     <div class="sc s"><div class="v" id="sv2">0</div><div class="l">🔥 Серия</div></div>
   </div>
-
-  <!-- SHAKER ZONE -->
+  <div class="prog-wrap">
+    <div class="prog-track"><div class="prog-fill" id="pf"></div></div>
+    <div class="prog-lbl">
+      <span id="plbl1">0 / 50</span>
+      <span id="plbl2">0%</span>
+    </div>
+  </div>
   <div class="zone">
     <div class="cup-wrap" id="cupWrap" onclick="handleBtn()">
       <div class="ring" id="ring"></div>
       <span class="cup" id="cup">🎲</span>
     </div>
-    <p class="hint" id="hint">Нажми на кубик или<br>потряси телефон!</p>
+    <p class="hint" id="hint">Нажми на кубик или потряси телефон!</p>
   </div>
-
-  <!-- QUESTION CARD -->
   <div class="card-wrap">
     <div class="card" id="card">
       <div class="empty" id="empty">
@@ -336,21 +197,14 @@ html,body{
           <span class="dtag" id="qdiff"></span>
         </div>
         <div class="qtext" id="qtext"></div>
-        <div class="opts"  id="opts"></div>
-        <div class="fb"    id="fb"></div>
+        <div class="opts" id="opts"></div>
+        <div class="fb" id="fb"></div>
       </div>
     </div>
   </div>
-
-  <!-- MAIN BUTTON -->
   <button class="mbtn" id="mbtn" onclick="handleBtn()">🎰 Потрясти!</button>
-
 </div>
-
-<!-- STREAK BADGE -->
 <div class="sbadge" id="sbadge"></div>
-
-<!-- RESULTS OVERLAY -->
 <div class="overlay" id="overlay">
   <div class="rsheet">
     <div class="re" id="re">🏆</div>
@@ -366,272 +220,926 @@ html,body{
 </div>
 
 <script>
-// ── ВОПРОСЫ ────────────────────────────────────────────────────────────────
-const QS=[
-  {cat:"Столицы",    diff:"easy",  q:"Столица Франции?",                              opts:["Берлин","Мадрид","Париж","Рим"],                      a:2,fact:"Париж — столица с 987 года, один из самых посещаемых городов мира."},
-  {cat:"Столицы",    diff:"easy",  q:"Столица Австралии?",                            opts:["Сидней","Мельбурн","Канберра","Брисбен"],             a:2,fact:"Канберра стала столицей в 1913 г. Многие ошибочно называют Сидней."},
-  {cat:"Столицы",    diff:"easy",  q:"Столица Японии?",                               opts:["Осака","Токио","Киото","Нагоя"],                      a:1,fact:"Токио — один из крупнейших мегаполисов мира (~37 млн чел.)."},
-  {cat:"Столицы",    diff:"medium",q:"Столица Канады?",                               opts:["Торонто","Монреаль","Ванкувер","Оттава"],             a:3,fact:"Оттава — столица с 1857 г. Торонто — крупнейший город, но не столица."},
-  {cat:"Столицы",    diff:"medium",q:"Столица Бразилии?",                             opts:["Рио-де-Жанейро","Сан-Паулу","Бразилиа","Салвадор"],  a:2,fact:"Бразилиа построена специально и стала столицей в 1960 году."},
-  {cat:"Столицы",    diff:"medium",q:"Столица Казахстана с 2022 года?",               opts:["Алматы","Нур-Султан","Астана","Шымкент"],             a:2,fact:"Астана — столица с 1997 г. В 2019–2022 носила название Нур-Султан."},
-  {cat:"Столицы",    diff:"hard",  q:"Столица Чада?",                                 opts:["Лагос","Яунде","Нджамена","Хартум"],                  a:2,fact:"Нджамена — столица Республики Чад в Центральной Африке."},
-  {cat:"Столицы",    diff:"hard",  q:"Столица Мьянмы?",                               opts:["Янгон","Нейпьидо","Мандалай","Ситтве"],               a:1,fact:"Нейпьидо стала столицей в 2005 г., сменив Янгон."},
-  {cat:"Столицы",    diff:"hard",  q:"Столица Микронезии?",                           opts:["Тарава","Нанди","Паликир","Апиа"],                    a:2,fact:"Паликир — один из наименее известных городов-столиц мира."},
-  {cat:"Рекорды",    diff:"easy",  q:"Самый большой океан на Земле?",                 opts:["Атлантический","Индийский","Тихий","Северный Ледовитый"],a:2,fact:"Тихий океан занимает ~50% площади Мирового океана."},
-  {cat:"Рекорды",    diff:"easy",  q:"Самая длинная река мира?",                      opts:["Амазонка","Нил","Янцзы","Миссисипи"],                 a:1,fact:"Нил (~6650 км) — самая длинная. Амазонка — самая полноводная."},
-  {cat:"Рекорды",    diff:"easy",  q:"Самая высокая гора?",                           opts:["К2","Монблан","Эльбрус","Эверест"],                   a:3,fact:"Эверест — 8849 м над уровнем моря."},
-  {cat:"Рекорды",    diff:"medium",q:"Самое глубокое озеро?",                         opts:["Каспий","Байкал","Танганьика","Верхнее"],              a:1,fact:"Байкал — 1642 м, хранит ~20% мировых запасов пресной воды."},
-  {cat:"Рекорды",    diff:"medium",q:"Самая большая страна по площади?",              opts:["Канада","Китай","США","Россия"],                      a:3,fact:"Россия — 17,1 млн км², около 11% суши планеты."},
-  {cat:"Рекорды",    diff:"medium",q:"Самая длинная горная цепь?",                    opts:["Гималаи","Альпы","Анды","Скалистые горы"],            a:2,fact:"Анды — ~7500 км вдоль западного побережья Южной Америки."},
-  {cat:"Рекорды",    diff:"hard",  q:"Самая большая горячая пустыня мира?",           opts:["Аравийская","Гоби","Сахара","Калахари"],              a:2,fact:"Сахара — ~9 млн км². Антарктида больше, но это холодная пустыня."},
-  {cat:"Рекорды",    diff:"hard",  q:"Самый маленький океан?",                        opts:["Индийский","Атлантический","Южный","Северный Ледовитый"],a:3,fact:"Северный Ледовитый — ~14 млн км², самый мелководный из всех."},
-  {cat:"Страны",     diff:"easy",  q:"На каком континенте находится Египет?",         opts:["Азия","Европа","Африка","Ю. Америка"],                a:2,fact:"Основная территория Египта — в Африке, Синай — в Азии."},
-  {cat:"Страны",     diff:"easy",  q:"Сколько стран в Соединённом Королевстве?",      opts:["2","3","4","5"],                                      a:2,fact:"Англия, Шотландия, Уэльс, Северная Ирландия = 4 страны."},
-  {cat:"Страны",     diff:"medium",q:"Страна с наибольшим числом соседей?",           opts:["Россия","Китай","Бразилия","Германия"],               a:1,fact:"Китай и Россия делят рекорд — по 14 соседних государств."},
-  {cat:"Страны",     diff:"medium",q:"Пролив между Европой и Африкой?",               opts:["Дрейка","Малаккский","Гибралтарский","Баб-эль-Мандебский"],a:2,fact:"Гибралтарский пролив — всего 14 км в самом узком месте."},
-  {cat:"Страны",     diff:"medium",q:"Государство-анклав внутри Италии?",             opts:["Монако","Сан-Марино","Лихтенштейн","Андорра"],        a:1,fact:"Сан-Марино — анклав в Италии, считается старейшей республикой мира."},
-  {cat:"Страны",     diff:"hard",  q:"Остров, разделённый Индонезией и Папуа Новой Гвинеей?",opts:["Суматра","Калимантан","Новая Гвинея","Сулавеси"],a:2,fact:"Новая Гвинея делится между Индонезией и государством ПНГ."},
-  {cat:"Природа",    diff:"easy",  q:"Другое название Северного сияния?",             opts:["Цунами","Торнадо","Аврора Бореалис","Муссон"],        a:2,fact:"Аврора Бореалис — взаимодействие солнечного ветра с магнитосферой."},
-  {cat:"Природа",    diff:"medium",q:"Где находится водопад Анхель?",                 opts:["Бразилия","Аргентина","Венесуэла","Колумбия"],        a:2,fact:"Анхель (979 м) в Венесуэле — самый высокий водопад Земли."},
-  {cat:"Природа",    diff:"medium",q:"Самый засушливый континент?",                   opts:["Африка","Австралия","Антарктида","Азия"],              a:2,fact:"Антарктида — ледяная пустыня, осадков < 200 мм в год."},
-  {cat:"Природа",    diff:"hard",  q:"Биогеографическая граница фауны Азии и Австралии?",opts:["Линия Гумбольдта","Линия Уоллеса","Линия Дарвина","Экватор"],a:1,fact:"Линия Уоллеса проходит через Индонезийский архипелаг."},
-  {cat:"Символы",    diff:"easy",  q:"На флаге какой страны кленовый лист?",          opts:["США","Австралия","Канада","Новая Зеландия"],           a:2,fact:"Кленовый лист — национальный символ Канады с 1965 года."},
-  {cat:"Символы",    diff:"medium",q:"На флаге какой страны изображена карта страны?",opts:["Кипр","Мальта","Косово","Тунис"],                     a:0,fact:"Кипр — единственная страна, на флаге которой карта её территории."},
-  {cat:"Горы/реки",  diff:"medium",q:"Самая полноводная река мира?",                  opts:["Нил","Янцзы","Амазонка","Конго"],                     a:2,fact:"Амазонка несёт ~20% всей пресной воды, попадающей в океан."},
+// ═══════════════════════════════════════════════════════════════════════════
+//  ДАННЫЕ
+// ═══════════════════════════════════════════════════════════════════════════
+
+const CONTS = ["Европа","Азия","Африка","Северная Америка","Южная Америка","Австралия и Океания"];
+
+// CTRY: [name, genitive, capital, continent, area_km2, pop_M, difficulty]
+const CTRY = [
+// ── ЕВРОПА ────────────────────────────────────────────────────────────────
+["Россия","России","Москва","Европа",17098,145,"easy"],
+["Германия","Германии","Берлин","Европа",357,83,"easy"],
+["Франция","Франции","Париж","Европа",551,68,"easy"],
+["Великобритания","Великобритании","Лондон","Европа",244,67,"easy"],
+["Италия","Италии","Рим","Европа",301,60,"easy"],
+["Испания","Испании","Мадрид","Европа",506,47,"easy"],
+["Украина","Украины","Киев","Европа",604,44,"medium"],
+["Польша","Польши","Варшава","Европа",313,38,"medium"],
+["Румыния","Румынии","Бухарест","Европа",238,19,"medium"],
+["Нидерланды","Нидерландов","Амстердам","Европа",42,17,"medium"],
+["Бельгия","Бельгии","Брюссель","Европа",31,11,"medium"],
+["Греция","Греции","Афины","Европа",132,11,"medium"],
+["Португалия","Португалии","Лиссабон","Европа",92,10,"medium"],
+["Чехия","Чехии","Прага","Европа",79,11,"medium"],
+["Венгрия","Венгрии","Будапешт","Европа",93,10,"medium"],
+["Швеция","Швеции","Стокгольм","Европа",450,10,"medium"],
+["Австрия","Австрии","Вена","Европа",84,9,"medium"],
+["Беларусь","Беларуси","Минск","Европа",208,9,"medium"],
+["Швейцария","Швейцарии","Берн","Европа",41,9,"medium"],
+["Сербия","Сербии","Белград","Европа",77,7,"medium"],
+["Болгария","Болгарии","София","Европа",111,7,"medium"],
+["Дания","Дании","Копенгаген","Европа",43,6,"medium"],
+["Финляндия","Финляндии","Хельсинки","Европа",338,6,"medium"],
+["Норвегия","Норвегии","Осло","Европа",385,5,"medium"],
+["Словакия","Словакии","Братислава","Европа",49,5,"medium"],
+["Хорватия","Хорватии","Загреб","Европа",57,4,"medium"],
+["Молдова","Молдовы","Кишинёв","Европа",34,3,"hard"],
+["Литва","Литвы","Вильнюс","Европа",65,3,"medium"],
+["Латвия","Латвии","Рига","Европа",65,2,"medium"],
+["Эстония","Эстонии","Таллин","Европа",45,1,"medium"],
+["Словения","Словении","Любляна","Европа",20,2,"hard"],
+["Черногория","Черногории","Подгорица","Европа",14,1,"hard"],
+["Босния и Герцеговина","Боснии и Герцеговины","Сараево","Европа",51,3,"hard"],
+["Албания","Албании","Тирана","Европа",29,3,"hard"],
+["Северная Македония","Северной Македонии","Скопье","Европа",26,2,"hard"],
+["Исландия","Исландии","Рейкьявик","Европа",103,0.4,"hard"],
+["Ирландия","Ирландии","Дублин","Европа",70,5,"medium"],
+["Косово","Косово","Приштина","Европа",11,2,"hard"],
+["Люксембург","Люксембурга","Люксембург","Европа",3,1,"hard"],
+["Мальта","Мальты","Валлетта","Европа",0.3,0.5,"hard"],
+["Монако","Монако","Монако","Европа",0.002,0.04,"hard"],
+["Сан-Марино","Сан-Марино","Сан-Марино","Европа",0.06,0.03,"hard"],
+// ── АЗИЯ ──────────────────────────────────────────────────────────────────
+["Китай","Китая","Пекин","Азия",9597,1412,"easy"],
+["Индия","Индии","Нью-Дели","Азия",3287,1380,"easy"],
+["Япония","Японии","Токио","Азия",378,126,"easy"],
+["Южная Корея","Южной Кореи","Сеул","Азия",100,52,"medium"],
+["Индонезия","Индонезии","Джакарта","Азия",1905,274,"medium"],
+["Пакистан","Пакистана","Исламабад","Азия",796,220,"medium"],
+["Бангладеш","Бангладеша","Дакка","Азия",148,165,"medium"],
+["Вьетнам","Вьетнама","Ханой","Азия",331,97,"medium"],
+["Иран","Ирана","Тегеран","Азия",1648,84,"medium"],
+["Турция","Турции","Анкара","Азия",784,84,"medium"],
+["Таиланд","Таиланда","Бангкок","Азия",513,71,"medium"],
+["Мьянма","Мьянмы","Нейпьидо","Азия",677,54,"hard"],
+["Саудовская Аравия","Саудовской Аравии","Эр-Рияд","Азия",2150,35,"medium"],
+["Казахстан","Казахстана","Астана","Азия",2725,19,"medium"],
+["Малайзия","Малайзии","Куала-Лумпур","Азия",330,33,"medium"],
+["Узбекистан","Узбекистана","Ташкент","Азия",448,35,"medium"],
+["Афганистан","Афганистана","Кабул","Азия",652,38,"medium"],
+["Ирак","Ирака","Багдад","Азия",438,40,"medium"],
+["Непал","Непала","Катманду","Азия",147,29,"medium"],
+["Камбоджа","Камбоджи","Пномпень","Азия",181,16,"medium"],
+["Сирия","Сирии","Дамаск","Азия",185,21,"medium"],
+["Монголия","Монголии","Улан-Батор","Азия",1564,3,"hard"],
+["Азербайджан","Азербайджана","Баку","Азия",87,10,"medium"],
+["Грузия","Грузии","Тбилиси","Азия",70,4,"medium"],
+["Армения","Армении","Ереван","Азия",30,3,"hard"],
+["Иордания","Иордании","Амман","Азия",89,10,"hard"],
+["ОАЭ","ОАЭ","Абу-Даби","Азия",84,10,"medium"],
+["Израиль","Израиля","Иерусалим","Азия",21,9,"medium"],
+["Шри-Ланка","Шри-Ланки","Коломбо","Азия",66,22,"medium"],
+["Лаос","Лаоса","Вьентьян","Азия",237,7,"hard"],
+["Таджикистан","Таджикистана","Душанбе","Азия",143,10,"hard"],
+["Кыргызстан","Кыргызстана","Бишкек","Азия",200,7,"hard"],
+["Туркменистан","Туркменистана","Ашхабад","Азия",488,6,"hard"],
+["КНДР","КНДР","Пхеньян","Азия",121,26,"hard"],
+["Филиппины","Филиппин","Манила","Азия",300,109,"medium"],
+["Катар","Катара","Доха","Азия",12,3,"hard"],
+["Кувейт","Кувейта","Эль-Кувейт","Азия",18,4,"hard"],
+["Оман","Омана","Маскат","Азия",309,5,"hard"],
+["Сингапур","Сингапура","Сингапур","Азия",0.7,6,"hard"],
+["Йемен","Йемена","Сана","Азия",528,30,"hard"],
+["Бутан","Бутана","Тхимпху","Азия",38,1,"hard"],
+["Ливан","Ливана","Бейрут","Азия",10,7,"hard"],
+["Кипр","Кипра","Никосия","Азия",9,1,"hard"],
+["Тайвань","Тайваня","Тайбэй","Азия",36,24,"hard"],
+["Бруней","Брунея","Бандар-Сери-Бегаван","Азия",6,0.4,"hard"],
+["Мальдивы","Мальдив","Мале","Азия",0.3,0.5,"hard"],
+["Тимор-Лесте","Тимора-Лесте","Дили","Азия",15,1,"hard"],
+// ── АФРИКА ────────────────────────────────────────────────────────────────
+["Нигерия","Нигерии","Абуджа","Африка",924,206,"medium"],
+["Эфиопия","Эфиопии","Аддис-Абеба","Африка",1104,115,"medium"],
+["Египет","Египта","Каир","Африка",1001,102,"easy"],
+["ДР Конго","ДР Конго","Киншаса","Африка",2345,90,"hard"],
+["Танзания","Танзании","Додома","Африка",945,60,"hard"],
+["ЮАР","ЮАР","Претория","Африка",1219,59,"medium"],
+["Кения","Кении","Найроби","Африка",580,54,"medium"],
+["Алжир","Алжира","Алжир","Африка",2382,44,"medium"],
+["Судан","Судана","Хартум","Африка",1887,44,"hard"],
+["Марокко","Марокко","Рабат","Африка",447,37,"medium"],
+["Ангола","Анголы","Луанда","Африка",1247,33,"hard"],
+["Мозамбик","Мозамбика","Мапуту","Африка",799,31,"hard"],
+["Мадагаскар","Мадагаскара","Антананариву","Африка",587,28,"hard"],
+["Гана","Ганы","Аккра","Африка",239,31,"medium"],
+["Камерун","Камеруна","Яунде","Африка",475,27,"hard"],
+["Кот-д'Ивуар","Кот-д'Ивуара","Ямусукро","Африка",322,27,"hard"],
+["Мали","Мали","Бамако","Африка",1240,22,"hard"],
+["Нигер","Нигера","Ниамей","Африка",1267,24,"hard"],
+["Зимбабве","Зимбабве","Харар","Африка",391,15,"hard"],
+["Замбия","Замбии","Лусака","Африка",753,18,"hard"],
+["Буркина-Фасо","Буркина-Фасо","Уагадугу","Африка",274,21,"hard"],
+["Сомали","Сомали","Могадишо","Африка",637,16,"hard"],
+["Сенегал","Сенегала","Дакар","Африка",197,17,"hard"],
+["Чад","Чада","Нджамена","Африка",1284,17,"hard"],
+["Гвинея","Гвинеи","Конакри","Африка",246,13,"hard"],
+["Тунис","Туниса","Тунис","Африка",164,12,"medium"],
+["Ливия","Ливии","Триполи","Африка",1760,7,"hard"],
+["Уганда","Уганды","Кампала","Африка",242,46,"hard"],
+["Руанда","Руанды","Кигали","Африка",26,13,"hard"],
+["Мавритания","Мавритании","Нуакшот","Африка",1031,4,"hard"],
+["Намибия","Намибии","Виндхук","Африка",824,3,"hard"],
+["Малави","Малави","Лилонгве","Африка",118,19,"hard"],
+["Бенин","Бенина","Порто-Ново","Африка",113,12,"hard"],
+["Эритрея","Эритреи","Асмэра","Африка",118,4,"hard"],
+["Того","Того","Ломе","Африка",57,8,"hard"],
+["Либерия","Либерии","Монровия","Африка",111,5,"hard"],
+["Ботсвана","Ботсваны","Габороне","Африка",582,2,"hard"],
+["Лесото","Лесото","Масеру","Африка",30,2,"hard"],
+["Джибути","Джибути","Джибути","Африка",23,1,"hard"],
+["Гамбия","Гамбии","Банжул","Африка",11,2,"hard"],
+["Кабо-Верде","Кабо-Верде","Прая","Африка",4,1,"hard"],
+["Экваториальная Гвинея","Экваториальной Гвинеи","Малабо","Африка",28,1,"hard"],
+// ── СЕВЕРНАЯ АМЕРИКА ──────────────────────────────────────────────────────
+["США","США","Вашингтон","Северная Америка",9834,331,"easy"],
+["Мексика","Мексики","Мехико","Северная Америка",1964,128,"easy"],
+["Канада","Канады","Оттава","Северная Америка",9985,38,"medium"],
+["Куба","Кубы","Гавана","Северная Америка",110,11,"medium"],
+["Гватемала","Гватемалы","Гватемала","Северная Америка",109,18,"medium"],
+["Гондурас","Гондураса","Тегусигальпа","Северная Америка",112,10,"hard"],
+["Никарагуа","Никарагуа","Манагуа","Северная Америка",130,7,"hard"],
+["Коста-Рика","Коста-Рики","Сан-Хосе","Северная Америка",51,5,"medium"],
+["Панама","Панамы","Панама","Северная Америка",75,4,"hard"],
+["Сальвадор","Сальвадора","Сан-Сальвадор","Северная Америка",21,7,"hard"],
+["Доминиканская Республика","Доминиканской Республики","Санто-Доминго","Северная Америка",49,11,"hard"],
+["Гаити","Гаити","Порт-о-Пренс","Северная Америка",28,11,"hard"],
+["Ямайка","Ямайки","Кингстон","Северная Америка",11,3,"hard"],
+["Белиз","Белиза","Бельмопан","Северная Америка",23,0.4,"hard"],
+// ── ЮЖНАЯ АМЕРИКА ─────────────────────────────────────────────────────────
+["Бразилия","Бразилии","Бразилиа","Южная Америка",8516,213,"easy"],
+["Аргентина","Аргентины","Буэнос-Айрес","Южная Америка",2780,45,"medium"],
+["Перу","Перу","Лима","Южная Америка",1285,33,"medium"],
+["Колумбия","Колумбии","Богота","Южная Америка",1142,50,"medium"],
+["Венесуэла","Венесуэлы","Каракас","Южная Америка",912,28,"medium"],
+["Чили","Чили","Сантьяго","Южная Америка",756,19,"medium"],
+["Боливия","Боливии","Сукре","Южная Америка",1099,12,"hard"],
+["Эквадор","Эквадора","Кито","Южная Америка",284,18,"medium"],
+["Парагвай","Парагвая","Асунсьон","Южная Америка",407,7,"hard"],
+["Уругвай","Уругвая","Монтевидео","Южная Америка",176,4,"hard"],
+["Гайана","Гайаны","Джорджтаун","Южная Америка",215,1,"hard"],
+["Суринам","Суринама","Парамарибо","Южная Америка",164,1,"hard"],
+// ── АВСТРАЛИЯ И ОКЕАНИЯ ───────────────────────────────────────────────────
+["Австралия","Австралии","Канберра","Австралия и Океания",7692,26,"easy"],
+["Папуа — Новая Гвинея","Папуа — Новой Гвинеи","Порт-Морсби","Австралия и Океания",463,9,"hard"],
+["Новая Зеландия","Новой Зеландии","Веллингтон","Австралия и Океания",268,5,"medium"],
+["Фиджи","Фиджи","Сува","Австралия и Океания",18,1,"hard"],
+["Вануату","Вануату","Порт-Вила","Австралия и Океания",12,0.3,"hard"],
+["Самоа","Самоа","Апиа","Австралия и Океания",3,0.2,"hard"],
+["Тонга","Тонги","Нукуалофа","Австралия и Океания",0.7,0.1,"hard"],
+["Кирибати","Кирибати","Тарава","Австралия и Океания",0.8,0.1,"hard"],
 ];
 
-// ── СОСТОЯНИЕ ──────────────────────────────────────────────────────────────
-let pool=[],current=null,answered=false;
-let correct=0,wrong=0,streak=0,bestStreak=0;
-const TOTAL=QS.length;
+// MNTS: [name, location, continent, height_m, diff]
+const MNTS = [
+["Эверест","Непал/Китай","Азия",8849,"easy"],
+["К2","Пакистан/Китай","Азия",8611,"medium"],
+["Канченджанга","Непал/Индия","Азия",8586,"hard"],
+["Лхоцзе","Непал/Китай","Азия",8516,"hard"],
+["Манаслу","Непал","Азия",8163,"hard"],
+["Фудзи","Япония","Азия",3776,"medium"],
+["Арарат","Турция","Азия",5137,"medium"],
+["Демавенд","Иран","Азия",5610,"hard"],
+["Ключевская Сопка","Россия","Азия",4750,"hard"],
+["Кинабалу","Малайзия","Азия",4095,"hard"],
+["Пунчак-Джая","Индонезия","Азия",4884,"hard"],
+["Белуха","Россия (Алтай)","Азия",4506,"hard"],
+["Эльбрус","Россия","Европа",5642,"easy"],
+["Монблан","Франция/Италия","Европа",4808,"easy"],
+["Маттерхорн","Швейцария/Италия","Европа",4478,"medium"],
+["Этна","Италия (Сицилия)","Европа",3357,"medium"],
+["Везувий","Италия","Европа",1281,"medium"],
+["Снежка","Чехия/Польша","Европа",1603,"hard"],
+["Денали","США (Аляска)","Северная Америка",6194,"easy"],
+["Логан","Канада","Северная Америка",5959,"hard"],
+["Орисаба","Мексика","Северная Америка",5636,"medium"],
+["Попокатепетль","Мексика","Северная Америка",5426,"medium"],
+["Аконкагуа","Аргентина","Южная Америка",6961,"easy"],
+["Охос-дель-Саладо","Аргентина/Чили","Южная Америка",6893,"hard"],
+["Чимборасо","Эквадор","Южная Америка",6263,"hard"],
+["Котопахи","Эквадор","Южная Америка",5897,"hard"],
+["Килиманджаро","Танзания","Африка",5895,"easy"],
+["Кения (гора)","Кения","Африка",5199,"medium"],
+["Рувензори","Уганда/ДР Конго","Африка",5110,"hard"],
+["Косцюшко","Австралия","Австралия и Океания",2228,"medium"],
+["Маунт-Кук","Новая Зеландия","Австралия и Океания",3724,"medium"],
+];
 
-// ── PWA: INSTALL PROMPT ────────────────────────────────────────────────────
-let deferredPrompt=null;
-window.addEventListener('beforeinstallprompt',e=>{
-  e.preventDefault(); deferredPrompt=e;
+// RVRS: [name, continent, length_km, empties_into, diff]
+const RVRS = [
+["Нил","Африка",6650,"Средиземное море","easy"],
+["Амазонка","Южная Америка",6400,"Атлантический океан","easy"],
+["Янцзы","Азия",6300,"Восточно-Китайское море","easy"],
+["Хуанхэ","Азия",5464,"Бохайский залив","medium"],
+["Лена","Азия",4400,"Море Лаптевых","medium"],
+["Меконг","Азия",4350,"Южно-Китайское море","hard"],
+["Конго","Африка",4700,"Атлантический океан","medium"],
+["Нигер","Африка",4180,"Гвинейский залив","medium"],
+["Парана","Южная Америка",4880,"Рио-де-ла-Плата","hard"],
+["Маккензи","Северная Америка",4241,"Море Бофора","hard"],
+["Обь","Азия",3650,"Обская губа","medium"],
+["Миссисипи","Северная Америка",3730,"Мексиканский залив","easy"],
+["Волга","Европа",3530,"Каспийское море","easy"],
+["Юкон","Северная Америка",3190,"Берингово море","hard"],
+["Инд","Азия",3180,"Аравийское море","medium"],
+["Дунай","Европа",2860,"Чёрное море","medium"],
+["Евфрат","Азия",2800,"Персидский залив","medium"],
+["Брахмапутра","Азия",2900,"Бенгальский залив","hard"],
+["Замбези","Африка",2574,"Индийский океан","hard"],
+["Ганг","Азия",2525,"Бенгальский залив","medium"],
+["Муррей","Австралия и Океания",2508,"Южный океан","hard"],
+["Ориноко","Южная Америка",2101,"Атлантический океан","hard"],
+["Ирравади","Азия",2170,"Андаманское море","hard"],
+["Оранжевая","Африка",2200,"Атлантический океан","hard"],
+["Колорадо","Северная Америка",2333,"Калифорнийский залив","medium"],
+["Тигр","Азия",1950,"Персидский залив","medium"],
+["Рейн","Европа",1230,"Северное море","medium"],
+["Сена","Европа",775,"Ла-Манш","medium"],
+["Темза","Европа",346,"Северное море","medium"],
+["Нева","Европа",74,"Финский залив","hard"],
+["Ниагара","Северная Америка",56,"Озеро Онтарио","hard"],
+];
+
+// LKES: [name, location, continent, area_km2, diff]
+const LKES = [
+["Каспийское море","Россия/Иран/Казахстан","Азия",371000,"easy"],
+["Верхнее","США/Канада","Северная Америка",82103,"easy"],
+["Виктория","Танзания/Кения/Уганда","Африка",69485,"easy"],
+["Гурон","США/Канада","Северная Америка",59596,"medium"],
+["Мичиган","США","Северная Америка",57757,"medium"],
+["Танганьика","ДР Конго/Танзания","Африка",32893,"medium"],
+["Байкал","Россия","Азия",31722,"easy"],
+["Большое Медвежье","Канада","Северная Америка",31153,"hard"],
+["Малави","Малави/Мозамбик","Африка",29600,"hard"],
+["Эри","США/Канада","Северная Америка",25667,"medium"],
+["Онтарио","США/Канада","Северная Америка",18960,"medium"],
+["Ладожское","Россия","Европа",17703,"medium"],
+["Маракайбо","Венесуэла","Южная Америка",13210,"hard"],
+["Чад","Нигер/Нигерия/Чад","Африка",1350,"hard"],
+["Онего","Россия","Европа",9700,"hard"],
+["Туркана","Кения","Африка",8665,"hard"],
+["Титикака","Перу/Боливия","Южная Америка",8372,"medium"],
+["Аральское море","Казахстан/Узбекистан","Азия",17160,"medium"],
+["Мёртвое море","Израиль/Иордания","Азия",810,"medium"],
+["Иссык-Куль","Кыргызстан","Азия",6236,"hard"],
+["Женевское","Швейцария/Франция","Европа",580,"hard"],
+["Боденское","Германия/Австрия/Швейцария","Европа",536,"hard"],
+["Балатон","Венгрия","Европа",594,"hard"],
+["Хубсугул","Монголия","Азия",2760,"hard"],
+["Эйр","Австралия","Австралия и Океания",9500,"hard"],
+];
+
+// ISLS: [name, country/territory, ocean_or_sea, diff]
+const ISLS = [
+["Гренландия","Дания","Северный Ледовитый океан","easy"],
+["Мадагаскар","Мадагаскар","Индийский океан","easy"],
+["Хонсю","Япония","Тихий океан","medium"],
+["Борнео","Индонезия/Малайзия","Тихий океан","medium"],
+["Суматра","Индонезия","Индийский океан","medium"],
+["Великобритания","Великобритания","Атлантический океан","easy"],
+["Исландия","Исландия","Атлантический океан","medium"],
+["Куба","Куба","Карибское море","easy"],
+["Новая Гвинея","Индонезия/ПНГ","Тихий океан","medium"],
+["Сицилия","Италия","Средиземное море","medium"],
+["Сардиния","Италия","Средиземное море","hard"],
+["Корсика","Франция","Средиземное море","hard"],
+["Кипр","Кипр","Средиземное море","medium"],
+["Шри-Ланка","Шри-Ланка","Индийский океан","medium"],
+["Сахалин","Россия","Тихий океан","medium"],
+["Тасмания","Австралия","Тихий океан","medium"],
+["Гавайи","США","Тихий океан","easy"],
+["Канарские острова","Испания","Атлантический океан","medium"],
+["Мадейра","Португалия","Атлантический океан","hard"],
+["Азорские острова","Португалия","Атлантический океан","hard"],
+["Фарерские острова","Дания","Атлантический океан","hard"],
+["Шпицберген","Норвегия","Северный Ледовитый океан","hard"],
+["Мальдивы","Мальдивы","Индийский океан","medium"],
+["Сейшелы","Сейшелы","Индийский океан","hard"],
+["Фолклендские острова","Великобритания","Атлантический океан","hard"],
+["Галапагосские острова","Эквадор","Тихий океан","medium"],
+["Реюньон","Франция","Индийский океан","hard"],
+["Новая Каледония","Франция","Тихий океан","hard"],
+["Французская Полинезия","Франция","Тихий океан","hard"],
+["Маврикий","Маврикий","Индийский океан","hard"],
+];
+
+// DSRT: [name, continent, area_km2, type, diff]
+const DSRT = [
+["Сахара","Африка",9200000,"горячая","easy"],
+["Аравийская","Азия",2330000,"горячая","medium"],
+["Гоби","Азия",1300000,"холодная","easy"],
+["Патагонская","Южная Америка",670000,"холодная","hard"],
+["Руб-эль-Хали","Азия",647500,"горячая","hard"],
+["Большой Бассейн","Северная Америка",492000,"холодная","hard"],
+["Каракумы","Азия",350000,"горячая","hard"],
+["Чиуауа","Северная Америка",362000,"горячая","hard"],
+["Такламакан","Азия",270000,"горячая","hard"],
+["Кызылкум","Азия",298000,"горячая","hard"],
+["Тар","Азия",200000,"горячая","hard"],
+["Калахари","Африка",900000,"горячая","medium"],
+["Намиб","Африка",81000,"горячая","hard"],
+["Атакама","Южная Америка",140000,"холодная","medium"],
+["Сонора","Северная Америка",310000,"горячая","hard"],
+["Мохаве","Северная Америка",65000,"горячая","hard"],
+["Симпсон","Австралия и Океания",143000,"горячая","hard"],
+["Виктория (пустыня)","Австралия и Океания",422000,"горячая","hard"],
+["Большая Песчаная","Австралия и Океания",360000,"горячая","hard"],
+["Тибетское нагорье","Азия",2500000,"холодная","hard"],
+];
+
+// ── ХАРДКОДНЫЕ ВОПРОСЫ ────────────────────────────────────────────────────
+const FIXED = [
+// РЕКОРДЫ
+{cat:"Рекорды",diff:"easy",q:"Самый большой океан?",opts:["Тихий","Атлантический","Индийский","Северный Ледовитый"],a:0,fact:"Тихий занимает ~50% площади Мирового океана."},
+{cat:"Рекорды",diff:"easy",q:"Самая длинная река мира?",opts:["Нил","Амазонка","Янцзы","Миссисипи"],a:0,fact:"Нил (~6650 км) — длиннейшая. Амазонка — самая полноводная."},
+{cat:"Рекорды",diff:"easy",q:"Самая высокая гора?",opts:["Эверест","К2","Монблан","Аконкагуа"],a:0,fact:"Эверест — 8849 м, Гималаи, Непал/Китай."},
+{cat:"Рекорды",diff:"easy",q:"Самое глубокое озеро?",opts:["Байкал","Каспийское","Танганьика","Виктория"],a:0,fact:"Байкал — 1642 м, Россия. ~20% мировых запасов пресной воды."},
+{cat:"Рекорды",diff:"easy",q:"Самый большой остров?",opts:["Гренландия","Новая Гвинея","Борнео","Мадагаскар"],a:0,fact:"Гренландия — 2,16 млн км², автономия Дании."},
+{cat:"Рекорды",diff:"easy",q:"Самая длинная горная цепь на суше?",opts:["Анды","Гималаи","Скалистые горы","Урал"],a:0,fact:"Анды — ~7500 км вдоль западного берега Южной Америки."},
+{cat:"Рекорды",diff:"medium",q:"Самый маленький континент?",opts:["Австралия","Европа","Антарктида","Южная Америка"],a:0,fact:"Австралия — ~7,7 млн км²."},
+{cat:"Рекорды",diff:"medium",q:"Самый засушливый континент?",opts:["Антарктида","Австралия","Африка","Азия"],a:0,fact:"Антарктида — ледяная пустыня, осадков < 200 мм/год."},
+{cat:"Рекорды",diff:"medium",q:"Самое низкое место на суше?",opts:["Берег Мёртвого моря","Долина Смерти","Котловина Каттара","Озеро Асаль"],a:0,fact:"Берег Мёртвого моря — ~430 м ниже уровня моря."},
+{cat:"Рекорды",diff:"medium",q:"Самый высокий водопад мира?",opts:["Анхель","Виктория","Ниагара","Игуасу"],a:0,fact:"Анхель (Венесуэла) — 979 м."},
+{cat:"Рекорды",diff:"medium",q:"Самое большое пресноводное озеро по площади?",opts:["Верхнее","Байкал","Виктория","Гурон"],a:0,fact:"Верхнее (82 103 км²) — крупнейшее пресноводное по площади."},
+{cat:"Рекорды",diff:"medium",q:"Самая длинная река Европы?",opts:["Волга","Дунай","Рейн","Нева"],a:0,fact:"Волга — 3530 км, впадает в Каспийское море."},
+{cat:"Рекорды",diff:"medium",q:"Самая населённая страна Африки?",opts:["Нигерия","Эфиопия","Египет","ЮАР"],a:0,fact:"Нигерия — более 200 млн чел."},
+{cat:"Рекорды",diff:"medium",q:"Самая большая страна Южной Америки?",opts:["Бразилия","Аргентина","Перу","Колумбия"],a:0,fact:"Бразилия — ~47% площади Южной Америки."},
+{cat:"Рекорды",diff:"hard",q:"Самая маленькая страна мира?",opts:["Ватикан","Монако","Сан-Марино","Лихтенштейн"],a:0,fact:"Ватикан — 0,44 км², суверенное государство в Риме."},
+{cat:"Рекорды",diff:"hard",q:"Самая длинная сухопутная граница?",opts:["США — Канада","Россия — Казахстан","Китай — Монголия","Аргентина — Чили"],a:0,fact:"США — Канада: 8891 км — мировой рекорд."},
+{cat:"Рекорды",diff:"hard",q:"Самый большой коралловый риф?",opts:["Большой Барьерный","Риф Белиза","Красноморский","Флоридский"],a:0,fact:"Большой Барьерный риф у берегов Австралии — более 2300 км."},
+{cat:"Рекорды",diff:"hard",q:"Глубочайшая точка Мирового океана?",opts:["Марианская впадина","Желоб Тонга","Желоб Пуэрто-Рико","Зондский желоб"],a:0,fact:"Марианская впадина — 11 034 м, Тихий океан."},
+{cat:"Рекорды",diff:"hard",q:"Самое мелководное море мира?",opts:["Азовское","Балтийское","Северное","Жёлтое"],a:0,fact:"Азовское море — средняя глубина около 7 м."},
+{cat:"Рекорды",diff:"medium",q:"Самый высокий действующий вулкан?",opts:["Охос-дель-Саладо","Котопахи","Этна","Ключевская Сопка"],a:0,fact:"Охос-дель-Саладо (6893 м) — на границе Аргентины и Чили."},
+// ВОДНЫЕ ПУТИ
+{cat:"Водные пути",diff:"easy",q:"Какой канал соединяет Средиземное и Красное моря?",opts:["Суэцкий","Панамский","Кильский","Коринфский"],a:0,fact:"Суэцкий канал — 193 км, открыт в 1869 году."},
+{cat:"Водные пути",diff:"easy",q:"Через какой канал плывут из Атлантики в Тихий?",opts:["Панамский","Суэцкий","Кильский","Коринфский"],a:0,fact:"Панамский канал — 82 км, открыт в 1914 году."},
+{cat:"Водные пути",diff:"medium",q:"Какой пролив соединяет Средиземное море с Атлантикой?",opts:["Гибралтарский","Баб-эль-Мандебский","Дарданеллы","Ормузский"],a:0,fact:"Гибралтарский пролив — ширина 14 км."},
+{cat:"Водные пути",diff:"medium",q:"Какой пролив разделяет Азию и Северную Америку?",opts:["Берингов","Малаккский","Ла-Манш","Дрейка"],a:0,fact:"Берингов пролив — ~86 км, Аляска и Чукотка."},
+{cat:"Водные пути",diff:"medium",q:"Какой пролив разделяет Великобританию и Францию?",opts:["Ла-Манш","Ирландское море","Северное море","Каледонский"],a:0,fact:"Ла-Манш — самый оживлённый судоходный пролив мира."},
+{cat:"Водные пути",diff:"medium",q:"Какой пролив проходит через Стамбул?",opts:["Босфор","Дарданеллы","Мраморное море","Гибралтар"],a:0,fact:"Босфор соединяет Чёрное и Мраморное моря."},
+{cat:"Водные пути",diff:"hard",q:"Какой пролив контролирует выход из Персидского залива?",opts:["Ормузский","Баб-эль-Мандебский","Малаккский","Берингов"],a:0,fact:"Через Ормузский пролив — ~20% мирового нефтяного экспорта."},
+{cat:"Водные пути",diff:"hard",q:"Какой пролив соединяет Красное море и Аденский залив?",opts:["Баб-эль-Мандебский","Ормузский","Гибралтарский","Малаккский"],a:0,fact:"Баб-эль-Мандебский — 10% мировой морской торговли."},
+{cat:"Водные пути",diff:"hard",q:"Через какой пролив Магеллан впервые обогнул Южную Америку?",opts:["Магелланов","Дрейка","Ла-Манш","Берингов"],a:0,fact:"Магелланов пролив открыт Фернаном Магелланом в 1520 году."},
+// ФЛАГИ
+{cat:"Флаги",diff:"easy",q:"На флаге какой страны — кленовый лист?",opts:["Канада","США","Австралия","Новая Зеландия"],a:0,fact:"Кленовый лист — символ Канады с 1965 года."},
+{cat:"Флаги",diff:"medium",q:"На флаге какой страны — карта этой страны?",opts:["Кипр","Мальта","Косово","Тунис"],a:0,fact:"Кипр — единственная страна с картой на флаге."},
+{cat:"Флаги",diff:"medium",q:"Какой флаг называется «Юнион Джек»?",opts:["Великобритании","США","Австралии","Ирландии"],a:0,fact:"Юнион Джек — кресты святых Георгия, Андрея и Патрика."},
+{cat:"Флаги",diff:"medium",q:"Как называется флаг Японии?",opts:["Хиномару","Одрисуру","Хандзи","Катана"],a:0,fact:"Хиномару («солнечный круг») — красный диск на белом фоне."},
+{cat:"Флаги",diff:"hard",q:"На флаге какой страны — звезда Давида?",opts:["Израиль","Иордания","Ливан","Сирия"],a:0,fact:"Маген Давид — символ Израиля."},
+{cat:"Флаги",diff:"hard",q:"На флаге какой страны — кедр?",opts:["Ливан","Иордания","Кипр","Иран"],a:0,fact:"Кедр — национальный символ Ливана."},
+{cat:"Флаги",diff:"medium",q:"Флаг какой страны — в углу австралийского флага?",opts:["Великобритании","Новой Зеландии","США","Ирландии"],a:0,fact:"«Юнион Джек» — исторический символ связи Австралии с Великобританией."},
+{cat:"Флаги",diff:"hard",q:"У какой страны единственный непрямоугольный флаг?",opts:["Непал","Швейцария","Ватикан","Кирибати"],a:0,fact:"Непал — единственная страна с непрямоугольным флагом (двойной вымпел)."},
+{cat:"Флаги",diff:"hard",q:"Сколько скандинавских флагов содержат «скандинавский крест»?",opts:["5","4","3","6"],a:0,fact:"5: Дания, Швеция, Норвегия, Финляндия, Исландия."},
+// ПРИРОДА
+{cat:"Природа",diff:"easy",q:"Как называется Северное сияние?",opts:["Аврора Бореалис","Цунами","Торнадо","Муссон"],a:0,fact:"Аврора Бореалис — взаимодействие солнечного ветра с магнитосферой."},
+{cat:"Природа",diff:"medium",q:"Периодическое потепление вод Тихого океана называется...",opts:["Эль-Ниньо","Ла-Нинья","Муссон","Пассат"],a:0,fact:"Эль-Ниньо влияет на климат всей планеты."},
+{cat:"Природа",diff:"medium",q:"Где находится Большой Барьерный риф?",opts:["Австралия","Бразилия","Индонезия","Мексика"],a:0,fact:"У побережья Квинсленда, Австралия — виден из космоса."},
+{cat:"Природа",diff:"medium",q:"Сколько материков на Земле?",opts:["6","5","7","8"],a:0,fact:"Евразия, Африка, Сев. Америка, Юж. Америка, Австралия, Антарктида = 6."},
+{cat:"Природа",diff:"medium",q:"Самое глубокое место Мирового океана?",opts:["Марианская впадина","Желоб Тонга","Желоб Пуэрто-Рико","Зондский желоб"],a:0,fact:"Марианская впадина — 11 034 м."},
+{cat:"Природа",diff:"medium",q:"Самое солёное море мира?",opts:["Мёртвое море","Красное море","Каспийское","Аральское"],a:0,fact:"Мёртвое море — солёность ~33%, нельзя утонуть."},
+{cat:"Природа",diff:"hard",q:"Как называется граница фауны Азии и Австралии?",opts:["Линия Уоллеса","Линия Гумбольдта","Линия Дарвина","Экватор"],a:0,fact:"Линия Уоллеса — через Индонезийский архипелаг."},
+{cat:"Природа",diff:"medium",q:"Что такое «цунами»?",opts:["Волны от подводных землетрясений","Тропический циклон","Вулкан","Торнадо над водой"],a:0,fact:"Цунами — огромные волны, вызванные подводными землетрясениями."},
+{cat:"Природа",diff:"medium",q:"Как называется зона вечной мерзлоты?",opts:["Тундра","Тайга","Саванна","Степь"],a:0,fact:"Тундра — безлесная зона с вечной мерзлотой, характерная для Арктики."},
+// ГОРЫ
+{cat:"Горы",diff:"easy",q:"На каком континенте находится Эверест?",opts:["Азия","Африка","Европа","Южная Америка"],a:0,fact:"Эверест в Гималаях, на границе Непала и Китая."},
+{cat:"Горы",diff:"easy",q:"Высшая точка Африки?",opts:["Килиманджаро","Кения","Рувензори","Этна"],a:0,fact:"Килиманджаро (5895 м) — высшая точка Африки."},
+{cat:"Горы",diff:"medium",q:"Высшая точка Европы?",opts:["Эльбрус","Монблан","Маттерхорн","Монте-Роза"],a:0,fact:"Эльбрус (5642 м) в России."},
+{cat:"Горы",diff:"medium",q:"Высшая точка Южной Америки?",opts:["Аконкагуа","Охос-дель-Саладо","Чимборасо","Котопахи"],a:0,fact:"Аконкагуа (6961 м) — высшая точка Западного полушария."},
+{cat:"Горы",diff:"medium",q:"Высшая точка Северной Америки?",opts:["Денали","Логан","Орисаба","Попокатепетль"],a:0,fact:"Денали (Мак-Кинли) на Аляске — 6194 м."},
+{cat:"Горы",diff:"medium",q:"На каком острове стоит вулкан Этна?",opts:["Сицилия","Сардиния","Корсика","Мальта"],a:0,fact:"Этна — самый активный вулкан Европы, Сицилия, Италия."},
+{cat:"Горы",diff:"medium",q:"В какой стране находится Монблан?",opts:["Франция/Италия","Швейцария","Германия","Австрия"],a:0,fact:"Монблан (4808 м) на границе Франции и Италии — высшая точка Альп."},
+{cat:"Горы",diff:"hard",q:"Как называется «крыша мира»?",opts:["Памир","Гималаи","Тибет","Каракорум"],a:0,fact:"Памир в Таджикистане — средняя высота ~3000–6000 м."},
+// РЕКИ
+{cat:"Реки",diff:"easy",q:"В какое море впадает Волга?",opts:["Каспийское","Чёрное","Азовское","Балтийское"],a:0,fact:"Волга — крупнейшая река Европы, впадает в Каспийское море."},
+{cat:"Реки",diff:"medium",q:"Через сколько стран протекает Дунай?",opts:["10","8","12","6"],a:0,fact:"Дунай — через 10 стран, мировой рекорд."},
+{cat:"Реки",diff:"medium",q:"На какой реке стоит Лондон?",opts:["Темза","Сена","Рейн","Медуэй"],a:0,fact:"Темза — 346 км, впадает в Северное море."},
+{cat:"Реки",diff:"medium",q:"На какой реке стоит Париж?",opts:["Сена","Луара","Рона","Рейн"],a:0,fact:"Сена впадает в Ла-Манш."},
+{cat:"Реки",diff:"easy",q:"Самая полноводная река мира?",opts:["Амазонка","Нил","Конго","Янцзы"],a:0,fact:"Амазонка несёт ~20% всей пресной воды, впадающей в океан."},
+{cat:"Реки",diff:"medium",q:"На какой реке находится водопад Виктория?",opts:["Замбези","Нил","Конго","Нигер"],a:0,fact:"Виктория на реке Замбези — граница Замбии и Зимбабве."},
+{cat:"Реки",diff:"medium",q:"Через какие города протекает Дунай?",opts:["Вена и Будапешт","Берлин и Варшава","Рим и Афины","Берн и Лион"],a:0,fact:"Дунай — вторая по длине река Европы после Волги."},
+{cat:"Реки",diff:"hard",q:"Куда впадает река Амур?",opts:["Охотское море","Японское море","Тихий океан","Берингово море"],a:0,fact:"Амур впадает в Амурский лиман, соединённый с Охотским морем."},
+// ОЗЁРА
+{cat:"Озёра",diff:"easy",q:"В какой стране находится Байкал?",opts:["Россия","Монголия","Казахстан","Китай"],a:0,fact:"Байкал в Сибири — самое глубокое и древнее озеро мира."},
+{cat:"Озёра",diff:"easy",q:"Самое большое озеро Африки?",opts:["Виктория","Танганьика","Малави","Чад"],a:0,fact:"Виктория — 69 485 км²."},
+{cat:"Озёра",diff:"medium",q:"На берегах каких стран расположено озеро Виктория?",opts:["Танзания, Кения, Уганда","ДР Конго, Замбия","Кения, Эфиопия","Уганда, Руанда"],a:0,fact:"Виктория — на стыке Танзании, Кении и Уганды."},
+{cat:"Озёра",diff:"medium",q:"Высочайшее судоходное озеро мира?",opts:["Титикака","Атитлан","Маракайбо","Поопо"],a:0,fact:"Титикака (3812 м) — на границе Перу и Боливии."},
+{cat:"Озёра",diff:"medium",q:"Самое солёное озеро мира?",opts:["Мёртвое море","Большое Солёное","Ретба","Каспийское"],a:0,fact:"Мёртвое море — солёность ~33%."},
+{cat:"Озёра",diff:"medium",q:"Самое крупное озеро Европы?",opts:["Ладожское","Онежское","Балатон","Женевское"],a:0,fact:"Ладожское озеро — 17 703 км²."},
+// ОСТРОВА
+{cat:"Острова",diff:"easy",q:"Самый большой остров мира?",opts:["Гренландия","Новая Гвинея","Борнео","Мадагаскар"],a:0,fact:"Гренландия — 2,16 млн км², автономия Дании."},
+{cat:"Острова",diff:"medium",q:"Какой стране принадлежит Гренландия?",opts:["Дании","Норвегии","Исландии","Канаде"],a:0,fact:"Гренландия — автономная территория Дании с 1814 года."},
+{cat:"Острова",diff:"medium",q:"В каком океане расположена Япония?",opts:["Тихий","Индийский","Атлантический","Северный Ледовитый"],a:0,fact:"Япония — архипелаг из 6852 островов в Тихом океане."},
+{cat:"Острова",diff:"medium",q:"Канарским островам принадлежит...",opts:["Испании","Португалии","Марокко","Франции"],a:0,fact:"Канарские острова — автономное сообщество Испании."},
+{cat:"Острова",diff:"medium",q:"В каком океане расположены Мальдивы?",opts:["Индийский","Тихий","Атлантический","Северный Ледовитый"],a:0,fact:"Мальдивы — самая низкая по высоте страна мира."},
+{cat:"Острова",diff:"hard",q:"Кому принадлежат Фолклендские острова?",opts:["Великобритании","Аргентине","Чили","Уругваю"],a:0,fact:"Фолкленды — британская заморская территория, предмет спора с Аргентиной."},
+{cat:"Острова",diff:"hard",q:"Где расположены Галапагосские острова?",opts:["Эквадор","Перу","Колумбия","Чили"],a:0,fact:"Галапагосы принадлежат Эквадору. Дарвин изучал здесь эволюцию."},
+// ПУСТЫНИ
+{cat:"Пустыни",diff:"easy",q:"Где находится пустыня Сахара?",opts:["Африка","Азия","Австралия","Южная Америка"],a:0,fact:"Сахара — крупнейшая горячая пустыня, север Африки."},
+{cat:"Пустыни",diff:"medium",q:"Где находится пустыня Гоби?",opts:["Монголия/Китай","Казахстан","Индия","Пакистан"],a:0,fact:"Гоби — крупнейшая пустыня Азии."},
+{cat:"Пустыни",diff:"medium",q:"Самая сухая пустыня (не считая полюсов)?",opts:["Атакама","Сахара","Гоби","Намиб"],a:0,fact:"Атакама в Чили — < 1 мм осадков в год в отдельных районах."},
+{cat:"Пустыни",diff:"medium",q:"Где находится пустыня Намиб?",opts:["Намибия","ЮАР","Ботсвана","Ангола"],a:0,fact:"Намиб — одна из старейших пустынь мира, дала название Намибии."},
+{cat:"Пустыни",diff:"hard",q:"Как называется пустыня в Туркменистане?",opts:["Каракумы","Кызылкум","Такламакан","Гоби"],a:0,fact:"Каракумы («чёрные пески») занимают большую часть Туркменистана."},
+// СТРАНЫ
+{cat:"Страны",diff:"easy",q:"На каком континенте Египет?",opts:["Африка","Азия","Европа","Ближний Восток"],a:0,fact:"Египет в Африке; Синайский полуостров — в Азии."},
+{cat:"Страны",diff:"easy",q:"Сколько стран в Соединённом Королевстве?",opts:["4","2","3","5"],a:0,fact:"Англия, Шотландия, Уэльс, Северная Ирландия = 4."},
+{cat:"Страны",diff:"medium",q:"Самое маленькое государство мира?",opts:["Ватикан","Монако","Сан-Марино","Лихтенштейн"],a:0,fact:"Ватикан — 0,44 км², суверенное государство в Риме."},
+{cat:"Страны",diff:"medium",q:"Страна с наибольшим числом островов?",opts:["Индонезия","Филиппины","Япония","Греция"],a:0,fact:"Индонезия состоит из более 17 000 островов."},
+{cat:"Страны",diff:"medium",q:"Пролив, разделяющий Европу и Азию у Стамбула?",opts:["Босфор","Дарданеллы","Гибралтар","Керченский"],a:0,fact:"Босфор проходит через Стамбул."},
+{cat:"Страны",diff:"hard",q:"Рекорд по числу соседних государств делят...",opts:["Китай и Россия","Бразилия и Китай","Германия и Франция","Индия и Пакистан"],a:0,fact:"Китай и Россия — по 14 стран-соседей."},
+{cat:"Страны",diff:"hard",q:"В состав какой страны входит Аляска?",opts:["США","Канада","Россия","Мексика"],a:0,fact:"Аляска куплена США у России в 1867 г. за 7,2 млн долларов."},
+{cat:"Страны",diff:"hard",q:"Французская Гвиана является...",opts:["Регионом Франции","Независимой страной","Колонией Бразилии","Территорией ООН"],a:0,fact:"Французская Гвиана — заморский регион Франции в Южной Америке."},
+{cat:"Страны",diff:"medium",q:"Единственный континент без постоянного населения?",opts:["Антарктида","Австралия","Арктика","Гренландия"],a:0,fact:"Антарктида — только временные научные станции."},
+// ГОРОДА
+{cat:"Города",diff:"easy",q:"Самый населённый город мира?",opts:["Токио","Шанхай","Нью-Йорк","Мехико"],a:0,fact:"Токио — агломерация ~37 млн чел."},
+{cat:"Города",diff:"medium",q:"«Вечный город» — это...",opts:["Рим","Афины","Иерусалим","Каир"],a:0,fact:"Рим — более 2700 лет непрерывной истории."},
+{cat:"Города",diff:"easy",q:"Где находится Колизей?",opts:["Рим","Афины","Неаполь","Флоренция"],a:0,fact:"Колизей построен в 72–80 гг. н. э., вмещал 70 000 зрителей."},
+{cat:"Города",diff:"easy",q:"Где находится Эйфелева башня?",opts:["Париж","Брюссель","Лондон","Берлин"],a:0,fact:"Эйфелева башня — построена к Всемирной выставке 1889 года."},
+{cat:"Города",diff:"medium",q:"Как раньше назывался Стамбул?",opts:["Константинополь","Карфаген","Александрия","Тир"],a:0,fact:"До 1453 года — Константинополь, столица Византии."},
+{cat:"Города",diff:"medium",q:"Самый большой город Африки?",opts:["Лагос","Каир","Киншаса","Йоханнесбург"],a:0,fact:"Лагос (Нигерия) — более 15 млн чел."},
+{cat:"Города",diff:"hard",q:"Самая высокогорная столица мира?",opts:["Ла-Пас (Боливия)","Кито (Эквадор)","Богота (Колумбия)","Тхимпху (Бутан)"],a:0,fact:"Ла-Пас (~3640 м) — правительственная столица Боливии."},
+{cat:"Города",diff:"hard",q:"Законодательная столица ЮАР?",opts:["Кейптаун","Претория","Йоханнесбург","Блумфонтейн"],a:0,fact:"ЮАР имеет 3 столицы: Претория, Кейптаун, Блумфонтейн."},
+// МОРЯ
+{cat:"Моря",diff:"easy",q:"Сколько океанов на Земле?",opts:["5","4","3","6"],a:0,fact:"Тихий, Атлантический, Индийский, Северный Ледовитый, Южный = 5."},
+{cat:"Моря",diff:"medium",q:"Какое море разделяет Европу и Африку?",opts:["Средиземное","Красное","Чёрное","Северное"],a:0,fact:"Средиземное море омывает 3 континента."},
+{cat:"Моря",diff:"medium",q:"Самое тёплое море мира?",opts:["Красное","Средиземное","Карибское","Аравийское"],a:0,fact:"Красное море — средняя температура ~25°C."},
+{cat:"Моря",diff:"hard",q:"Где находится Саргассово море?",opts:["Атлантический океан","Тихий океан","Индийский","Средиземное море"],a:0,fact:"Саргассово море — единственное без берегов, в Атлантике."},
+// ПОЛИТИКА
+{cat:"Политика",diff:"medium",q:"Штаб-квартира ООН находится в...",opts:["Нью-Йорке","Женеве","Вене","Лондоне"],a:0,fact:"Штаб-квартира ООН в Нью-Йорке, основана в 1945 году."},
+{cat:"Политика",diff:"medium",q:"Сколько государств-членов в ООН?",opts:["193","195","190","200"],a:0,fact:"ООН — 193 государства-члена."},
+{cat:"Политика",diff:"medium",q:"Сколько постоянных членов в Совете Безопасности?",opts:["5","7","6","10"],a:0,fact:"США, Великобритания, Франция, Россия, Китай."},
+{cat:"Политика",diff:"hard",q:"Первая страна с женским избирательным правом?",opts:["Новая Зеландия","Австралия","Финляндия","Норвегия"],a:0,fact:"Новая Зеландия — 1893 год."},
+{cat:"Политика",diff:"hard",q:"Гонконг входит в состав...",opts:["Китая","Великобритании","Тайваня","Автономен"],a:0,fact:"С 1997 года — специальный административный район Китая."},
+{cat:"Политика",diff:"medium",q:"Сколько звёзд на флаге США?",opts:["50","48","52","51"],a:0,fact:"50 звёзд = 50 штатов. Последний добавлен в 1960 г. (Гавайи)."},
+// СТОЛИЦЫ (доп.)
+{cat:"Столицы",diff:"hard",q:"Официальная столица Нидерландов?",opts:["Амстердам","Гаага","Роттердам","Утрехт"],a:0,fact:"Амстердам — официальная столица. Правительство заседает в Гааге."},
+{cat:"Столицы",diff:"hard",q:"Где заседает правительство ЮАР?",opts:["Претория","Кейптаун","Йоханнесбург","Дурбан"],a:0,fact:"Претория — исполнительная столица. Законодательная — Кейптаун."},
+{cat:"Столицы",diff:"hard",q:"Конституционная столица Боливии?",opts:["Сукре","Ла-Пас","Санта-Крус","Кочабамба"],a:0,fact:"Сукре — конституционная. Ла-Пас — правительственная столица."},
+{cat:"Столицы",diff:"hard",q:"Столица Казахстана с 2022 года называется...",opts:["Астана","Нур-Султан","Алматы","Шымкент"],a:0,fact:"В 2019 переименован в Нур-Султан, в 2022 — обратно в Астана."},
+{cat:"Столицы",diff:"medium",q:"Столица Бразилии?",opts:["Бразилиа","Рио-де-Жанейро","Сан-Паулу","Салвадор"],a:0,fact:"Бразилиа стала столицей в 1960 г., сменив Рио."},
+{cat:"Столицы",diff:"hard",q:"Столица Австралии?",opts:["Канберра","Сидней","Мельбурн","Брисбен"],a:0,fact:"Канберра — специально построенный город, столица с 1913 г."},
+];
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  ГЕНЕРАТОРЫ ВОПРОСОВ
+// ═══════════════════════════════════════════════════════════════════════════
+
+function rnd(arr, n) {
+  return [...arr].sort(() => Math.random() - 0.5).slice(0, n);
+}
+function rnde(arr, excl, n) {
+  return rnd(arr.filter(x => !excl.includes(x)), n);
+}
+
+function buildBank() {
+  const bank = [];
+  const caps  = CTRY.map(c => c[2]);
+  const names = CTRY.map(c => c[0]);
+
+  // ── СТРАНЫ: 3 типа вопроса на каждую ─────────────────────────────────────
+  CTRY.forEach(c => {
+    const wc1 = rnde(caps, [c[2]], 3);
+    if (wc1.length === 3) bank.push({cat:"Столицы",diff:c[6],
+      q:`Какая столица ${c[1]}?`,opts:[c[2],...wc1],a:0,
+      fact:`${c[2]} — столица ${c[0]}.`});
+
+    const wc2 = rnde(names, [c[0]], 3);
+    if (wc2.length === 3) bank.push({cat:"Столицы",diff:c[6],
+      q:`${c[2]} — столица какой страны?`,opts:[c[0],...wc2],a:0,
+      fact:`${c[2]} — столица ${c[0]}.`});
+
+    const wc3 = rnde(CONTS, [c[3]], 3);
+    if (wc3.length === 3) bank.push({cat:"Континенты",diff:c[6],
+      q:`На каком континенте находится ${c[0]}?`,opts:[c[3],...wc3],a:0,
+      fact:`${c[0]} расположена в регионе: ${c[3]}.`});
+  });
+
+  // ── СРАВНЕНИЕ ПЛОЩАДЕЙ (наибольшая) ──────────────────────────────────────
+  for (let i = 0; i < 220; i++) {
+    const four = rnd(CTRY, 4);
+    const sh = [...four].sort(() => Math.random() - 0.5);
+    const w = [...four].sort((a,b) => b[4]-a[4])[0];
+    const wi = sh.indexOf(w);
+    bank.push({cat:"Рекорды",diff:"medium",
+      q:"Какая из этих стран наибольшая по площади?",
+      opts:sh.map(c=>c[0]),a:wi,
+      fact:`${w[0]} — самая большая: ${w[4].toLocaleString('ru')} км².`});
+  }
+
+  // ── СРАВНЕНИЕ ПЛОЩАДЕЙ (наименьшая) ──────────────────────────────────────
+  for (let i = 0; i < 120; i++) {
+    const four = rnd(CTRY, 4);
+    const sh = [...four].sort(() => Math.random() - 0.5);
+    const w = [...four].sort((a,b) => a[4]-b[4])[0];
+    const wi = sh.indexOf(w);
+    bank.push({cat:"Рекорды",diff:"hard",
+      q:"Какая из этих стран НАИМЕНЬШАЯ по площади?",
+      opts:sh.map(c=>c[0]),a:wi,
+      fact:`${w[0]} — самая маленькая: ${w[4].toLocaleString('ru')} км².`});
+  }
+
+  // ── СРАВНЕНИЕ НАСЕЛЕНИЯ (наибольшее) ─────────────────────────────────────
+  for (let i = 0; i < 160; i++) {
+    const four = rnd(CTRY, 4);
+    const sh = [...four].sort(() => Math.random() - 0.5);
+    const w = [...four].sort((a,b) => b[5]-a[5])[0];
+    const wi = sh.indexOf(w);
+    bank.push({cat:"Население",diff:"medium",
+      q:"Какая из этих стран наиболее населённая?",
+      opts:sh.map(c=>c[0]),a:wi,
+      fact:`${w[0]} — ~${w[5]} млн чел., самая населённая из перечисленных.`});
+  }
+
+  // ── СРАВНЕНИЕ НАСЕЛЕНИЯ (наименьшее) ─────────────────────────────────────
+  for (let i = 0; i < 80; i++) {
+    const four = rnd(CTRY, 4);
+    const sh = [...four].sort(() => Math.random() - 0.5);
+    const w = [...four].sort((a,b) => a[5]-b[5])[0];
+    const wi = sh.indexOf(w);
+    bank.push({cat:"Население",diff:"hard",
+      q:"Какая из этих стран НАИМЕНЕЕ населённая?",
+      opts:sh.map(c=>c[0]),a:wi,
+      fact:`${w[0]} — ~${w[5]} млн чел., наименее населённая.`});
+  }
+
+  // ── НЕ В ЭТОМ КОНТИНЕНТЕ ─────────────────────────────────────────────────
+  CONTS.forEach(cont => {
+    const inC  = CTRY.filter(c => c[3] === cont);
+    const outC = CTRY.filter(c => c[3] !== cont);
+    for (let i = 0; i < 35; i++) {
+      if (inC.length < 3 || outC.length < 1) break;
+      const outsider = rnd(outC, 1)[0];
+      const insiders = rnd(inC, 3);
+      const four = [outsider, ...insiders];
+      const sh = [...four].sort(() => Math.random() - 0.5);
+      const wi = sh.indexOf(outsider);
+      bank.push({cat:"Континенты",diff:"medium",
+        q:`Какая из этих стран НЕ находится в регионе «${cont}»?`,
+        opts:sh.map(c=>c[0]),a:wi,
+        fact:`${outsider[0]} находится в ${outsider[3]}, а не в ${cont}.`});
+    }
+  });
+
+  // ── ГОРЫ: страна + континент ──────────────────────────────────────────────
+  const mtLocs = [...new Set(MNTS.map(m => m[1]))];
+  MNTS.forEach(m => {
+    const wl = rnde(mtLocs, [m[1]], 3);
+    if (wl.length >= 3) bank.push({cat:"Горы",diff:m[4],
+      q:`Где находится гора ${m[0]}?`,
+      opts:[m[1],...wl.slice(0,3)],a:0,
+      fact:`${m[0]} (${m[3]} м) расположена в ${m[1]}.`});
+    const wc = rnde(CONTS, [m[2]], 3);
+    if (wc.length === 3) bank.push({cat:"Горы",diff:m[4],
+      q:`На каком континенте гора ${m[0]}?`,
+      opts:[m[2],...wc],a:0,
+      fact:`${m[0]} — ${m[2]}.`});
+  });
+
+  // ── ГОРЫ: сравнение высот ─────────────────────────────────────────────────
+  for (let i = 0; i < 90; i++) {
+    const four = rnd(MNTS, 4);
+    const sh = [...four].sort(() => Math.random() - 0.5);
+    const w = [...four].sort((a,b) => b[3]-a[3])[0];
+    const wi = sh.indexOf(w);
+    bank.push({cat:"Горы",diff:"hard",
+      q:"Какая из этих гор самая высокая?",
+      opts:sh.map(m=>m[0]),a:wi,
+      fact:`${w[0]} — ${w[3]} м, самая высокая.`});
+  }
+
+  // ── РЕКИ: континент + куда впадает ───────────────────────────────────────
+  const rvMouths = [...new Set(RVRS.map(r => r[3]))];
+  RVRS.forEach(r => {
+    const wc = rnde(CONTS, [r[1]], 3);
+    if (wc.length === 3) bank.push({cat:"Реки",diff:r[4],
+      q:`На каком континенте протекает ${r[0]}?`,
+      opts:[r[1],...wc],a:0,
+      fact:`${r[0]} протекает в ${r[1]}.`});
+    const wm = rnde(rvMouths, [r[3]], 3);
+    if (wm.length >= 3) bank.push({cat:"Реки",diff:r[4],
+      q:`Куда впадает река ${r[0]}?`,
+      opts:[r[3],...wm.slice(0,3)],a:0,
+      fact:`${r[0]} впадает в ${r[3]}.`});
+  });
+
+  // ── РЕКИ: сравнение длин ──────────────────────────────────────────────────
+  for (let i = 0; i < 90; i++) {
+    const four = rnd(RVRS, 4);
+    const sh = [...four].sort(() => Math.random() - 0.5);
+    const w = [...four].sort((a,b) => b[2]-a[2])[0];
+    const wi = sh.indexOf(w);
+    bank.push({cat:"Реки",diff:"medium",
+      q:"Какая из этих рек самая длинная?",
+      opts:sh.map(r=>r[0]),a:wi,
+      fact:`${w[0]} — ${w[2]} км, самая длинная.`});
+  }
+
+  // ── ОЗЁРА: регион ─────────────────────────────────────────────────────────
+  const lkLocs = [...new Set(LKES.map(l => l[1]))];
+  LKES.forEach(l => {
+    const wl = rnde(lkLocs, [l[1]], 3);
+    if (wl.length >= 3) bank.push({cat:"Озёра",diff:l[4],
+      q:`Где находится озеро ${l[0]}?`,
+      opts:[l[1],...wl.slice(0,3)],a:0,
+      fact:`Озеро ${l[0]} — ${l[1]}.`});
+  });
+
+  // ── ОЗЁРА: сравнение площадей ─────────────────────────────────────────────
+  for (let i = 0; i < 50; i++) {
+    const four = rnd(LKES, 4);
+    const sh = [...four].sort(() => Math.random() - 0.5);
+    const w = [...four].sort((a,b) => b[3]-a[3])[0];
+    const wi = sh.indexOf(w);
+    bank.push({cat:"Озёра",diff:"medium",
+      q:"Какое из этих озёр самое большое по площади?",
+      opts:sh.map(l=>l[0]),a:wi,
+      fact:`${w[0]} — ${w[3].toLocaleString('ru')} км², самое большое.`});
+  }
+
+  // ── ОСТРОВА: страна + океан ───────────────────────────────────────────────
+  const oceans = ["Тихий океан","Атлантический океан","Индийский океан",
+    "Северный Ледовитый океан","Средиземное море","Карибское море"];
+  ISLS.forEach(i => {
+    const wn = rnde(names, [i[1]], 3);
+    if (wn.length === 3) bank.push({cat:"Острова",diff:i[3],
+      q:`Кому принадлежит ${i[0]}?`,
+      opts:[i[1],...wn],a:0,
+      fact:`${i[0]} принадлежит ${i[1]}.`});
+    const wo = rnde(oceans, [i[2]], 3);
+    if (wo.length === 3) bank.push({cat:"Острова",diff:i[3],
+      q:`В каком океане/море расположен ${i[0]}?`,
+      opts:[i[2],...wo],a:0,
+      fact:`${i[0]} — ${i[2]}.`});
+  });
+
+  // ── ПУСТЫНИ: континент ────────────────────────────────────────────────────
+  DSRT.forEach(d => {
+    const wc = rnde([...CONTS,"Антарктида"], [d[1]], 3);
+    if (wc.length === 3) bank.push({cat:"Пустыни",diff:d[4],
+      q:`На каком континенте находится пустыня ${d[0]}?`,
+      opts:[d[1],...wc],a:0,
+      fact:`${d[0]} — пустыня в ${d[1]}, ~${d[2].toLocaleString('ru')} км².`});
+  });
+
+  // ── ПУСТЫНИ: сравнение площадей ───────────────────────────────────────────
+  for (let i = 0; i < 40; i++) {
+    const four = rnd(DSRT, 4);
+    const sh = [...four].sort(() => Math.random() - 0.5);
+    const w = [...four].sort((a,b) => b[2]-a[2])[0];
+    const wi = sh.indexOf(w);
+    bank.push({cat:"Пустыни",diff:"hard",
+      q:"Какая из этих пустынь самая большая?",
+      opts:sh.map(d=>d[0]),a:wi,
+      fact:`${w[0]} — ~${w[2].toLocaleString('ru')} км².`});
+  }
+
+  // ── ХАРДКОДНЫЕ ────────────────────────────────────────────────────────────
+  bank.push(...FIXED);
+
+  return bank;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  ИГРОВАЯ ЛОГИКА
+// ═══════════════════════════════════════════════════════════════════════════
+
+const GAME_SIZE = 50;
+let pool = [], current = null, answered = false;
+let correct = 0, wrong = 0, streak = 0, bestStreak = 0;
+let bankSize = 0;
+
+// PWA
+let deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault(); deferredPrompt = e;
   document.getElementById('banner').classList.add('on');
 });
-function installPWA(){
-  if(!deferredPrompt)return;
+function installPWA() {
+  if (!deferredPrompt) return;
   deferredPrompt.prompt();
-  deferredPrompt.userChoice.then(()=>{deferredPrompt=null;closeBanner();});
+  deferredPrompt.userChoice.then(() => { deferredPrompt = null; closeBanner(); });
 }
-function closeBanner(){ document.getElementById('banner').classList.remove('on'); }
+function closeBanner() { document.getElementById('banner').classList.remove('on'); }
 
-// ── SERVICE WORKER ─────────────────────────────────────────────────────────
-if('serviceWorker'in navigator){
-  navigator.serviceWorker.register('sw.js').catch(()=>{});
-}
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
 
-// ── SHAKE DETECTION (DeviceMotion) ─────────────────────────────────────────
+// Shake detection
 let lx=null,ly=null,lz=null,shLock=null;
-const THRESH=17;
-
-function enableMotion(){
-  if(typeof DeviceMotionEvent!=='undefined'&&
-     typeof DeviceMotionEvent.requestPermission==='function'){
-    DeviceMotionEvent.requestPermission()
-      .then(r=>{ if(r==='granted') window.addEventListener('devicemotion',onMotion); })
-      .catch(()=>{});
+function enableMotion() {
+  if (typeof DeviceMotionEvent !== 'undefined' &&
+      typeof DeviceMotionEvent.requestPermission === 'function') {
+    DeviceMotionEvent.requestPermission().then(r => {
+      if (r === 'granted') window.addEventListener('devicemotion', onMotion);
+    }).catch(()=>{});
   } else {
-    window.addEventListener('devicemotion',onMotion);
+    window.addEventListener('devicemotion', onMotion);
   }
 }
-
-function onMotion(e){
-  const a=e.accelerationIncludingGravity; if(!a) return;
-  const {x,y,z}=a;
-  if(lx===null){lx=x;ly=y;lz=z;return;}
-  const d=Math.abs(x-lx)+Math.abs(y-ly)+Math.abs(z-lz);
-  lx=x;ly=y;lz=z;
-  if(d>THRESH&&!shLock){
-    shLock=setTimeout(()=>shLock=null,1000);
+function onMotion(e) {
+  const a = e.accelerationIncludingGravity; if (!a) return;
+  const {x,y,z} = a;
+  if (lx === null) { lx=x; ly=y; lz=z; return; }
+  const d = Math.abs(x-lx)+Math.abs(y-ly)+Math.abs(z-lz);
+  lx=x; ly=y; lz=z;
+  if (d > 17 && !shLock) {
+    shLock = setTimeout(() => shLock = null, 1000);
     handleBtn();
   }
 }
+document.getElementById('cupWrap').addEventListener('click', enableMotion, {once:true});
 
-// Запрашиваем разрешение при первом касании (iOS 13+)
-document.getElementById('cupWrap').addEventListener('click',enableMotion,{once:true});
+const vib = p => { if ('vibrate' in navigator) navigator.vibrate(p); };
 
-// ── ВИБРАЦИЯ ───────────────────────────────────────────────────────────────
-const vib=p=>{ if('vibrate'in navigator) navigator.vibrate(p); };
+function initPool() {
+  const bank = buildBank();
+  bankSize = bank.length;
+  document.getElementById('bankBadge').textContent = `📚 ${bankSize} вопросов`;
+  pool = rnd(bank, GAME_SIZE);
+}
 
-// ── ЛОГИКА ─────────────────────────────────────────────────────────────────
-function initPool(){ pool=[...QS].sort(()=>Math.random()-.5); }
-
-function restart(){
-  correct=wrong=streak=bestStreak=0;
-  answered=false;current=null;
+function restart() {
+  correct = wrong = streak = bestStreak = 0;
+  answered = false; current = null;
   initPool(); updateUI();
   document.getElementById('overlay').classList.remove('on');
-  document.getElementById('empty').style.display='block';
-  document.getElementById('qc').style.display='none';
-  setBtn('🎰 Потрясти!',false);
-  document.getElementById('hint').textContent='Нажми на кубик или потряси телефон!';
+  document.getElementById('empty').style.display = 'block';
+  document.getElementById('qc').style.display = 'none';
+  setBtn('🎰 Потрясти!', false);
+  document.getElementById('hint').textContent = 'Нажми на кубик или потряси телефон!';
 }
 
-function updateUI(){
-  document.getElementById('sv0').textContent=correct;
-  document.getElementById('sv1').textContent=wrong;
-  document.getElementById('sv2').textContent=streak;
-  const done=TOTAL-pool.length;
-  const pct=Math.round(done/TOTAL*100);
-  const C=2*Math.PI*18; // ~113.1
-  document.getElementById('pcirc').style.strokeDashoffset=C-(C*pct/100);
-  document.getElementById('plbl').textContent=pct+'%';
+function updateUI() {
+  document.getElementById('sv0').textContent = correct;
+  document.getElementById('sv1').textContent = wrong;
+  document.getElementById('sv2').textContent = streak;
+  const done = GAME_SIZE - pool.length;
+  const pct = Math.round(done / GAME_SIZE * 100);
+  document.getElementById('pf').style.width = pct + '%';
+  document.getElementById('plbl1').textContent = `${done} / ${GAME_SIZE}`;
+  document.getElementById('plbl2').textContent = pct + '%';
 }
 
-function setBtn(txt,dis){
-  const b=document.getElementById('mbtn');
-  b.textContent=txt; b.disabled=dis;
+function setBtn(txt, dis) {
+  const b = document.getElementById('mbtn');
+  b.textContent = txt; b.disabled = dis;
 }
 
-function handleBtn(){
-  const btn=document.getElementById('mbtn');
-  if(btn.disabled) return;
-  if(answered){
-    if(pool.length===0){showResults();return;}
-    answered=false;
+function handleBtn() {
+  const btn = document.getElementById('mbtn');
+  if (btn.disabled) return;
+  if (answered) {
+    if (pool.length === 0) { showResults(); return; }
+    answered = false;
     doShake();
   } else {
-    if(pool.length===0){showResults();return;}
+    if (pool.length === 0) { showResults(); return; }
     doShake();
   }
 }
 
-function doShake(){
-  const cup=document.getElementById('cup');
-  const ring=document.getElementById('ring');
-  setBtn('🎰 Потрясти!',true);
+function doShake() {
+  const cup = document.getElementById('cup');
+  const ring = document.getElementById('ring');
+  setBtn('🎰 Потрясти!', true);
   vib([25,15,40]);
-
   cup.classList.remove('sh'); ring.classList.remove('pulse');
   void cup.offsetWidth;
   cup.classList.add('sh'); ring.classList.add('pulse');
-
-  setTimeout(()=>{
+  setTimeout(() => {
     cup.classList.remove('sh'); ring.classList.remove('pulse');
     showQuestion();
-    setBtn('🎰 Потрясти!',false);
-  },800);
+    setBtn('🎰 Потрясти!', false);
+  }, 800);
 }
 
-function showQuestion(){
-  current=pool.pop();
-  answered=false;
+function showQuestion() {
+  current = pool.pop();
+  answered = false;
   updateUI();
+  document.getElementById('empty').style.display = 'none';
+  document.getElementById('qc').style.display = 'block';
+  document.getElementById('fb').className = 'fb';
+  document.getElementById('fb').textContent = '';
+  document.getElementById('hint').textContent = '↑ Потряси для следующего вопроса';
 
-  document.getElementById('empty').style.display='none';
-  document.getElementById('qc').style.display='block';
-  document.getElementById('fb').className='fb';
-  document.getElementById('fb').textContent='';
-  document.getElementById('hint').textContent='↑ Потряси для следующего вопроса';
+  document.getElementById('qcat').textContent = '🌐 ' + current.cat;
+  const de = document.getElementById('qdiff');
+  const dm = {easy:['easy','⭐ Лёгкий'],medium:['medium','⭐⭐ Средний'],hard:['hard','⭐⭐⭐ Сложный']};
+  de.className = 'dtag ' + dm[current.diff][0];
+  de.textContent = dm[current.diff][1];
+  document.getElementById('qtext').textContent = current.q;
 
-  document.getElementById('qcat').textContent='🌐 '+current.cat;
+  // перетасовываем ответы
+  const origOpts = [...current.opts];
+  const sh = [...origOpts].sort(() => Math.random() - 0.5);
+  const correctText = current.opts[current.a];
+  const newA = sh.indexOf(correctText);
 
-  const de=document.getElementById('qdiff');
-  const dm={easy:['easy','⭐ Лёгкий'],medium:['medium','⭐⭐ Средний'],hard:['hard','⭐⭐⭐ Сложный']};
-  de.className='dtag '+dm[current.diff][0];
-  de.textContent=dm[current.diff][1];
-  document.getElementById('qtext').textContent=current.q;
-
-  const sh=[0,1,2,3].sort(()=>Math.random()-.5);
-  const og=document.getElementById('opts');
-  og.innerHTML='';
-  sh.forEach(i=>{
-    const b=document.createElement('button');
-    b.className='opt'; b.textContent=current.opts[i];
-    b.dataset.i=i; b.onclick=()=>pick(b,i);
+  const og = document.getElementById('opts');
+  og.innerHTML = '';
+  sh.forEach((txt, idx) => {
+    const b = document.createElement('button');
+    b.className = 'opt'; b.textContent = txt;
+    b.dataset.i = idx;
+    b.onclick = () => pick(b, idx, newA);
     og.appendChild(b);
   });
 
-  const card=document.getElementById('card');
-  card.className='card new';
-  setTimeout(()=>card.className='card',400);
-  document.querySelector('.card-wrap').scrollTop=0;
+  const card = document.getElementById('card');
+  card.className = 'card new';
+  setTimeout(() => card.className = 'card', 400);
+  document.querySelector('.card-wrap').scrollTop = 0;
 }
 
-function pick(btn,idx){
-  if(answered) return;
-  answered=true;
-  document.querySelectorAll('.opt').forEach(b=>b.disabled=true);
-
-  const ok=idx===current.a;
-  const fb=document.getElementById('fb');
-
-  if(ok){
+function pick(btn, idx, correctIdx) {
+  if (answered) return;
+  answered = true;
+  document.querySelectorAll('.opt').forEach(b => b.disabled = true);
+  const ok = idx === correctIdx;
+  const fb = document.getElementById('fb');
+  if (ok) {
     btn.classList.add('ok');
     correct++; streak++;
-    if(streak>bestStreak) bestStreak=streak;
-    fb.className='fb ok on';
-    fb.textContent='✅ '+current.fact;
+    if (streak > bestStreak) bestStreak = streak;
+    fb.className = 'fb ok on';
+    fb.textContent = '✅ ' + current.fact;
     vib([40,20,70]);
-    if(streak>=3){ showBadge('🔥 Серия × '+streak+'!'); confetti(); }
+    if (streak >= 3) { showBadge('🔥 Серия × ' + streak + '!'); confetti(); }
   } else {
     btn.classList.add('no');
-    wrong++; streak=0;
-    fb.className='fb no on';
-    fb.textContent='❌ Верно: «'+current.opts[current.a]+'». '+current.fact;
+    wrong++; streak = 0;
+    fb.className = 'fb no on';
+    fb.textContent = '❌ Верно: «' + current.opts[current.a] + '». ' + current.fact;
     vib([90,40,90]);
-    document.querySelectorAll('.opt').forEach(b=>{
-      if(+b.dataset.i===current.a) b.classList.add('ok');
+    document.querySelectorAll('.opt').forEach(b => {
+      if (+b.dataset.i === correctIdx) b.classList.add('ok');
     });
   }
-
   updateUI();
-  setBtn(pool.length===0?'🏆 Результаты':'➡️ Следующий вопрос',false);
+  setBtn(pool.length === 0 ? '🏆 Результаты' : '➡️ Следующий вопрос', false);
 }
 
-function showBadge(txt){
-  const b=document.getElementById('sbadge');
-  b.textContent=txt; b.className='sbadge';
-  void b.offsetWidth; b.className='sbadge pop';
+function showBadge(txt) {
+  const b = document.getElementById('sbadge');
+  b.textContent = txt; b.className = 'sbadge';
+  void b.offsetWidth; b.className = 'sbadge pop';
 }
 
-function showResults(){
-  const tot=correct+wrong;
-  const pct=tot?Math.round(correct/tot*100):0;
-  const score=Math.max(0,correct*10-wrong*3);
-  let e='😅',t='Не сдавайся!';
-  if(pct>=90){e='🏆';t='Ты — гений географии!';}
-  else if(pct>=75){e='🥇';t='Отличный результат!';}
-  else if(pct>=60){e='🌍';t='Хорошая работа!';}
-  else if(pct>=40){e='🗺️';t='Есть куда расти!';}
-  document.getElementById('re').textContent=e;
-  document.getElementById('rt').textContent=t;
-  document.getElementById('rs').textContent='Пройдено вопросов: '+tot;
-  document.getElementById('rscore').textContent=score;
-  document.getElementById('rpct').textContent=pct+'%';
-  document.getElementById('rbest').textContent=bestStreak;
+function showResults() {
+  const tot = correct + wrong;
+  const pct = tot ? Math.round(correct / tot * 100) : 0;
+  const score = Math.max(0, correct * 10 - wrong * 3);
+  let e = '😅', t = 'Не сдавайся!';
+  if (pct >= 90) { e = '🏆'; t = 'Ты — гений географии!'; }
+  else if (pct >= 75) { e = '🥇'; t = 'Отличный результат!'; }
+  else if (pct >= 60) { e = '🌍'; t = 'Хорошая работа!'; }
+  else if (pct >= 40) { e = '🗺️'; t = 'Есть куда расти!'; }
+  document.getElementById('re').textContent = e;
+  document.getElementById('rt').textContent = t;
+  document.getElementById('rs').textContent = `Пройдено: ${tot} вопросов из ${GAME_SIZE}`;
+  document.getElementById('rscore').textContent = score;
+  document.getElementById('rpct').textContent = pct + '%';
+  document.getElementById('rbest').textContent = bestStreak;
   document.getElementById('overlay').classList.add('on');
-  if(pct>=60){ vib([50,30,50,30,100]); confetti(50); }
+  if (pct >= 60) { vib([50,30,50,30,100]); confetti(50); }
 }
 
-function confetti(n=22){
-  const cl=['#ffd166','#4dffb0','#ff6b6b','#aad4f5','#f7971e','#fff','#c77dff'];
-  for(let i=0;i<n;i++){
-    setTimeout(()=>{
-      const el=document.createElement('div');
-      el.className='conf';
-      el.style.cssText=`left:${Math.random()*100}vw;top:-12px;`+
+function confetti(n = 22) {
+  const cl = ['#ffd166','#4dffb0','#ff6b6b','#aad4f5','#f7971e','#fff','#c77dff'];
+  for (let i = 0; i < n; i++) {
+    setTimeout(() => {
+      const el = document.createElement('div');
+      el.className = 'conf';
+      el.style.cssText = `left:${Math.random()*100}vw;top:-12px;`+
         `width:${Math.random()*8+5}px;height:${Math.random()*8+5}px;`+
         `background:${cl[Math.floor(Math.random()*cl.length)]};`+
         `animation-duration:${Math.random()*2+1.5}s;`+
         `animation-delay:${Math.random()*.4}s;`+
         `border-radius:${Math.random()>.5?'50%':'3px'};`;
       document.body.appendChild(el);
-      setTimeout(()=>el.remove(),3200);
-    },i*55);
+      setTimeout(() => el.remove(), 3200);
+    }, i * 55);
   }
 }
 
-// ── СТАРТ ──────────────────────────────────────────────────────────────────
-initPool(); updateUI();
+// Блокируем pull-to-refresh
+document.addEventListener('touchmove', e => {
+  if (e.touches.length === 1) e.preventDefault();
+}, {passive: false});
 
-// Блокируем pull-to-refresh и double-tap-zoom
-document.addEventListener('touchmove',e=>{
-  if(e.touches.length===1) e.preventDefault();
-},{passive:false});
+// СТАРТ
+initPool();
+updateUI();
 </script>
 </body>
 </html>
