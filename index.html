@@ -2,1016 +2,1173 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no,maximum-scale=1">
+<meta name="theme-color" content="#0d1b2a">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#0f0c29">
-<title>🌍 Шейкер Квиз — География</title>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ШейкерКвиз">
+<link rel="manifest" href="manifest.json">
+<title>ШейкерКвиз 🌍</title>
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-@keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes slideIn { from { opacity: 0; transform: translateX(40px); } to { opacity: 1; transform: translateX(0); } }
-@keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.03); } }
-@keyframes shake { 0%, 100% { transform: translateX(0); } 20% { transform: translateX(-6px); } 40% { transform: translateX(6px); } 60% { transform: translateX(-4px); } 80% { transform: translateX(4px); } }
-@keyframes bounceIn { 0% { transform: scale(0.3); opacity: 0; } 50% { transform: scale(1.05); } 70% { transform: scale(0.9); } 100% { transform: scale(1); opacity: 1; } }
-@keyframes confetti { 0% { transform: translateY(0) rotate(0deg); opacity: 1; } 100% { transform: translateY(-150px) rotate(720deg); opacity: 0; } }
-body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: linear-gradient(135deg, #0f0c29, #302b63, #24243e); background-size: 400% 400%; animation: gradientShift 15s ease infinite; min-height: 100vh; color: #fff; overflow-x: hidden; }
-.app-container { max-width: 480px; margin: 0 auto; padding: 16px; min-height: 100vh; }
-.header { text-align: center; padding: 16px 0 10px; }
-.header h1 { font-size: 26px; font-weight: 800; background: linear-gradient(135deg, #f093fb, #f5576c, #ffd200); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 0.5px; }
-.header .subtitle { font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 4px; }
-.screen { display: none; animation: fadeIn 0.4s ease; }
-.screen.active { display: block; }
-.menu-card, .question-card, .results-card { background: rgba(255,255,255,0.08); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.12); border-radius: 22px; padding: 24px 20px; margin-top: 16px; text-align: center; }
-.menu-icon { font-size: 64px; display: block; margin-bottom: 12px; animation: pulse 2s infinite; }
-.menu-card h2 { font-size: 20px; margin-bottom: 6px; }
-.menu-card p { color: rgba(255,255,255,0.6); font-size: 13px; line-height: 1.5; margin-bottom: 20px; }
-.stats-row { display: flex; justify-content: center; gap: 12px; margin-bottom: 20px; }
-.stat-box { background: rgba(255,255,255,0.08); border-radius: 14px; padding: 10px 14px; min-width: 80px; }
-.stat-box .stat-num { font-size: 22px; font-weight: 800; background: linear-gradient(135deg, #f093fb, #f5576c); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.stat-box .stat-label { font-size: 10px; color: rgba(255,255,255,0.5); margin-top: 2px; }
-.btn-primary, .btn-secondary { width: 100%; padding: 15px; border-radius: 14px; font-size: 16px; font-weight: 700; cursor: pointer; border: none; transition: transform 0.2s; margin-top: 8px; }
-.btn-primary { background: linear-gradient(135deg, #f093fb, #f5576c); color: #fff; box-shadow: 0 6px 20px rgba(245,87,108,0.3); }
-.btn-secondary { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.15); }
-.btn-primary:active, .btn-secondary:active { transform: scale(0.97); }
-.quiz-header { display: flex; justify-content: space-between; align-items: center; padding: 4px 0 12px; font-size: 13px; }
-.quiz-progress { font-weight: 600; color: rgba(255,255,255,0.7); }
-.quiz-score { background: rgba(255,255,255,0.1); border-radius: 12px; padding: 4px 10px; font-weight: 700; }
-.quiz-score span { color: #ffd200; }
-.progress-bar-container { width: 100%; height: 5px; background: rgba(255,255,255,0.1); border-radius: 3px; margin-bottom: 16px; overflow: hidden; }
-.progress-bar-fill { height: 100%; background: linear-gradient(90deg, #f093fb, #f5576c, #ffd200); transition: width 0.4s ease; }
-.category-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.1); border-radius: 16px; padding: 5px 12px; font-size: 11px; font-weight: 600; margin-bottom: 14px; }
-.question-number { font-size: 11px; color: rgba(255,255,255,0.4); margin-bottom: 8px; font-weight: 600; text-align: left; }
-.question-text { font-size: 18px; font-weight: 700; line-height: 1.45; margin-bottom: 16px; text-align: left; }
-.options-list { display: flex; flex-direction: column; gap: 10px; }
-.option-btn { background: rgba(255,255,255,0.07); border: 2px solid rgba(255,255,255,0.15); border-radius: 14px; padding: 14px 16px; color: #fff; font-size: 15px; font-weight: 600; cursor: pointer; text-align: left; display: flex; align-items: center; gap: 10px; transition: all 0.25s ease; }
-.option-btn .option-letter { width: 28px; height: 28px; border-radius: 8px; background: rgba(255,255,255,0.12); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; flex-shrink: 0; }
-.option-btn:active { transform: scale(0.985); }
-.option-btn.correct { background: rgba(46, 213, 115, 0.25); border-color: #2ed573; animation: bounceIn 0.4s ease; }
-.option-btn.correct .option-letter { background: #2ed573; color: #fff; }
-.option-btn.wrong { background: rgba(255, 71, 87, 0.25); border-color: #ff4757; animation: shake 0.4s ease; }
-.option-btn.wrong .option-letter { background: #ff4757; color: #fff; }
-.option-btn.disabled { pointer-events: none; opacity: 0.6; }
-.option-btn.disabled.correct, .option-btn.disabled.wrong { opacity: 1; }
-.comment-box { background: rgba(255,255,255,0.08); border-radius: 14px; padding: 14px 16px; margin-top: 16px; animation: fadeIn 0.35s ease; font-size: 14px; line-height: 1.55; color: rgba(255,255,255,0.9); border-left: 4px solid; }
-.comment-box.correct-comment { border-left-color: #2ed573; background: rgba(46,213,115,0.12); }
-.comment-box.wrong-comment { border-left-color: #ff4757; background: rgba(255,71,87,0.12); }
-.comment-title { font-weight: 700; margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
-.comment-text { color: rgba(255,255,255,0.8); font-size: 13px; }
-.next-btn { background: linear-gradient(135deg, #667eea, #764ba2); color: #fff; border: none; border-radius: 14px; padding: 14px; font-size: 15px; font-weight: 700; cursor: pointer; width: 100%; margin-top: 16px; box-shadow: 0 6px 20px rgba(102,126,234,0.3); display: none; transition: transform 0.2s; }
-.next-btn:active { transform: scale(0.97); }
-.results-emoji { font-size: 72px; display: block; margin-bottom: 12px; animation: bounceIn 0.7s ease; }
-.results-card h2 { font-size: 24px; font-weight: 800; margin-bottom: 6px; }
-.results-subtitle { color: rgba(255,255,255,0.6); font-size: 13px; margin-bottom: 20px; }
-.results-score-big { font-size: 56px; font-weight: 900; background: linear-gradient(135deg, #ffd200, #f5576c); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 6px; }
-.results-detail { color: rgba(255,255,255,0.5); font-size: 13px; margin-bottom: 22px; }
-.results-bars { display: flex; justify-content: center; gap: 20px; margin-bottom: 22px; }
-.result-bar-item { text-align: center; }
-.result-bar-item .rb-num { font-size: 26px; font-weight: 800; }
-.result-bar-item .rb-label { font-size: 10px; color: rgba(255,255,255,0.4); margin-top: 2px; }
-.rb-correct .rb-num { color: #2ed573; }
-.rb-wrong .rb-num { color: #ff4757; }
-.confetti-piece { position: fixed; width: 8px; height: 8px; top: 100%; z-index: 999; pointer-events: none; animation: confetti 1.2s ease forwards; }
-@supports (padding-bottom: env(safe-area-inset-bottom)) { .app-container { padding-bottom: calc(16px + env(safe-area-inset-bottom)); } }
+:root{
+  --sat:env(safe-area-inset-top,0px);--sab:env(safe-area-inset-bottom,0px);
+  --sal:env(safe-area-inset-left,0px);--sar:env(safe-area-inset-right,0px);
+  --gold:#ffd200;--green:#4dffb0;--red:#ff6b6b;--blue:#aad4f5;
+  --bg1:#0d1b2a;--bg2:#1a3a5c;--card:rgba(255,255,255,.07);
+  --border:rgba(255,255,255,.13);--sub:rgba(255,255,255,.55);--r:18px;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;overflow:hidden;background:linear-gradient(160deg,var(--bg1),var(--bg2));
+  font-family:-apple-system,'Nunito',system-ui,sans-serif;color:#fff;
+  overscroll-behavior:none;-webkit-user-select:none;user-select:none;}
+.app{display:flex;flex-direction:column;height:100%;height:100dvh;
+  padding:calc(14px + var(--sat)) max(14px,var(--sar)) calc(14px + var(--sab)) max(14px,var(--sal));
+  gap:10px;overflow:hidden;}
+.banner{display:none;background:rgba(255,210,0,.1);border:1px solid rgba(255,210,0,.25);
+  border-radius:14px;padding:9px 12px;align-items:center;gap:10px;flex-shrink:0;}
+.banner.on{display:flex;}
+.banner p{font-size:.78rem;font-weight:700;color:var(--gold);flex:1;line-height:1.3;}
+.banner .ibtn{background:var(--gold);border:none;border-radius:9px;padding:6px 12px;
+  font-size:.78rem;font-weight:900;font-family:inherit;color:#0d1b2a;cursor:pointer;}
+.banner .xbtn{background:none;border:none;color:var(--sub);font-size:1.1rem;cursor:pointer;padding:2px 6px;}
+.header{display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.logo{font-size:1.2rem;font-weight:900;letter-spacing:.4px;}
+.logo span{color:var(--gold);}
+.bank-badge{background:rgba(255,210,0,.12);border:1px solid rgba(255,210,0,.25);
+  color:var(--gold);font-size:.68rem;font-weight:800;padding:4px 10px;border-radius:20px;}
+.scores{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;flex-shrink:0;}
+.sc{background:var(--card);border:1px solid var(--border);border-radius:14px;
+  padding:7px 4px;text-align:center;backdrop-filter:blur(10px);}
+.sc .v{font-size:1.35rem;font-weight:900;line-height:1;}
+.sc .l{font-size:.6rem;color:var(--sub);text-transform:uppercase;letter-spacing:.7px;margin-top:2px;}
+.sc.c .v{color:var(--green);}.sc.w .v{color:var(--red);}.sc.s .v{color:var(--gold);}
+.prog-wrap{flex-shrink:0;}
+.prog-track{background:rgba(255,255,255,.08);border-radius:50px;height:5px;overflow:hidden;}
+.prog-fill{height:100%;background:linear-gradient(90deg,#f7971e,var(--gold));border-radius:50px;transition:width .4s ease;width:0%;}
+.prog-lbl{display:flex;justify-content:space-between;margin-top:4px;}
+.prog-lbl span{font-size:.65rem;color:var(--sub);font-weight:700;}
+.cat-indicator{font-size:.72rem;font-weight:800;text-align:center;padding:3px 0;
+  color:rgba(255,255,255,.5);letter-spacing:.5px;flex-shrink:0;}
+.zone{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;overflow:hidden;}
+.hint{font-size:.78rem;color:var(--sub);font-weight:600;text-align:center;}
+.cup-wrap{position:relative;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.ring{position:absolute;width:120%;height:120%;border-radius:50%;border:2.5px solid rgba(255,210,0,.45);opacity:0;pointer-events:none;}
+.ring.pulse{animation:ringout .55s ease-out forwards;}
+@keyframes ringout{0%{transform:scale(.75);opacity:.9}100%{transform:scale(1.7);opacity:0}}
+.cup{font-size:clamp(70px,18vw,108px);display:block;line-height:1;
+  filter:drop-shadow(0 0 22px rgba(255,210,0,.4));animation:afloat 3.5s ease-in-out infinite;}
+@keyframes afloat{0%,100%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(-12px) rotate(4deg);}}
+@keyframes bigshake{
+  0%{transform:rotate(0deg) translateY(0) scale(1);}12%{transform:rotate(-22deg) translateY(-10px) scale(1.06);}
+  28%{transform:rotate(22deg) translateY(-18px) scale(1.12);}44%{transform:rotate(-17deg) translateY(-9px) scale(1.06);}
+  58%{transform:rotate(17deg) translateY(-13px) scale(1.09);}72%{transform:rotate(-11deg) translateY(-5px) scale(1.02);}
+  86%{transform:rotate(7deg) translateY(-2px) scale(1);}100%{transform:rotate(0deg) translateY(0) scale(1);}}
+.cup.sh{animation:bigshake .78s cubic-bezier(.36,.07,.19,.97) forwards;filter:drop-shadow(0 0 40px rgba(255,210,0,.9));}
+.card-wrap{flex:0 0 auto;max-height:52vh;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;scrollbar-width:none;}
+.card-wrap::-webkit-scrollbar{display:none;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:16px;backdrop-filter:blur(16px);}
+@keyframes cardin{from{opacity:0;transform:translateY(18px) scale(.97)}to{opacity:1;transform:none}}
+.card.new{animation:cardin .35s ease;}
+.empty{text-align:center;padding:22px 12px;color:var(--sub);font-size:.9rem;font-weight:600;line-height:1.6;}
+.empty .big{font-size:2.2rem;margin-bottom:6px;}
+.qmeta{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px;}
+.ctag{background:rgba(255,209,0,.15);border:1px solid rgba(255,209,0,.3);color:var(--gold);
+  font-size:.68rem;font-weight:800;padding:3px 9px;border-radius:20px;text-transform:uppercase;letter-spacing:.6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.dtag{font-size:.68rem;font-weight:800;padding:3px 9px;border-radius:20px;white-space:nowrap;}
+.easy{background:rgba(77,255,176,.14);color:var(--green);border:1px solid rgba(77,255,176,.3);}
+.medium{background:rgba(255,200,50,.14);color:#ffc832;border:1px solid rgba(255,200,50,.3);}
+.hard{background:rgba(255,107,107,.14);color:var(--red);border:1px solid rgba(255,107,107,.3);}
+.qtext{font-size:clamp(.92rem,3.2vw,1.05rem);font-weight:700;line-height:1.45;margin-bottom:14px;color:#fff;}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.opt{padding:12px 9px;font-size:.86rem;font-weight:700;font-family:inherit;
+  background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.13);
+  border-radius:12px;color:#ddeeff;cursor:pointer;text-align:left;line-height:1.3;
+  transition:background .15s,border-color .15s,transform .1s;min-height:50px;display:flex;align-items:center;}
+.opt:active:not(:disabled){transform:scale(.97);}
+.opt.ok{background:rgba(77,255,176,.2);border-color:var(--green);color:var(--green);animation:popin .3s ease;}
+.opt.no{background:rgba(255,107,107,.15);border-color:var(--red);color:#ff9f9f;animation:wrongsh .3s ease;}
+@keyframes popin{0%{transform:scale(.96)}60%{transform:scale(1.04)}100%{transform:scale(1)}}
+@keyframes wrongsh{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.opt:disabled{cursor:default;}
+.fb{margin-top:11px;padding:11px 13px;border-radius:12px;font-size:.82rem;font-weight:700;line-height:1.4;display:none;}
+.fb.on{display:block;animation:fadein .3s ease;}
+.fb.ok{background:rgba(77,255,176,.11);border:1px solid rgba(77,255,176,.32);color:var(--green);}
+.fb.no{background:rgba(255,107,107,.09);border:1px solid rgba(255,107,107,.28);color:#ffaaaa;}
+.mbtn{width:100%;padding:15px;font-size:.98rem;font-weight:900;font-family:inherit;
+  background:linear-gradient(135deg,#f7971e,var(--gold));border:none;border-radius:16px;
+  color:#0d1b2a;cursor:pointer;box-shadow:0 4px 20px rgba(255,210,0,.32);
+  transition:transform .1s,box-shadow .1s,opacity .2s;letter-spacing:.3px;flex-shrink:0;}
+.mbtn:active{transform:scale(.98);}
+.mbtn:disabled{opacity:.45;}
+.sbadge{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);
+  background:linear-gradient(135deg,#f7971e,var(--gold));color:#0d1b2a;
+  font-size:1.05rem;font-weight:900;padding:13px 26px;border-radius:50px;
+  z-index:50;pointer-events:none;white-space:nowrap;box-shadow:0 8px 28px rgba(255,210,0,.5);}
+.sbadge.pop{animation:sbpop 1.6s ease forwards;}
+@keyframes sbpop{
+  0%{transform:translate(-50%,-50%) scale(0);opacity:0;}20%{transform:translate(-50%,-50%) scale(1.1);opacity:1;}
+  35%{transform:translate(-50%,-50%) scale(1);opacity:1;}80%{transform:translate(-50%,-50%) scale(1);opacity:1;}
+  100%{transform:translate(-50%,-50%) scale(.8);opacity:0;}}
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);
+  backdrop-filter:blur(12px);z-index:100;align-items:flex-end;justify-content:center;
+  padding:0 16px calc(20px + var(--sab));}
+.overlay.on{display:flex;animation:fadein .35s ease;}
+@keyframes fadein{from{opacity:0}to{opacity:1}}
+.rsheet{background:linear-gradient(160deg,#1a2d42,#0d1b2a);border:1px solid rgba(255,255,255,.17);
+  border-radius:26px 26px 20px 20px;padding:30px 22px 26px;width:100%;max-width:430px;
+  text-align:center;animation:slideup .4s cubic-bezier(.34,1.56,.64,1);}
+@keyframes slideup{from{transform:translateY(90px);opacity:0}to{transform:none;opacity:1}}
+.rsheet .re{font-size:3.2rem;margin-bottom:8px;}.rsheet .rt{font-size:1.45rem;font-weight:900;margin-bottom:4px;}
+.rsheet .rs{font-size:.82rem;color:var(--sub);margin-bottom:22px;}
+.rstats{display:flex;justify-content:center;gap:22px;margin-bottom:26px;}
+.rstat .rv{font-size:2rem;font-weight:900;color:var(--gold);}
+.rstat .rl{font-size:.62rem;color:var(--sub);text-transform:uppercase;letter-spacing:1px;margin-top:2px;}
+.rbtn{width:100%;padding:15px;font-size:.98rem;font-weight:900;font-family:inherit;
+  background:linear-gradient(135deg,#f7971e,var(--gold));border:none;border-radius:14px;
+  color:#0d1b2a;cursor:pointer;box-shadow:0 4px 18px rgba(255,210,0,.32);}
+.conf{position:fixed;border-radius:3px;pointer-events:none;z-index:200;animation:cffall linear forwards;}
+@keyframes cffall{to{transform:translateY(110vh) rotate(900deg);opacity:0}}
 </style>
 </head>
 <body>
-<div class="app-container">
+<div class="app">
+  <div class="banner" id="banner">
+    <p>📲 Установи как приложение!</p>
+    <button class="ibtn" onclick="installPWA()">Установить</button>
+    <button class="xbtn" onclick="closeBanner()">✕</button>
+  </div>
   <div class="header">
-    <h1>🌍 Шейкер Квиз</h1>
-    <div class="subtitle">География • 13 категорий • Без повторов</div>
+    <div class="logo">🌍 Шейкер<span>Квиз</span></div>
+    <div class="bank-badge" id="bankBadge">📚 загрузка…</div>
   </div>
-
-  <div id="screen-menu" class="screen active">
-    <div class="menu-card">
-      <span class="menu-icon">🧠</span>
-      <h2>Готов тряхнуть знаниями?</h2>
-      <p>50 вопросов из 13 категорий. Каждый раз — новые! Вопросы никогда не повторяются.</p>
-      <div class="stats-row">
-        <div class="stat-box"><div class="stat-num" id="total-played">0</div><div class="stat-label">Игр сыграно</div></div>
-        <div class="stat-box"><div class="stat-num" id="total-answered">0</div><div class="stat-label">Вопросов пройдено</div></div>
-        <div class="stat-box"><div class="stat-num" id="total-available">500+</div><div class="stat-label">Осталось</div></div>
+  <div class="scores">
+    <div class="sc c"><div class="v" id="sv0">0</div><div class="l">✅ Верно</div></div>
+    <div class="sc w"><div class="v" id="sv1">0</div><div class="l">❌ Ошибки</div></div>
+    <div class="sc s"><div class="v" id="sv2">0</div><div class="l">🔥 Серия</div></div>
+  </div>
+  <div class="prog-wrap">
+    <div class="prog-track"><div class="prog-fill" id="pf"></div></div>
+    <div class="prog-lbl"><span id="plbl1">0 / 50</span><span id="plbl2">0%</span></div>
+  </div>
+  <div class="cat-indicator" id="catInd">🎲 Потряси, чтобы начать!</div>
+  <div class="zone">
+    <div class="cup-wrap" id="cupWrap" onclick="handleBtn()">
+      <div class="ring" id="ring"></div>
+      <span class="cup" id="cup">🎲</span>
+    </div>
+    <p class="hint" id="hint">Нажми или потряси телефон!</p>
+  </div>
+  <div class="card-wrap">
+    <div class="card" id="card">
+      <div class="empty" id="empty"><div class="big">🎲</div>Нажми кубик или потряси телефон,<br>чтобы получить вопрос</div>
+      <div id="qc" style="display:none">
+        <div class="qmeta"><span class="ctag" id="qcat"></span><span class="dtag" id="qdiff"></span></div>
+        <div class="qtext" id="qtext"></div>
+        <div class="opts" id="opts"></div>
+        <div class="fb" id="fb"></div>
       </div>
-      <button class="btn-primary" onclick="startGame()">🎮 Начать игру</button>
-      <button class="btn-secondary" onclick="resetProgress()">🗑 Сбросить прогресс</button>
     </div>
   </div>
-
-  <div id="screen-quiz" class="screen">
-    <div class="quiz-header">
-      <div class="quiz-progress" id="quiz-progress">1 / 50</div>
-      <div class="quiz-score">⭐ <span id="live-score">0</span></div>
+  <button class="mbtn" id="mbtn" onclick="handleBtn()">🎰 Потрясти!</button>
+</div>
+<div class="sbadge" id="sbadge"></div>
+<div class="overlay" id="overlay">
+  <div class="rsheet">
+    <div class="re" id="re">🏆</div><div class="rt" id="rt">Квиз завершён!</div>
+    <div class="rs" id="rs">Все вопросы пройдены</div>
+    <div class="rstats">
+      <div class="rstat"><div class="rv" id="rscore">0</div><div class="rl">Очков</div></div>
+      <div class="rstat"><div class="rv" id="rpct">0%</div><div class="rl">Точность</div></div>
+      <div class="rstat"><div class="rv" id="rbest">0</div><div class="rl">Серия</div></div>
     </div>
-    <div class="progress-bar-container"><div class="progress-bar-fill" id="progress-fill" style="width: 2%"></div></div>
-    <div class="category-badge" id="category-badge">📍 Столицы</div>
-    <div class="question-card" id="question-card">
-      <div class="question-number" id="question-number">Вопрос 1 из 50</div>
-      <div class="question-text" id="question-text">Загрузка...</div>
-    </div>
-    <div class="options-list" id="options-list"></div>
-    <div id="comment-area"></div>
-    <button class="next-btn" id="next-btn" onclick="nextQuestion()">Следующий вопрос →</button>
-  </div>
-
-  <div id="screen-results" class="screen">
-    <div class="results-card">
-      <span class="results-emoji" id="results-emoji">🏆</span>
-      <h2 id="results-title">Отлично!</h2>
-      <div class="results-subtitle" id="results-subtitle"></div>
-      <div class="results-score-big" id="results-score-big">0/50</div>
-      <div class="results-detail" id="results-detail"></div>
-      <div class="results-bars">
-        <div class="result-bar-item rb-correct"><div class="rb-num" id="res-correct">0</div><div class="rb-label">Верно</div></div>
-        <div class="result-bar-item rb-wrong"><div class="rb-num" id="res-wrong">0</div><div class="rb-label">Неверно</div></div>
-      </div>
-      <button class="btn-primary" onclick="startGame()">🔄 Ещё разок!</button>
-      <button class="btn-secondary" onclick="showMenu()">🏠 В меню</button>
-    </div>
+    <button class="rbtn" onclick="restart()">🔄 Играть снова</button>
   </div>
 </div>
 
 <script>
-const TOTAL_QUESTIONS_PER_GAME = 50;
-const CATEGORIES = ["Столицы","Континенты","Рекорды","Население","Горы","Реки","Озёра","Острова","Пустыни","Флаги","Природа","Города","Политика"];
-const CAT_EMOJIS = {"Столицы":"🏛️","Континенты":"🌍","Рекорды":"🏆","Население":"👥","Горы":"⛰️","Реки":"🌊","Озёра":"💧","Острова":"🏝️","Пустыни":"🏜️","Флаги":"🏳️","Природа":"🌿","Города":"🏙️","Политика":"📜"};
+// ══════════════════════════════════════════════════════════════════════════
+//  ДАННЫЕ  (площадь в точных км²!)
+// ══════════════════════════════════════════════════════════════════════════
+const CONTS = ["Европа","Азия","Африка","Северная Америка","Южная Америка","Австралия и Океания"];
+const CAT_ORDER = ["Столицы","Континенты","Рекорды","Население","Горы","Реки","Озёра","Острова","Пустыни","Флаги","Природа","Города","Политика"];
 
-// База фактов для комментариев (ключ = правильный ответ в нижнем регистре)
-const FACTS = {
-  // Столицы
-  "стамбул": "Единственная столица в мире, расположенная на двух континентах — Европе и Азии, разделённых проливом Босфор.",
-  "вадуц": "Столица Лихтенштейна — одна из самых маленьких в мире, с населением всего около 6000 человек.",
-  "ла-пас": "Самая высокогорная столица мира (3640 м), хотя конституционная столица Боливии — Сукре.",
-  "бразилиа": "Построена с нуля за 41 месяц в 1960 году по плану архитектора Оскара Нимейера.",
-  "нейпьидо": "Новая столица Мьянмы, перенесённая из Янгона в 2005 году в глубь страны по стратегическим соображениям.",
-  "стокгольм": "Расположен на 14 островах, соединённых более чем 50 мостами, и омывается водами Балтийского моря.",
-  "канберра": "Единственная столица-континента, не имеющая выхода к морю, и единственная, построенная специально как столица.",
-  "астана": "Переименована в Нур-Султан в 2019 году, но в 2022 вернула имя Астана. Вторая самая холодная столица в мире.",
-  "веллингтон": "Самая южная столица независимого государства в мире и одна из самых ветреных городов планеты.",
-  "абуджа": "Плановая столица Нигерии, построенная в 1980-х в центре страны для объединения разных этнических групп.",
-  "додома": "Официальная столица Танзании с 1996 года, хотя правительство до сих пор частично работает в Дар-эс-Саламе.",
-  "шри-джаяварденепура-котте": "Самое длинное официальное название столицы в мире. Часто называют просто «Котте».",
-  "сукре": "Конституционная столица Боливии, где находится Верховный суд, хотя правительство заседает в Ла-Пасе.",
-  "бельмопан": "Столица Белиза, перенесённая в 1970 году после разрушительного урагана, уничтожившего Белиз-Сити.",
-  "банжул": "Столица Гамбии, расположенная на острове Святой Марии в устье реки Гамбия.",
-  "тхимпху": "Единственная столица в мире без светофоров — регулировщики используют жесты вместо сигналов.",
-  "асмэра": "Столица Эритреи с уникальной архитектурой в стиле ар-деко, внесённой в список ЮНЕСКО.",
-  "парамарибо": "Столица Суринама, где более половины населения живёт, и где сохранилась колониальная архитектура Нидерландов.",
-  "джорджтаун": "Единственная столица в Южной Америке, где говорят на английском языке (бывшая британская колония).",
-  "порт-оф-спейн": "Столица Тринидада и Тобаго, родина музыкального стиля калипсо и стальных барабанов.",
-  "мбабане": "Административная столица Эсватини, в то время как королевская резиденция находится в Лобамбе.",
-  "джибути": "Столица Джибути — один из самых жарких городов мира, где средняя температура июля +41°C.",
-  "кастри": "Столица Сент-Люсии, названная в честь французского маршала, и один из лучших природных портов Кариб.",
-  "розо": "Столица Доминики, расположенная у подножия вулкана и известная своими геотермальными источниками.",
-  "сент-джонс": "Столица Антигуа и Барбуды с одной из самых безопасных естественных гаваней в Карибском бассейне.",
-  
-  // Континенты
-  "6": "Общепринятая модель: Евразия, Африка, Северная Америка, Южная Америка, Антарктида, Австралия.",
-  "евразия": "Самый большой континент: 54,7 млн км², где живёт около 70% населения Земли.",
-  "австралия": "Самый маленький континент (7,7 млн км²) и единственная страна-континент.",
-  "антарктида": "Единственный континент без постоянного населения и без стран. Регулируется международным договором.",
-  "африка": "Единственный континент, который пересекает экватор, Северный и Южный тропики одновременно.",
-  "антарктида": "Полностью в южном полушарии, самый холодный, сухой и ветреный континент на планете.",
-  "антарктида": "Самая сухая пустыня мира — в Долине Сухих Долин не было дождей почти 2 млн лет.",
-  "евразия": "Омывается Северным Ледовитым, Атлантическим, Индийским и Тихим океанами.",
-  "азия": "Дом для 4,7 млрд человек — больше, чем на всех остальных континентах вместе взятых.",
-  "антарктида": "Самый холодный континент: рекорд −89,2°C зафиксирован на станции «Восток» в 1983 году.",
-  "гибралтарский": "Ширина пролива всего 14 км — в ясный день из Испании видна Африка.",
-  "панамский": "Открыт в 1914 году, сократил путь между океанами на 13 000 км, избегая пролива Магеллана.",
-  "америка": "Термин ввёл Америго Веспуччи, понявший, что Колумб открыл новый континент, а не Азию.",
-  "африка": "Форма «песочных часов» или буквы S обусловлена тектоническими разломами и эрозией.",
-  "австралия": "Полностью в восточном полушарии, между 113° и 154° восточной долготы.",
-  "антарктида": "180-й меридиан проходит через Западную Антарктиду, разделяя восточную и западную долготы.",
-  "азия": "Эверест (8848 м) находится на границе Непала и Тибета в Гималаях.",
-  "южная америка": "Анхель (979 м) в Венесуэле — самый высокий водопад мира, назван в честь лётчика Джеймса Анхеля.",
-  "африка": "Термин ввели европейские колонизаторы из-за недостатка знаний о континенте в XIX веке.",
-  "евразия": "Россия одна охватывает 11 часовых поясов, а Франция с заморскими территориями — 12.",
-  
-  // Рекорды
-  "байкал": "Самое глубокое озеро мира (1642 м) и крупнейший резервуар пресной воды (20% мировых запасов).",
-  "нил": "Традиционно считается самой длинной рекой (6650 км), хотя некоторые исследования отдают первенство Амазонке.",
-  "эверест": "Высота 8848,86 м (по данным 2020 года). Первое восхождение — Хиллари и Норгей, 1953 год.",
-  "антарктическая": "Пустыня площадью 14 млн км², где осадков выпадает менее 50 мм в год.",
-  "гренландия": "Площадь 2 166 086 км², 80% покрыто льдом толщиной до 3 км.",
-  "каспийское море": "Самое большое озеро по площади (371 000 км²), хотя по геологии это бессточное море.",
-  "анхель": "Высота свободного падения воды — 807 м. Расположен в национальном парке Канайма, Венесуэла.",
-  "долина смерти": "Рекорд +56,7°C зафиксирован в 1913 году в Фёрнес-Крик, Калифорния.",
-  "мегхалая (индия)": "Черрапунджи и Мосинрам получают до 11 872 мм осадков в год — рекорд планеты.",
-  "марианский": "Глубина 10 994 м. Давление на дне в 1100 раз больше атмосферного.",
-  "дон-жуан": "Солёность 40-44%, что в 18 раз выше океана. Не замерзает даже при −50°C.",
-  "репруа": "Длина всего 18 метров, впадает в Чёрное море в Абхазии. Внесена в Книгу рекордов Гиннесса.",
-  "матован": "Высота всего 1,2 метра, расположен на Филиппинах. Действующий вулкан с 1628 года.",
-  "тибетское": "Площадь 2,5 млн км², средняя высота 4500 м — «Крыша мира».",
-  "анды": "Длина 7000 км, проходят через 7 стран Южной Америки. Самая длинная горная цепь на суше.",
-  "россия": "Площадь 17,1 млн км² — больше, чем у Плутона (16,7 млн км²).",
-  "ватикан": "Площадь 0,44 км², население ~800 человек. Самое маленькое государство в мире.",
-  "бездна челленджера": "Самая глубокая точка Марианской впадины, названа в честь судна HMS Challenger.",
-  "мауна-лоа": "Объём 75 000 км³, высота от основания на дне океана — 10 210 м.",
-  "мамонтова": "Длина исследованных проходов — более 676 км в штате Кентукки, США.",
-  
-  // Население
-  "индия": "Обогнала Китай в 2023 году: 1,428 млрд человек против 1,425 млрд (данные ООН).",
-  "ватикан": "Население ~800 человек, все — граждане по службе. Гражданство не передаётся по наследству.",
-  "папуа — новая гвинея": "Более 850 языков — 12% всех языков мира на одной стране с населением 9 млн.",
-  "япония": "Средний возраст 48,6 лет, 29% населения старше 65 — самый высокий показатель в мире.",
-  "монако": "Плотность 26 000 чел/км². Площадь 2 км², но население 39 000 человек.",
-  "нигер": "Средний возраст 15,2 года, рождаемость 6,7 детей на женщину — самая молодая нация.",
-  "китай": "Около 250 млн буддистов, хотя официально атеистическое государство.",
-  "папуа — новая гвинея": "Более 600 этнических групп, многие изолированы в горных долинах.",
-  "монголия": "Плотность 2 чел/км². 3,3 млн человек на территории 1,56 млн км².",
-  "сингапур": "100% городского населения. Город-государство без сельской местности.",
-  "индонезия": "231 млн мусульман — 13% всех мусульман мира. Самая большая мусульманская страна.",
-  "ватикан": "100% католиков по определению — все граждане связаны с Церковью.",
-  "в городах": "56% населения Земли живёт в городах (2024). Прогноз: 68% к 2050 году.",
-  "нигер": "Рост населения 3,7% в год. Население удваивается каждые 19 лет.",
-  "япония": "Средний возраст 48,6 лет. Прогноз: к 2050 году население сократится на 30%.",
-  "сша": "Около 253 млн христиан (70% населения) — самая большая христианская страна по числу верующих.",
-  "индия": "Диаспора 32 млн человек в 130 странах. Крупнейшие общины в ОАЭ, США, Саудовской Аравии.",
-  "андорра": "Уровень грамотности 100%. Всеобщее бесплатное образование с 6 до 16 лет.",
-  "нигер": "Уровень грамотности 37% (2023). Только 29% девочек посещают начальную школу.",
-  "нигер": "Среднее число детей на семью — 6,7. Высокая рождаемость сочетается с высокой детской смертностью.",
-  
-  // Горы
-  "килиманджаро": "Высота 5895 м. Единственная гора Африки с ледниками, хотя они тают из-за изменения климата.",
-  "эльбрус": "Высота 5642 м. Потухший вулкан на Кавказе, граница Европы и Азии.",
-  "денали": "Высота 6190 м. До 2015 года называлась Мак-Кинли. Самое большое вертикальное превышение в мире.",
-  "аконкагуа": "Высота 6961 м. Самая высокая гора за пределами Азии, расположена в Аргентине.",
-  "косцюшко": "Высота 2228 м. Названа в честь польского героя Тадеуша Костюшко.",
-  "более 10 000": "По данным Непала, на вершину Эвереста поднялись более 11 000 раз (некоторые альпинисты — многократно).",
-  "хиллари и норгей": "Эдмунд Хиллари (Новая Зеландия) и Тенцинг Норгей (шерп) достигли вершины 29 мая 1953 года.",
-  "к2": "Второй по высоте (8611 м), но самый сложный: смертность при восхождении ~25%, против ~4% на Эвересте.",
-  "охос-дель-саладо": "Высота 6893 м. Действующий вулкан на границе Чили и Аргентины с кратерным озером.",
-  "япония": "Высота 3776 м. Священная гора, объект ЮНЕСКО. Восхождение разрешено только в июле-августе.",
-  "кайлас": "Высота 6638 м. Священная для индуистов, буддистов, джайнистов. Восхождение запрещено по религиозным соображениям.",
-  "франция/италия": "Высота 4807 м. Первый подъём в 1786 году. Граница проходит точно по вершине.",
-  "олимп": "Высота 21,9 км — почти в 2,5 раза выше Эвереста. Самый большой вулкан Солнечной системы.",
-  "анды": "Длина 7000 км. Включают 100 вершин выше 6000 м. Формируются субдукцией плиты Наска.",
-  "турция": "Высота 5137 м. По библейской легенде, здесь остановился Ноев ковчег.",
-  "мауна-кеа": "От основания на дне океана высота 10 210 м. Вершина на 4207 м над уровнем моря.",
-  "массив винсон": "Высота 4892 м. Открыт только в 1958 году. Самый труднодоступный из «Семь вершин».",
-  "танзания": "Килиманджаро — потухший вулкан с тремя конусами: Кибо, Мавензи, Шира.",
-  "гималаи": "Сформировались 50 млн лет назад при столкновении Индийской и Евразийской плит. Растут на 5 мм в год.",
-  "монес-апеннинус": "Высота 2,4 км. Горный хребет на Луне, названный в честь Апеннин в Италии.",
-  
-  // Реки
-  "амазонка": "Расход воды 209 000 м³/с — больше, чем следующие 7 крупнейших рек вместе. 20% пресной воды планеты.",
-  "10": "Дунай протекает через 10 стран: Германия, Австрия, Словакия, Венгрия, Хорватия, Сербия, Болгария, Румыния, Молдова, Украина.",
-  "сена": "Длина 777 км. Протекает через центр Парижа, разделена на Сите, правый и левый берега.",
-  "темза": "Длина 346 км. Приливная река: уровень в Лондоне меняется на 7 метров.",
-  "волга": "Длина 3530 км. Самая длинная река Европы, впадает в Каспийское море.",
-  "индия": "Длина 2525 км. Священная река индуизма. В бассейне живёт 400 млн человек.",
-  "волга": "Впадает в Каспийское море — крупнейший бессточный водоём. Дельта Волги — крупнейшая в Европе.",
-  "тигр": "Длина 1900 км. Вместе с Евфратом образует Месопотамию — «колыбель цивилизации».",
-  "конго": "Длина 4700 км. Вторая по полноводности в мире. Единственная река, пересекающая экватор дважды.",
-  "юго-восточная азия": "Длина 4350 км. Протекает через 6 стран. Дельта — одна из самых плодородных на Земле.",
-  "рио-гранде": "Длина 3034 км. Формирует границу США и Мексики на 2000 км.",
-  "тибр": "Длина 405 км. На её берегах основан Рим. Легенда: волчица выкормила Ромула и Рема у этой реки.",
-  "амазонка": "Длина 6992 км (по новым данным). В бассейне — 40 000 видов растений, 3000 рыб.",
-  "россия": "Длина 4400 км. Крупнейшая река, полностью протекающая в зоне вечной мерзлоты.",
-  "нил": "Длина 6650 км. Единственный источник воды для 250 млн человек в 11 странах.",
-  "чиннава": "Река в Индонезии, где концентрация промышленных отходов превышает норму в 1000 раз.",
-  "босфор (пролив)": "Не река, а пролив длиной 30 км. Разделяет Европу и Азию, соединяет Чёрное и Мраморное моря.",
-  "репруа": "Длина 18 м. Впадает в Чёрное море в Абхазии. Самая короткая река России и одна из самых коротких в мире.",
-  "влтава": "Длина 430 км. Протекает через Прагу, впадает в Эльбу. Символ чешской национальной идентичности.",
-  "африка": "Длина 2574 км. Известна водопадом Виктория и реками с крокодилами и бегемотами.",
-  
-  // Озёра
-  "байкал": "Глубина 1642 м. Возраст 25 млн лет. Дом для 2500 видов, 80% из которых — эндемики.",
-  "верхнее": "Площадь 82 100 км². Крупнейшее пресноводное озеро по площади. Объём — 12 100 км³.",
-  "мёртвое море": "Солёность 34% — в 10 раз выше океана. Плотность воды позволяет лежать на поверхности без усилий.",
-  "перу/боливия": "Высота 3812 м. Крупнейшее высокогорное судоходное озеро. Источник легенд об инках.",
-  "виктория": "Площадь 68 800 км². Крупнейшее тропическое озеро. Названо в честь королевы Виктории.",
-  "шотландия": "Длина 37 км. Глубина до 230 м. Легенды о Несси привлекают туристов со всего мира.",
-  "байкал": "Содержит 20% мировых запасов поверхностной пресной воды. Вода прозрачна до 40 м.",
-  "титикака": "Площадь 8372 км². Самое большое озеро Южной Америки по объёму воды.",
-  "венгрия": "Площадь 592 км². Крупнейшее озеро Центральной Европы. Популярный курорт с термальными водами.",
-  "никарагуа": "Площадь 8264 км². Единственное пресноводное озеро с акулами и рыбой-пираньей.",
-  "италия": "Глубина до 410 м. Третье по глубине в Европе. Известно виллами и курортами.",
-  "аральское": "С 1960 года потеряло 90% объёма из-за забора воды на орошение. Экологическая катастрофа.",
-  "титикака": "Высота 3812 м. Самое высокое судоходное озеро. Инки считали его местом рождения цивилизации.",
-  "байкал": "Возраст 25-30 млн лет. Самое древнее озеро планеты. Образовалось в рифтовой зоне.",
-  "ладожское": "Площадь 17 700 км². Крупнейшее озеро Европы. Соединено с Балтикой через Неву.",
-  "хиллер": "Розовый цвет из-за водорослей Dunaliella salina и бактерий. Расположено на острове в Австралии.",
-  "ришат": "Глаз Сахары — геологическое образование в Мавритании диаметром 40 км. Видно из космоса.",
-  "верхнее": "Площадь 82 100 км². Крупнейшее из Великих озёр. Объём воды — 12 100 км³.",
-  "каспийское": "Площадь 371 000 км². Крупнейшее озеро мира. По геологии — бессточное море.",
-  "китай": "Площадь меняется от 3000 до 5000 км² в зависимости от сезона. Крупнейшее пресноводное озеро Китая.",
-  
-  // Острова
-  "гренландия": "Площадь 2 166 086 км². 80% покрыто льдом. Принадлежит Дании, но имеет автономию.",
-  "ява": "Население 148 млн человек. Плотность 1100 чел/км². Здесь живёт более половины населения Индонезии.",
-  "более 17 000": "Индонезия — крупнейшее островное государство. Заселено около 6000 островов.",
-  "остров свободы": "Площадь 0,49 км². Куплен Нью-Йорком в 1808 году. Статуя установлена в 1886.",
-  "сицилия": "Площадь 25 711 км². Крупнейший остров Средиземноморья. Дом вулкана Этна.",
-  "чили": "Расстояние от материка 3700 км. Знаменит моаи — каменными статуями высотой до 10 м.",
-  "куба": "Площадь 109 884 км². Крупнейший остров Карибского бассейна. Известен сигарами и революцией.",
-  "индонезия": "Площадь 5783 км². Популярный туристический центр. Единственный остров в мире, где исповедуют индуизм в мусульманской стране.",
-  "борнео": "Разделён между Индонезией (73%), Малайзией (26%) и Брунеем (1%).",
-  "у восточного берега африки": "Площадь 587 041 км². Четвёртый по величине остров. Отделился от Африки 160 млн лет назад.",
-  "хонсю": "Площадь 227 960 км². Здесь расположены Токио, Киото, Осака. 80% населения Японии.",
-  "норвегия": "Архипелаг в Северном Ледовитом океане. Известен полярными сияниями и северными оленями.",
-  "остров александра i": "Расположен у побережья Антарктиды. Площадь 49 070 км². Необитаем.",
-  "средиземное море": "Площадь 316 км². Независимое государство. Официальные языки: мальтийский и английский.",
-  "лусон": "Площадь 109 965 км². Здесь расположена столица Манила. 53% населения Филиппин.",
-  "3 страны": "Индонезия, Малайзия, Бруней. Границы проведены в джунглях, часто по рекам.",
-  "южный": "Площадь 150 437 км². Гористый, с ледниками и фьордами. Меньше населён, чем Северный.",
-  "индийский океан": "Французский заморский департамент. Известен вулканом Питон-де-ла-Фурнез.",
-  "гавайи (большой остров)": "Площадь 10 432 км². Активные вулканы Килауэа и Мауна-Лоа. Растёт на 1 км² в год.",
-  "южная атлантика": "Британская заморская территория. Спор с Аргентиной. Известны пингвинами и овцами.",
-  
-  // Пустыни
-  "сахара": "Площадь 9,2 млн км². Крупнейшая жаркая пустыня. Простирается на 4800 км с запада на восток.",
-  "антарктическая": "Площадь 14 млн км². Самая большая пустыня мира. Осадков менее 50 мм в год.",
-  "чили": "Длина 1000 км. Самая сухая пустыня: в некоторых местах не было дождей 400 лет.",
-  "атакама": "Среднегодовое количество осадков 1 мм. Некоторые метеостанции не фиксировали дождь никогда.",
-  "монголия/китай": "Площадь 1,3 млн км². Название означает «безводное место». Климат резко континентальный.",
-  "большая песчаная": "Площадь 360 000 км². Крупнейшая пустыня Австралии. Красные дюны высотой до 30 м.",
-  "намибия": "Возраст 55-80 млн лет. Самая старая пустыня. Знаменита дюнами Соссусфлей высотой 300 м.",
-  "лут (иран)": "Температура поверхности до +70,7°C (рекорд спутниковых измерений). Почти безжизненна.",
-  "китай": "Площадь 270 000 км². «Море смерти». Подвижные пески, частые песчаные бури.",
-  "тар": "Площадь 200 000 км². Также известна как Великая Индийская пустыня. Населена, есть сельское хозяйство.",
-  "южная африка": "Площадь 900 000 км². Полупустыня с уникальной флорой: суккуленты, алоэ.",
-  "табернас": "Площадь 280 км². Единственная настоящая пустыня в Европе. Здесь снимали спагетти-вестерны.",
-  "сша/мексика": "Площадь 311 000 км². Биоразнообразие: 2000 видов растений, многие — эндемики.",
-  "каракумы": "Площадь 350 000 км². Название означает «чёрные пески». Богата газом и нефтью.",
-  "сша": "Площадь 124 000 км². Расположена в Калифорнии, Неваде, Аризоне. Знаменита деревом Джошуа.",
-  "руб-эль-хали": "Площадь 650 000 км². Крупнейшая песчаная пустыня мира. «Пустая четверть» Аравии.",
-  "австралия": "Площадь 176 500 км². Красные песчаные дюны. Крайне засушливый климат.",
-  "руб-эль-хали": "Площадь 650 000 км². Крупнейший непрерывный песчаный массив на Земле.",
-  "чили": "Длина 1000 км. Самая сухая: некоторые районы не видели дождя 400 лет.",
-  "сахара": "Площадь 9,2 млн км². Простирается от Атлантики до Красного моря. Климат меняется: 10 000 лет назад здесь были озёра.",
-  
-  // Флаги
-  "канада": "Красный кленовый лист на белом фоне между двумя красными полосами. Принят в 1965 году.",
-  "бутан": "Жёлто-оранжевый флаг с белым драконом. Дракон символизирует название страны: «Страна Громового Дракона».",
-  "дания": "Флаг «Даннеброг» — старейший в мире, используется с 1219 года. Легенда: упал с неба во время битвы.",
-  "сша": "50 звёзд — по числу штатов. 13 полос — по числу оригинальных колоний. Принят в 1960 году.",
-  "туркменистан": "Пять ковровых гёлей, полумесяц, 5 звёзд. Самый сложный флаг: трудно воспроизвести точно.",
-  "мексика": "Орёл, держащий змею на кактусе — символ основания Теночтитлана, столицы ацтеков.",
-  "мозамбик": "Единственный флаг с изображением современного оружия — АК-47, символ защиты независимости.",
-  "аргентина": "Солнце Мая — символ майской революции 1810 года. 32 луча, лицо в центре.",
-  "ливия (бывший)": "До 2011 года — просто зелёное полотнище. Самый простой флаг в истории.",
-  "евросоюз": "12 звёзд — символ совершенства и единства, а не числа стран. Принят в 1985 году.",
-  "доминиканская республика": "Единственный флаг с Библией. Открытая книга — символ веры и закона.",
-  "австралия": "Большая семиконечная звезда — Содружество. 5 малых + одна большая — созвездие Южный Крест.",
-  "саудовская аравия": "Зелёный флаг с шахада (исламское кредо) и мечом. Меч символизирует справедливость.",
-  "бразилия": "27 звёзд — по числу штатов и округов. Созвездия соответствуют небу над Рио 15 ноября 1889 года.",
-  "непал": "Единственный непрямоугольный флаг. Два треугольника символизируют Гималаи и две религии: индуизм и буддизм.",
-  "кипр": "Флаг с картой острова и оливковыми ветвями. Единственный флаг с изображением территории страны.",
-  "турция": "Красный фон с белым полумесяцем и звездой. Символ ислама и независимости.",
-  "германия": "Чёрный, красный, золотой — цвета национально-освободительной войны против Наполеона 1813 года.",
-  "всё перечисленное": "Флаг ООН: голубой фон, карта мира в азимутальной проекции, обрамлённая оливковыми ветвями — символ мира.",
-  "израиль": "Звезда Давида между двумя синими полосами. Символ еврейского народа и связи с Торой.",
-  
-  // Природа
-  "синий кит": "Длина до 33 м, вес до 180 тонн. Язык весит как слон, сердце — как автомобиль.",
-  "бамбук": "Некоторые виды растут на 91 см в сутки. Самый быстрый рост среди растений.",
-  "секвойя": "Гиперион — 115,92 м. Растут только в Калифорнии. Живут более 2000 лет.",
-  "гепард": "Разгоняется до 112 км/ч за 3 секунды. Может бежать только 30 секунд — перегревается.",
-  "амазония": "Площадь 5,5 млн км². Дом для 10% всех видов на Земле. Вырабатывает 20% кислорода планеты.",
-  "африканский слон": "Вес до 10 тонн, высота 4 м. Уши в форме Африки. Бивни — это зубы, растут всю жизнь.",
-  "китовая акула": "Длина до 18 м, вес до 21 тонны. Питается планктоном. Не опасна для человека.",
-  "гренландская акула": "Живёт 272-512 лет. Самая долгоживущая позвоночная. Достигает половой зрелости в 150 лет.",
-  "колумбия": "1912 видов птиц — рекорд планеты. 1 из 7 видов птиц в мире обитает здесь.",
-  "колибри-пчёлка": "Длина 5-6 см, вес 1,6-2 г. Обитает на Кубе. Машет крыльями 80 раз в секунду.",
-  "раффлезия": "Диаметр до 1 м, вес до 10 кг. Паразит, не имеет листьев и корней. Пахнет гнилым мясом.",
-  "квадратная медуза": "Яд одной особи может убить 60 взрослых людей. Смерть наступает за 2-5 минут.",
-  "северо-восточная гренландия": "Площадь 972 000 км² — крупнейший национальный парк мира. Необитаем.",
-  "шимпанзе": "ДНК совпадает с человеческим на 98,7%. Используют орудия, имеют культуру, учат язык жестов.",
-  "сосна остистая": "Мафусаил — 4854 года. Растёт в Калифорнии. Древесина устойчива к гниению и вредителям.",
-  "коралловый риф": "Большой Барьерный риф: 2900 рифов, 900 островов, 1500 видов рыб.",
-  "навозный жук": "Может тащить груз в 1141 раз тяжелее себя. Эквивалент: человек тянет 6 автобусов.",
-  "килауэа": "Самый активный вулкан Земли. Извергается почти непрерывно с 1983 года. Находится на Гавайях.",
-  "синий кит": "Звук до 188 децибел. Слышен на расстоянии 1600 км. Используется для общения и навигации.",
-  "игуасу": "Система из 275 водопадов. Расход воды до 12 750 м³/с. На границе Аргентины и Бразилии.",
-  
-  // Города
-  "токио": "Большой Токио: 37,4 млн человек. Крупнейшая агломерация мира. Плотность 6158 чел/км².",
-  "рим": "Основан в 753 году до н.э. Непрерывно населён более 2700 лет. «Вечный город».",
-  "лонгйир": "Шпицберген, 78° с.ш. Самый северный город с постоянным населением (>1000 чел). Полярная ночь 4 месяца.",
-  "пуэрто-уильямс": "Чили, 54° ю.ш. Население ~2000 человек. Обогнал Ушуайю по статусу самого южного города.",
-  "ла-ринконада": "Перу, 5100 м. Население 30 000. Шахтёрский город без канализации и водопровода.",
-  "гамбург": "Более 2300 мостов — больше, чем в Венеции, Амстердаме и Лондоне вместе взятых.",
-  "стамбул": "Единственный город на двух континентах. Европейская и азиатская части разделены Босфором.",
-  "манила": "Плотность 43 079 чел/км² в самом густонаселённом районе. Треть населения живёт в трущобах.",
-  "нью-йорк": "Прозвище появилось в 1909 году. Символ возможностей: «Если можешь здесь, можешь везде».",
-  "дамаск": "Непрерывно населён с 10 000 года до н.э. Старейшая столица в мире.",
-  "париж": "«Город огней» — первый город с уличным освещением (1667). Также центр Просвещения.",
-  "баку": "28 м ниже уровня моря. Самый низкий город-миллионер. Нефтяная столица Каспия.",
-  "сингапур": "50% территории — зелёные насаждения. «Город в саду». Более 2 млн деревьев.",
-  "дубровник": "Хорватия. Средневековые стены, барокко. «Жемчужина Адриатики». Снимали «Игру престолов».",
-  "сингапур": "Индекс стоимости жизни: 100 (база). Аренда, транспорт, еда — самые дорогие в мире.",
-  "токио": "Самый безопасный мегаполис. Низкая преступность, честная полиция, культура уважения.",
-  "амстердам": "165 каналов, 1281 мост. Кольцо каналов — объект ЮНЕСКО. «Северная Венеция».",
-  "веллингтон": "Средняя скорость ветра 27 км/ч. Порывы до 200 км/ч. Ветер с океана не встречает преград.",
-  "рим": "Семь холмов: Палатин, Капитолий, Квиринал, Виминал, Эсквилин, Целий, Авентин.",
-  "калгари": "Канада. Чистый воздух, переработка 80% отходов, зелёный транспорт. Рейтинг 2023.",
-  
-  // Политика
-  "193": "На 2024 год. Не входят: Ватикан, Палестина, Косово, Тайвань, Западная Сахара.",
-  "южный судан": "Независимость 9 июля 2011 года. Отделился от Судана после референдума.",
-  "китай": "14 сухопутных соседей: Россия, Индия, Пакистан, Афганистан и др. + морские границы.",
-  "лесото": "Анклав внутри ЮАР. Единственная страна, полностью выше 1000 м над уровнем моря.",
-  "канада": "Граница с США — 8891 км. Самая длинная непрерывная граница в мире.",
-  "54": "Признанные ООН. Западная Сахара — спорная территория. Самый молодой континент по числу стран.",
-  "швеция": "267 570 островов, из них 984 заселены. Крупнейшие: Готланд, Эланд.",
-  "чили": "Длина 4300 км, средняя ширина 177 км. От пустыни Атакама до ледников Патагонии.",
-  "юар": "Претория (административная), Кейптаун (законодательная), Блумфонтейн (судебная).",
-  "50": "Последний — Гавайи, 1959 год. Пуэрто-Рико — территория, не штат.",
-  "суринам": "Площадь 163 820 км². Меньше Гайаны (214 969) и Уругвая (176 215).",
-  "франция": "12 часовых поясов благодаря заморским территориям: Гвиана, Реюньон, Полинезия и др.",
-  "сейшелы": "Площадь 459 км². 115 островов. Население 98 000. Самая маленькая страна Африки.",
-  "индонезия": "147 вулканов, из них 76 действующих. «Огненное кольцо» Тихого океана.",
-  "куба": "Площадь 109 884 км². Крупнейший остров Карибского бассейна. Население 11,2 млн.",
-  "германия": "9 соседей: Дания, Польша, Чехия, Австрия, Швейцария, Франция, Люксембург, Бельгия, Нидерланды.",
-  "мальдивы": "Средняя высота 1,5 м. Самая низкая страна. Под угрозой затопления из-за подъёма океана.",
-  "чили": "Средняя ширина 177 км. От Анд до Тихого океана. Самая узкая страна в мире.",
-  "канада": "2 млн озёр — больше, чем в остальном мире вместе. 9% территории покрыто пресной водой.",
-  "нет такой": "Все признанные страны находятся на континентах. Островные государства относятся к континентам по географическому положению."
-};
-
-function getFact(answer) {
-  const key = answer.toLowerCase().trim();
-  return FACTS[key] || "Интересный факт: этот ответ — часть удивительного мира географии!";
-}
-
-const correctComments = [
-  "Гениально! Ты явно не прогуливал географию! 😎",
-  "Бинго! Мозг работает как GPS! 🗺️",
-  "Красавчик! Это попадание в яблочко! 🎯",
-  "Огонь! Тебе бы вести «Что? Где? Когда?» 🔥",
-  "Вот это поворот — и сразу в десятку! 💪",
+// CTRY: [name, genitive, capital, continent, area_km2(точная!), pop_M, difficulty]
+const CTRY=[
+// ── ЕВРОПА ───────────────────────────────────────────────────────────────
+["Россия","России","Москва","Европа",17098242,145,"easy"],
+["Германия","Германии","Берлин","Европа",357114,83,"easy"],
+["Франция","Франции","Париж","Европа",551695,68,"easy"],
+["Великобритания","Великобритании","Лондон","Европа",244820,67,"easy"],
+["Италия","Италии","Рим","Европа",301340,60,"easy"],
+["Испания","Испании","Мадрид","Европа",505990,47,"easy"],
+["Украина","Украины","Киев","Европа",603550,44,"medium"],
+["Польша","Польши","Варшава","Европа",312685,38,"medium"],
+["Румыния","Румынии","Бухарест","Европа",238397,19,"medium"],
+["Нидерланды","Нидерландов","Амстердам","Европа",41543,17,"medium"],
+["Бельгия","Бельгии","Брюссель","Европа",30528,11,"medium"],
+["Греция","Греции","Афины","Европа",131957,11,"medium"],
+["Португалия","Португалии","Лиссабон","Европа",92212,10,"medium"],
+["Чехия","Чехии","Прага","Европа",78866,11,"medium"],
+["Венгрия","Венгрии","Будапешт","Европа",93028,10,"medium"],
+["Швеция","Швеции","Стокгольм","Европа",450295,10,"medium"],
+["Австрия","Австрии","Вена","Европа",83871,9,"medium"],
+["Беларусь","Беларуси","Минск","Европа",207600,9,"medium"],
+["Швейцария","Швейцарии","Берн","Европа",41285,9,"medium"],
+["Сербия","Сербии","Белград","Европа",77474,7,"medium"],
+["Болгария","Болгарии","София","Европа",110879,7,"medium"],
+["Дания","Дании","Копенгаген","Европа",42924,6,"medium"],
+["Финляндия","Финляндии","Хельсинки","Европа",338145,6,"medium"],
+["Норвегия","Норвегии","Осло","Европа",385207,5,"medium"],
+["Словакия","Словакии","Братислава","Европа",49035,5,"medium"],
+["Хорватия","Хорватии","Загреб","Европа",56594,4,"medium"],
+["Молдова","Молдовы","Кишинёв","Европа",33846,3,"hard"],
+["Литва","Литвы","Вильнюс","Европа",65300,3,"medium"],
+["Латвия","Латвии","Рига","Европа",64589,2,"medium"],
+["Эстония","Эстонии","Таллин","Европа",45228,1,"medium"],
+["Словения","Словении","Любляна","Европа",20271,2,"hard"],
+["Черногория","Черногории","Подгорица","Европа",13812,1,"hard"],
+["Босния и Герцеговина","Боснии и Герцеговины","Сараево","Европа",51197,3,"hard"],
+["Албания","Албании","Тирана","Европа",28748,3,"hard"],
+["Северная Македония","Северной Македонии","Скопье","Европа",25713,2,"hard"],
+["Исландия","Исландии","Рейкьявик","Европа",102775,0.4,"hard"],
+["Ирландия","Ирландии","Дублин","Европа",70273,5,"medium"],
+["Косово","Косово","Приштина","Европа",10887,2,"hard"],
+["Люксембург","Люксембурга","Люксембург","Европа",2586,1,"hard"],
+["Мальта","Мальты","Валлетта","Европа",316,0.5,"hard"],
+["Монако","Монако","Монако","Европа",2,0.04,"hard"],
+["Сан-Марино","Сан-Марино","Сан-Марино","Европа",61,0.03,"hard"],
+// ── АЗИЯ ─────────────────────────────────────────────────────────────────
+["Китай","Китая","Пекин","Азия",9596960,1412,"easy"],
+["Индия","Индии","Нью-Дели","Азия",3287263,1380,"easy"],
+["Япония","Японии","Токио","Азия",377930,126,"easy"],
+["Южная Корея","Южной Кореи","Сеул","Азия",100210,52,"medium"],
+["Индонезия","Индонезии","Джакарта","Азия",1904569,274,"medium"],
+["Пакистан","Пакистана","Исламабад","Азия",881913,220,"medium"],
+["Бангладеш","Бангладеша","Дакка","Азия",147570,165,"medium"],
+["Вьетнам","Вьетнама","Ханой","Азия",331212,97,"medium"],
+["Иран","Ирана","Тегеран","Азия",1648195,84,"medium"],
+["Турция","Турции","Анкара","Азия",783562,84,"medium"],
+["Таиланд","Таиланда","Бангкок","Азия",513120,71,"medium"],
+["Мьянма","Мьянмы","Нейпьидо","Азия",676578,54,"hard"],
+["Саудовская Аравия","Саудовской Аравии","Эр-Рияд","Азия",2149690,35,"medium"],
+["Казахстан","Казахстана","Астана","Азия",2724900,19,"medium"],
+["Малайзия","Малайзии","Куала-Лумпур","Азия",329847,33,"medium"],
+["Узбекистан","Узбекистана","Ташкент","Азия",448978,35,"medium"],
+["Афганистан","Афганистана","Кабул","Азия",652230,38,"medium"],
+["Ирак","Ирака","Багдад","Азия",438317,40,"medium"],
+["Непал","Непала","Катманду","Азия",147181,29,"medium"],
+["Камбоджа","Камбоджи","Пномпень","Азия",181035,16,"medium"],
+["Сирия","Сирии","Дамаск","Азия",185180,21,"medium"],
+["Монголия","Монголии","Улан-Батор","Азия",1564116,3,"hard"],
+["Азербайджан","Азербайджана","Баку","Азия",86600,10,"medium"],
+["Грузия","Грузии","Тбилиси","Азия",69700,4,"medium"],
+["Армения","Армении","Ереван","Азия",29743,3,"hard"],
+["Иордания","Иордании","Амман","Азия",89342,10,"hard"],
+["ОАЭ","ОАЭ","Абу-Даби","Азия",83600,10,"medium"],
+["Израиль","Израиля","Иерусалим","Азия",20770,9,"medium"],
+["Шри-Ланка","Шри-Ланки","Коломбо","Азия",65610,22,"medium"],
+["Лаос","Лаоса","Вьентьян","Азия",236800,7,"hard"],
+["Таджикистан","Таджикистана","Душанбе","Азия",143100,10,"hard"],
+["Кыргызстан","Кыргызстана","Бишкек","Азия",199951,7,"hard"],
+["Туркменистан","Туркменистана","Ашхабад","Азия",488100,6,"hard"],
+["КНДР","КНДР","Пхеньян","Азия",120538,26,"hard"],
+["Филиппины","Филиппин","Манила","Азия",300000,109,"medium"],
+["Катар","Катара","Доха","Азия",11586,3,"hard"],
+["Кувейт","Кувейта","Эль-Кувейт","Азия",17818,4,"hard"],
+["Оман","Омана","Маскат","Азия",309500,5,"hard"],
+["Сингапур","Сингапура","Сингапур","Азия",728,6,"hard"],
+["Йемен","Йемена","Сана","Азия",527968,30,"hard"],
+["Бутан","Бутана","Тхимпху","Азия",38394,0.8,"hard"],
+["Ливан","Ливана","Бейрут","Азия",10452,7,"hard"],
+["Кипр","Кипра","Никосия","Азия",9251,1,"hard"],
+["Тайвань","Тайваня","Тайбэй","Азия",36193,24,"hard"],
+["Бруней","Брунея","Бандар-Сери-Бегаван","Азия",5765,0.4,"hard"],
+["Мальдивы","Мальдив","Мале","Азия",298,0.5,"hard"],
+["Тимор-Лесте","Тимора-Лесте","Дили","Азия",14874,1,"hard"],
+// ── АФРИКА ───────────────────────────────────────────────────────────────
+["Нигерия","Нигерии","Абуджа","Африка",923768,206,"medium"],
+["Эфиопия","Эфиопии","Аддис-Абеба","Африка",1104300,115,"medium"],
+["Египет","Египта","Каир","Африка",1001449,102,"easy"],
+["ДР Конго","ДР Конго","Киншаса","Африка",2344858,90,"hard"],
+["Танзания","Танзании","Додома","Африка",945087,60,"hard"],
+["ЮАР","ЮАР","Претория","Африка",1219090,59,"medium"],
+["Кения","Кении","Найроби","Африка",580367,54,"medium"],
+["Алжир","Алжира","Алжир","Африка",2381741,44,"medium"],
+["Судан","Судана","Хартум","Африка",1861484,44,"hard"],
+["Марокко","Марокко","Рабат","Африка",446550,37,"medium"],
+["Ангола","Анголы","Луанда","Африка",1246700,33,"hard"],
+["Мозамбик","Мозамбика","Мапуту","Африка",801590,31,"hard"],
+["Мадагаскар","Мадагаскара","Антананариву","Африка",587041,28,"hard"],
+["Гана","Ганы","Аккра","Африка",238533,31,"medium"],
+["Камерун","Камеруна","Яунде","Африка",475440,27,"hard"],
+["Кот-д'Ивуар","Кот-д'Ивуара","Ямусукро","Африка",322463,27,"hard"],
+["Мали","Мали","Бамако","Африка",1240192,22,"hard"],
+["Нигер","Нигера","Ниамей","Африка",1267000,24,"hard"],
+["Зимбабве","Зимбабве","Харар","Африка",390757,15,"hard"],
+["Замбия","Замбии","Лусака","Африка",752612,18,"hard"],
+["Буркина-Фасо","Буркина-Фасо","Уагадугу","Африка",274200,21,"hard"],
+["Сомали","Сомали","Могадишо","Африка",637657,16,"hard"],
+["Сенегал","Сенегала","Дакар","Африка",196722,17,"hard"],
+["Чад","Чада","Нджамена","Африка",1284000,17,"hard"],
+["Гвинея","Гвинеи","Конакри","Африка",245857,13,"hard"],
+["Тунис","Туниса","Тунис","Африка",163610,12,"medium"],
+["Ливия","Ливии","Триполи","Африка",1759540,7,"hard"],
+["Уганда","Уганды","Кампала","Африка",241038,46,"hard"],
+["Руанда","Руанды","Кигали","Африка",26338,13,"hard"],
+["Мавритания","Мавритании","Нуакшот","Африка",1030700,4,"hard"],
+["Намибия","Намибии","Виндхук","Африка",824292,3,"hard"],
+["Малави","Малави","Лилонгве","Африка",118484,19,"hard"],
+["Бенин","Бенина","Порто-Ново","Африка",112622,12,"hard"],
+["Эритрея","Эритреи","Асмэра","Африка",117600,4,"hard"],
+["Того","Того","Ломе","Африка",56785,8,"hard"],
+["Либерия","Либерии","Монровия","Африка",111369,5,"hard"],
+["Ботсвана","Ботсваны","Габороне","Африка",581730,2,"hard"],
+["Лесото","Лесото","Масеру","Африка",30355,2,"hard"],
+["Джибути","Джибути","Джибути","Африка",23200,1,"hard"],
+["Гамбия","Гамбии","Банжул","Африка",11295,2,"hard"],
+["Кабо-Верде","Кабо-Верде","Прая","Африка",4033,1,"hard"],
+["Экваториальная Гвинея","Экваториальной Гвинеи","Малабо","Африка",28051,1,"hard"],
+// ── СЕВЕРНАЯ АМЕРИКА ──────────────────────────────────────────────────────
+["США","США","Вашингтон","Северная Америка",9833517,331,"easy"],
+["Мексика","Мексики","Мехико","Северная Америка",1964375,128,"easy"],
+["Канада","Канады","Оттава","Северная Америка",9984670,38,"medium"],
+["Куба","Кубы","Гавана","Северная Америка",109884,11,"medium"],
+["Гватемала","Гватемалы","Гватемала","Северная Америка",108889,18,"medium"],
+["Гондурас","Гондураса","Тегусигальпа","Северная Америка",112492,10,"hard"],
+["Никарагуа","Никарагуа","Манагуа","Северная Америка",130373,7,"hard"],
+["Коста-Рика","Коста-Рики","Сан-Хосе","Северная Америка",51100,5,"medium"],
+["Панама","Панамы","Панама","Северная Америка",75417,4,"hard"],
+["Сальвадор","Сальвадора","Сан-Сальвадор","Северная Америка",21041,7,"hard"],
+["Доминиканская Республика","Доминиканской Республики","Санто-Доминго","Северная Америка",48671,11,"hard"],
+["Гаити","Гаити","Порт-о-Пренс","Северная Америка",27750,11,"hard"],
+["Ямайка","Ямайки","Кингстон","Северная Америка",10991,3,"hard"],
+["Белиз","Белиза","Бельмопан","Северная Америка",22966,0.4,"hard"],
+// ── ЮЖНАЯ АМЕРИКА ─────────────────────────────────────────────────────────
+["Бразилия","Бразилии","Бразилиа","Южная Америка",8515767,213,"easy"],
+["Аргентина","Аргентины","Буэнос-Айрес","Южная Америка",2780400,45,"medium"],
+["Перу","Перу","Лима","Южная Америка",1285216,33,"medium"],
+["Колумбия","Колумбии","Богота","Южная Америка",1141748,50,"medium"],
+["Венесуэла","Венесуэлы","Каракас","Южная Америка",916445,28,"medium"],
+["Чили","Чили","Сантьяго","Южная Америка",756102,19,"medium"],
+["Боливия","Боливии","Сукре","Южная Америка",1098581,12,"hard"],
+["Эквадор","Эквадора","Кито","Южная Америка",283561,18,"medium"],
+["Парагвай","Парагвая","Асунсьон","Южная Америка",406752,7,"hard"],
+["Уругвай","Уругвая","Монтевидео","Южная Америка",176215,4,"hard"],
+["Гайана","Гайаны","Джорджтаун","Южная Америка",214969,1,"hard"],
+["Суринам","Суринама","Парамарибо","Южная Америка",163820,1,"hard"],
+// ── ОКЕАНИЯ ──────────────────────────────────────────────────────────────
+["Австралия","Австралии","Канберра","Австралия и Океания",7692024,26,"easy"],
+["Папуа — Новая Гвинея","Папуа — Новой Гвинеи","Порт-Морсби","Австралия и Океания",462840,9,"hard"],
+["Новая Зеландия","Новой Зеландии","Веллингтон","Австралия и Океания",268021,5,"medium"],
+["Фиджи","Фиджи","Сува","Австралия и Океания",18274,1,"hard"],
+["Вануату","Вануату","Порт-Вила","Австралия и Океания",12189,0.3,"hard"],
+["Самоа","Самоа","Апиа","Австралия и Океания",2831,0.2,"hard"],
+["Тонга","Тонги","Нукуалофа","Австралия и Океания",747,0.1,"hard"],
+["Кирибати","Кирибати","Тарава","Австралия и Океания",811,0.1,"hard"],
 ];
 
-const wrongComments = [
-  "Эх, мимо! Но теперь ты знаешь правильный ответ. 📚",
-  "Не-а! Зато запомнишь надолго! 🧠",
-  "Промах! Но каждый великий исследователь ошибался. ⛵",
-  "Увы! Земля вертится, и знания приходят. 🌍",
-  "Мимо кассы! Зато есть куда расти! 🌱",
+// MNTS: [name, location, continent, height_m, diff]
+const MNTS=[
+["Эверест","Непал/Китай","Азия",8849,"easy"],
+["К2","Пакистан/Китай","Азия",8611,"medium"],
+["Канченджанга","Непал/Индия","Азия",8586,"hard"],
+["Лхоцзе","Непал/Китай","Азия",8516,"hard"],
+["Манаслу","Непал","Азия",8163,"hard"],
+["Фудзи","Япония","Азия",3776,"medium"],
+["Арарат","Турция","Азия",5137,"medium"],
+["Демавенд","Иран","Азия",5610,"hard"],
+["Ключевская Сопка","Россия","Азия",4750,"hard"],
+["Кинабалу","Малайзия","Азия",4095,"hard"],
+["Пунчак-Джая","Индонезия","Азия",4884,"hard"],
+["Белуха","Россия (Алтай)","Азия",4506,"hard"],
+["Эльбрус","Россия","Европа",5642,"easy"],
+["Монблан","Франция/Италия","Европа",4808,"easy"],
+["Маттерхорн","Швейцария/Италия","Европа",4478,"medium"],
+["Этна","Италия (Сицилия)","Европа",3357,"medium"],
+["Везувий","Италия","Европа",1281,"medium"],
+["Снежка","Чехия/Польша","Европа",1603,"hard"],
+["Денали","США (Аляска)","Северная Америка",6194,"easy"],
+["Логан","Канада","Северная Америка",5959,"hard"],
+["Орисаба","Мексика","Северная Америка",5636,"medium"],
+["Попокатепетль","Мексика","Северная Америка",5426,"medium"],
+["Аконкагуа","Аргентина","Южная Америка",6961,"easy"],
+["Охос-дель-Саладо","Аргентина/Чили","Южная Америка",6893,"hard"],
+["Чимборасо","Эквадор","Южная Америка",6263,"hard"],
+["Котопахи","Эквадор","Южная Америка",5897,"hard"],
+["Килиманджаро","Танзания","Африка",5895,"easy"],
+["Кения (гора)","Кения","Африка",5199,"medium"],
+["Рувензори","Уганда/ДР Конго","Африка",5110,"hard"],
+["Косцюшко","Австралия","Австралия и Океания",2228,"medium"],
+["Маунт-Кук","Новая Зеландия","Австралия и Океания",3724,"medium"],
 ];
 
-const ALL_QUESTIONS = {
-"Столицы": [
-["Какая столица находится на двух континентах?","Стамбул","Анкара","Каир","Москва"],
-["Столица какого государства — Вадуц?","Лихтенштейн","Люксембург","Андорра","Монако"],
-["Какая столица самая высокогорная в мире?","Ла-Пас","Кито","Богота","Тибет"],
-["Столица Бразилии?","Бразилиа","Рио-де-Жанейро","Сан-Паулу","Салвадор"],
-["Столица Мьянмы?","Нейпьидо","Янгон","Мандалай","Бангкок"],
-["Какая столица Европы стоит на 14 островах?","Стокгольм","Венеция","Копенгаген","Амстердам"],
-["Столица Австралии?","Канберра","Сидней","Мельбурн","Брисбен"],
-["Столица Казахстана?","Астана","Алматы","Шымкент","Караганда"],
-["Столица Новой Зеландии?","Веллингтон","Окленд","Крайстчерч","Гамильтон"],
-["Столица Нигерии?","Абуджа","Лагос","Кано","Ибадан"],
-["Столица Танзании?","Додома","Дар-эс-Салам","Аруша","Мванза"],
-["Столица Шри-Ланки?","Шри-Джаяварденепура-Котте","Коломбо","Канди","Галле"],
-["Столица Боливии (конституционная)?","Сукре","Ла-Пас","Кочабамба","Санта-Крус"],
-["Столица Белиза?","Бельмопан","Белиз-Сити","Оранж-Уолк","Сан-Игнасио"],
-["Столица Гамбии?","Банжул","Серекунда","Брикама","Фарафенни"],
-["Столица Бутана?","Тхимпху","Паро","Пунакха","Вангди"],
-["Столица Эритреи?","Асмэра","Массауа","Керен","Асэб"],
-["Столица Суринама?","Парамарибо","Лелидорп","Ньив-Никкери","Мунго"],
-["Столица Гайаны?","Джорджтаун","Линден","Нью-Амстердам","Анна-Реджина"],
-["Столица Тринидада и Тобаго?","Порт-оф-Спейн","Сан-Фернандо","Чагуанас","Арима"],
-["Столица Эсватини?","Мбабане","Лобамба","Манзини","Ситеки"],
-["Столица Джибути?","Джибути","Али-Сабие","Дихиль","Обок"],
-["Столица Сент-Люсии?","Кастри","Виё-фор","Суфриер","Мику"],
-["Столица Доминики?","Розо","Портсмут","Маригот","Касл-Брюс"],
-["Столица Антигуа и Барбуды?","Сент-Джонс","Ол-Сейнтс","Кодрингтон","Либерта"]
-],
-"Континенты": [
-["Сколько континентов на Земле?","6","5","7","4"],
-["Какой континент самый большой?","Евразия","Африка","Северная Америка","Антарктида"],
-["Какой континент самый маленький?","Австралия","Антарктида","Европа","Южная Америка"],
-["На каком континенте нет стран?","Антарктида","Австралия","Гренландия","Мадагаскар"],
-["Какой континент пересекает экватор и оба тропика?","Африка","Южная Америка","Азия","Австралия"],
-["Какой континент полностью в южном полушарии?","Антарктида","Австралия","Африка","Южная Америка"],
-["Где находится самая сухая пустыня мира?","Антарктида","Африка","Австралия","Азия"],
-["Какой континент омывается всеми четырьмя океанами?","Евразия","Африка","Антарктида","Северная Америка"],
-["На каком континенте живёт больше всего людей?","Азия","Африка","Европа","Северная Америка"],
-["Какой континент самый холодный?","Антарктида","Арктика","Сибирь","Гренландия"],
-["Какой пролив разделяет Африку и Европу?","Гибралтарский","Босфор","Берингов","Ла-Манш"],
-["Какой канал соединяет Северную и Южную Америку?","Панамский","Суэцкий","Кильский","Коринфский"],
-["Какой континент когда-то называли «Новым Светом»?","Америка","Австралия","Африка","Азия"],
-["Какой континент имеет форму буквы «S»?","Африка","Южная Америка","Европа","Австралия"],
-["Какой континент полностью находится в восточном полушарии?","Австралия","Африка","Азия","Европа"],
-["Какой континент пересекает 180-й меридиан?","Антарктида","Азия","Северная Америка","Австралия"],
-["Где находится Эверест?","Азия","Европа","Африка","Южная Америка"],
-["На каком континенте расположен водопад Анхель?","Южная Америка","Африка","Азия","Северная Америка"],
-["Какой континент называют «чёрным континентом»?","Африка","Антарктида","Австралия","Южная Америка"],
-["Какой континент имеет больше всего часовых поясов?","Евразия","Африка","Северная Америка","Антарктида"]
-],
-"Рекорды": [
-["Самое глубокое озеро в мире?","Байкал","Танганьика","Каспийское море","Кратерное озеро"],
-["Самая длинная река в мире?","Нил","Амазонка","Миссисипи","Янцзы"],
-["Самая высокая гора в мире?","Эверест","К2","Канченджанга","Макалу"],
-["Самая большая пустыня в мире?","Антарктическая","Сахара","Аравийская","Гоби"],
-["Самый большой остров в мире?","Гренландия","Мадагаскар","Борнео","Суматра"],
-["Самое большое озеро в мире?","Каспийское море","Байкал","Верхнее","Виктория"],
-["Самый высокий водопад в мире?","Анхель","Виктория","Ниагарский","Игуасу"],
-["Самое жаркое место на Земле?","Долина Смерти","Сахара","Даллол","Лут"],
-["Самое влажное место на Земле?","Мегхалая (Индия)","Амазония","Гавайи","Конго"],
-["Самый глубокий океанический жёлоб?","Марианский","Тонга","Курило-Камчатский","Филиппинский"],
-["Самое солёное озеро в мире?","Дон-Жуан","Мёртвое море","Урмия","Большое Солёное"],
-["Самая короткая река в мире?","Репруа","Тамбаци","Д","Хуанхэ"],
-["Самый маленький вулкан в мире?","Матован","Этна","Везувий","Фудзияма"],
-["Самое большое плато в мире?","Тибетское","Деканское","Колорадо","Бразильское"],
-["Самая длинная горная цепь в мире?","Анды","Гималаи","Альпы","Скалистые горы"],
-["Самое большое государство по площади?","Россия","Канада","Китай","США"],
-["Самое маленькое государство в мире?","Ватикан","Монако","Науру","Сан-Марино"],
-["Самое глубокое место в океане?","Бездна Челленджера","Бездна Тонга","Филиппинский жёлоб","Яванский жёлоб"],
-["Самый большой вулкан по объёму?","Мауна-Лоа","Этна","Везувий","Тейде"],
-["Самая длинная пещера в мире?","Мамонтова","Оптимистическая","Флинт","Шондонг"]
-],
-"Население": [
-["Какая страна самая населённая в мире?","Индия","Китай","США","Индонезия"],
-["Какая страна самая малонаселённая?","Ватикан","Науру","Тувалу","Палау"],
-["В какой стране больше всего языков?","Папуа — Новая Гвинея","Индия","Индонезия","Нигерия"],
-["Какая страна имеет самый высокий средний возраст?","Япония","Монако","Германия","Италия"],
-["Где самая высокая плотность населения?","Монако","Сингапур","Бангладеш","Мальта"],
-["Какая страна самая молодая по среднему возрасту?","Нигер","Уганда","Мали","Чад"],
-["В какой стране больше всего буддистов?","Китай","Таиланд","Япония","Мьянма"],
-["Какая страна самая многонациональная?","Папуа — Новая Гвинея","Индонезия","Индия","ДР Конго"],
-["Где самая низкая плотность населения?","Монголия","Намибия","Австралия","Исландия"],
-["Какая страна имеет самый высокий уровень урбанизации?","Сингапур","Монако","Катар","Кувейт"],
-["В какой стране больше всего мусульман?","Индонезия","Пакистан","Индия","Бангладеш"],
-["Какая страна самая «белая» по населению?","Ватикан","Польша","Исландия","Норвегия"],
-["Где живёт больше всего людей — в городах или сёлах (в мире)?","В городах","В сёлах","Поровну","Неизвестно"],
-["Какая страна имеет самый быстрый рост населения?","Нигер","ДР Конго","Танзания","Уганда"],
-["Какая страна самая старая по населению?","Япония","Италия","Германия","Португалия"],
-["В какой стране больше всего христиан?","США","Бразилия","Мексика","Филиппины"],
-["Какая страна имеет самую большую диаспору?","Индия","Мексика","Китай","Россия"],
-["Где самый высокий уровень грамотности?","Андорра","Лихтенштейн","Норвегия","Финляндия"],
-["Какая страна имеет самый низкий уровень грамотности?","Нигер","Чад","Мали","Бурунди"],
-["Какая страна самая многодетная (в среднем на семью)?","Нигер","Сомали","ДР Конго","Мали"]
-],
-"Горы": [
-["Самая высокая гора в Африке?","Килиманджаро","Кения","Рувензори","Атлас"],
-["Самая высокая гора в Европе?","Эльбрус","Монблан","Монте-Роза","Дюфур"],
-["Самая высокая гора в Северной Америке?","Денали","Логан","Орисаба","Уитни"],
-["Самая высокая гора в Южной Америке?","Аконкагуа","Уаскаран","Чимборасо","Мерседарио"],
-["Самая высокая гора в Австралии?","Косцюшко","Кук","Вильгельм","Джая"],
-["Сколько раз Эверест покоряли?","Более 10 000","Более 1000","Более 100","Более 50 000"],
-["Кто первым покорил Эверест?","Хиллари и Норгей","Месснер","Бонингтон","Хорнбейн"],
-["Какая гора самая трудная для восхождения?","К2","Эверест","Аннапурна","Нанга Парбат"],
-["Самая высокая действующая вулканическая гора?","Охос-дель-Саладо","Котопахи","Фудзияма","Килиманджаро"],
-["Где находится гора Фудзи?","Япония","Китай","Корея","Филиппины"],
-["Какая гора считается священной в индуизме?","Кайлас","Эверест","Нанда-Деви","Аннапурна"],
-["В какой стране находится Монблан?","Франция/Италия","Швейцария","Испания","Австрия"],
-["Самая высокая гора на Марсе?","Олимп","Аскрийский","Арсия","Элизий"],
-["Какая горная система самая длинная?","Анды","Гималаи","Альпы","Атлас"],
-["Где находится гора Арарат?","Турция","Армения","Иран","Азербайджан"],
-["Какая гора самая изолированная?","Мауна-Кеа","Эверест","Килиманджаро","Аконкагуа"],
-["Самая высокая гора в Антарктиде?","Массив Винсон","Эребус","Сидли","Тирон"],
-["Где находится гора Килиманджаро?","Танзания","Кения","Уганда","Эфиопия"],
-["Какая гора самая молодая?","Гималаи","Альпы","Анды","Аппалачи"],
-["Самая высокая гора на Луне?","Монес-Апеннинус","Ньютон","Хадли","Брэдли"]
-],
-"Реки": [
-["Самая полноводная река в мире?","Амазонка","Нил","Конго","Янцзы"],
-["Через сколько стран протекает Дунай?","10","8","6","12"],
-["Какая река протекает через Париж?","Сена","Луара","Рона","Рейн"],
-["Какая река протекает через Лондон?","Темза","Северн","Трент","Клайд"],
-["Какая река самая длинная в Европе?","Волга","Дунай","Днепр","Урал"],
-["В какой стране находится река Ганг?","Индия","Бангладеш","Непал","Пакистан"],
-["Какая река впадает в Каспийское море?","Волга","Урал","Терек","Кура"],
-["Какая река протекает через Багдад?","Тигр","Евфрат","Нил","Иордан"],
-["Какая река самая длинная в Африке (после Нила)?","Конго","Нигер","Замбези","Оранжевая"],
-["Где находится река Меконг?","Юго-Восточная Азия","Южная Америка","Центральная Америка","Западная Африка"],
-["Какая река образует границу между США и Мексикой?","Рио-Гранде","Колорадо","Юкон","Миссури"],
-["Какая река протекает через Рим?","Тибр","По","Арно","Адидже"],
-["Какая река самая длинная в Южной Америке?","Амазонка","Парана","Ориноко","Сан-Франсиску"],
-["Где находится река Лена?","Россия","Китай","Монголия","Казахстан"],
-["Какая река протекает через Каир?","Нил","Тигр","Евфрат","Конго"],
-["Какая река самая грязная в мире?","Чиннава","Ганг","Янцзы","Миссисипи"],
-["Какая река протекает через Стамбул?","Босфор (пролив)","Мармара","Дунай","Сакарья"],
-["Какая река самая короткая в России?","Репруа","Нева","Обь","Енисей"],
-["Какая река протекает через Прагу?","Влтава","Дунай","Лаба","Морава"],
-["Где находится река Замбези?","Африка","Южная Америка","Азия","Австралия"]
-],
-"Озёра": [
-["Самое глубокое озеро в мире?","Байкал","Танганьика","Кратерное","Верхнее"],
-["Самое большое пресноводное озеро по площади?","Верхнее","Виктория","Гурон","Мичиган"],
-["Какое озеро самое солёное?","Мёртвое море","Дон-Жуан","Урмия","Большое Солёное"],
-["Где находится озеро Титикака?","Перу/Боливия","Чили/Аргентина","Колумбия/Эквадор","Бразилия/Уругвай"],
-["Какое озеро самое большое в Африке?","Виктория","Танганьика","Ньяса","Чад"],
-["Где находится озеро Лох-Несс?","Шотландия","Ирландия","Уэльс","Англия"],
-["Какое озеро называют «Жемчужиной Сибири»?","Байкал","Телецкое","Хантайское","Чаны"],
-["Какое озеро самое большое в Южной Америке?","Титикака","Маракайбо","Поопо","Буэнос-Айрес"],
-["Где находится озеро Балатон?","Венгрия","Австрия","Хорватия","Словакия"],
-["Какое озеро самое большое в Центральной Америке?","Никарагуа","Атитлан","Исабаль","Петен-Ица"],
-["Где находится озеро Комо?","Италия","Швейцария","Франция","Австрия"],
-["Какое озеро исчезает быстрее всех?","Аральское","Чад","Балхаш","Урмия"],
-["Какое озеро самое высокогорное в мире?","Титикака","Нам-Цо","Пури-Юмцо","Лагуна-Бланка"],
-["Какое озеро самое старое в мире?","Байкал","Танганьика","Бива","Верхнее"],
-["Какое озеро самое большое в Европе?","Ладожское","Онежское","Венерн","Сайма"],
-["Какое озеро имеет розовый цвет?","Хиллер","Байкал","Виктория","Танганьика"],
-["Какое озеро называют «Глазом Сахары»?","Ришат","Чад","Туркана","Ассаль"],
-["Какое озеро самое большое в США?","Верхнее","Мичиган","Эри","Онтарио"],
-["Какое озеро самое большое в Азии?","Каспийское","Байкал","Аральское","Балхаш"],
-["Где находится озеро Поянху?","Китай","Япония","Корея","Вьетнам"]
-],
-"Острова": [
-["Самый большой остров в мире?","Гренландия","Мадагаскар","Борнео","Суматра"],
-["Самый населённый остров в мире?","Ява","Хонсю","Лусон","Британия"],
-["Сколько островов в Индонезии?","Более 17 000","Более 10 000","Более 5000","Более 30 000"],
-["На каком острове находится Статуя Свободы?","Остров Свободы","Манхэттен","Эллис","Рузвельт"],
-["Какой остров самый большой в Средиземном море?","Сицилия","Сардиния","Кипр","Крит"],
-["Где находится остров Пасхи?","Чили","Перу","Эквадор","Бразилия"],
-["Какой остров самый большой в Карибском море?","Куба","Гаити","Ямайка","Пуэрто-Рико"],
-["Где находится остров Бали?","Индонезия","Малайзия","Филиппины","Таиланд"],
-["Какой остров разделён на две страны?","Борнео","Гаити","Ирландия","Тимор"],
-["Где находится остров Мадагаскар?","У восточного берега Африки","У западного берега Африки","В Индийском океане","В Тихом океане"],
-["Какой остров самый большой в Японии?","Хонсю","Хоккайдо","Кюсю","Сикоку"],
-["Где находится остров Шпицберген?","Норвегия","Россия","Дания","Исландия"],
-["Какой остров самый южный в мире?","Остров Александра I","Огненная Земля","Тасмания","Новая Зеландия"],
-["Где находится остров Мальта?","Средиземное море","Атлантический океан","Карибское море","Индийский океан"],
-["Какой остров самый большой в Филиппинах?","Лусон","Минданао","Самар","Негрос"],
-["Где находится остров Борнео разделён?","3 страны","2 страны","1 страна","4 страны"],
-["Какой остров самый большой в Новой Зеландии?","Южный","Северный","Стюарт","Чатем"],
-["Где находится остров Реюньон?","Индийский океан","Атлантический океан","Тихий океан","Карибское море"],
-["Какой остров самый большой в Гавайях?","Гавайи (Большой остров)","Оаху","Мауи","Кауаи"],
-["Где находится Фолклендские острова?","Южная Атлантика","Северная Атлантика","Тихий океан","Индийский океан"]
-],
-"Пустыни": [
-["Самая большая жаркая пустыня?","Сахара","Аравийская","Гоби","Калахари"],
-["Самая большая пустыня в мире (любая)?","Антарктическая","Сахара","Арктическая","Аравийская"],
-["В какой стране находится пустыня Атакама?","Чили","Перу","Боливия","Аргентина"],
-["Какая пустыня самая сухая?","Атакама","Сахара","Гоби","Калахари"],
-["В какой стране находится пустыня Гоби?","Монголия/Китай","Индия","Пакистан","Иран"],
-["Какая пустыня находится в Австралии?","Большая Песчаная","Сахара","Гоби","Калахари"],
-["Где находится пустыня Намиб?","Намибия","ЮАР","Ботсвана","Ангола"],
-["Какая пустыня самая жаркая?","Лут (Иран)","Сахара","Долина Смерти","Атакама"],
-["Где находится пустыня Такла-Макан?","Китай","Монголия","Индия","Казахстан"],
-["Какая пустыня находится в Индии?","Тар","Гоби","Каракумы","Кызылкумы"],
-["Где находится пустыня Калахари?","Южная Африка","Северная Африка","Восточная Африка","Западная Африка"],
-["Какая пустыня самая большая в Европе?","Табернас","Лас-Мединас","Монегрос","Альмерия"],
-["Где находится пустыня Сонора?","США/Мексика","Канада","Бразилия","Аргентина"],
-["Какая пустыня самая большая в Центральной Азии?","Каракумы","Гоби","Такла-Макан","Кызылкумы"],
-["Где находится пустыня Мохаве?","США","Мексика","Канада","Бразилия"],
-["Какая пустыня находится в ОАЭ?","Руб-эль-Хали","Сахара","Нефуд","Дехна"],
-["Где находится пустыня Симпсон?","Австралия","Новая Зеландия","ЮАР","Бразилия"],
-["Какая пустыня самая большая в Аравии?","Руб-эль-Хали","Нефуд","Дехна","Сирия"],
-["Где находится пустыня Атакама?","Чили","Аргентина","Перу","Боливия"],
-["Какая пустыня самая большая в Африке?","Сахара","Калахари","Намиб","Ливийская"]
-],
-"Флаги": [
-["На флаге какой страны кленовый лист?","Канада","Австралия","Новая Зеландия","Ирландия"],
-["На флаге какой страны изображён дракон?","Бутан","Уэльс","Китай","Вьетнам"],
-["Какая страна имеет самый старый флаг в мире?","Дания","Нидерланды","Швеция","Великобритания"],
-["На флаге какой страны 50 звёзд?","США","Бразилия","Евросоюз","Австралия"],
-["Какой флаг самый сложный в мире?","Туркменистан","Бутан","Белиз","Мозамбик"],
-["На флаге какой страны изображён орёл?","Мексика","Германия","Польша","Египет"],
-["Какая страна имеет флаг с АК-47?","Мозамбик","Ангола","Зимбабве","Куба"],
-["На флаге какой страны солнце с лицом?","Аргентина","Уругвай","Казахстан","Япония"],
-["Какой флаг самый простой в мире?","Ливия (бывший)","Япония","Польша","Индонезия"],
-["На флаге какой страны 12 звёзд по кругу?","Евросоюз","Бразилия","США","Австралия"],
-["Какая страна имеет флаг с Библией?","Доминиканская Республика","Бразилия","Филиппины","Либерия"],
-["На флаге какой страны изображён кенгуру?","Австралия","Новая Зеландия","Папуа — Новая Гвинея","Кирибати"],
-["Какая страна имеет флаг с мечом?","Саудовская Аравия","Оман","Катар","Йемен"],
-["На флаге какой страны 27 звёзд?","Бразилия","США","Австралия","Новая Зеландия"],
-["Какой флаг не имеет прямоугольной формы?","Непал","Швейцария","Ватикан","Монако"],
-["На флаге какой страны изображена карта?","Кипр","Косово","Босния","Мальта"],
-["Какая страна имеет флаг с полумесяцем?","Турция","Пакистан","Алжир","Мавритания"],
-["На флаге какой страны 3 горизонтальные полосы: чёрная, красная, золотая?","Германия","Бельгия","Нидерланды","Люксембург"],
-["Какой флаг изображён на гербе ООН?","Карта мира","Голубой фон","Оливковые ветви","Всё перечисленное"],
-["На флаге какой страны изображена звезда Давида?","Израиль","Ливан","Сирия","Иордан"]
-],
-"Природа": [
-["Самое большое животное на Земле?","Синий кит","Африканский слон","Жираф","Белая акула"],
-["Самое быстрорастущее растение?","Бамбук","Водоросли","Папоротник","Кактус"],
-["Какое дерево самое высокое в мире?","Секвойя","Дуб","Баобаб","Эвкалипт"],
-["Какое животное самое быстрое на суше?","Гепард","Лев","Газель","Страус"],
-["Где находится самый большой тропический лес?","Амазония","Конго","Борнео","Суматра"],
-["Какое животное самое большое на суше?","Африканский слон","Бегемот","Носорог","Жираф"],
-["Какая рыба самая большая?","Китовая акула","Большая белая","Скат-манта","Океаническая солнечная"],
-["Какое животное живёт дольше всех?","Гренландская акула","Черепаха","Кит","Попугай"],
-["Где обитает больше всего видов птиц?","Колумбия","Бразилия","Индонезия","Перу"],
-["Какое животное самое маленькое в мире?","Колибри-пчёлка","Лягушка-бриллиант","Мышь-малютка","Оса-паразит"],
-["Какой цветок самый большой в мире?","Раффлезия","Подсолнух","Лотос","Орхидея"],
-["Какое животное самое ядовитое?","Квадратная медуза","Лягушка-древолаз","Змея тайпан","Скорпион"],
-["Где находится самый большой национальный парк?","Северо-Восточная Гренландия","Йеллоустон","Крюгер","Серенгети"],
-["Какое животное самое умное после человека?","Шимпанзе","Дельфин","Слон","Ворон"],
-["Какое растение живёт дольше всех?","Сосна остистая","Баобаб","Секвойя","Олива"],
-["Где обитает больше всего видов рыб?","Коралловый риф","Амазонка","Байкал","Средиземное море"],
-["Какое животное самое сильное относительно размера?","Навозный жук","Муравей","Пума","Орёл"],
-["Какой вулкан самый активный в мире?","Килауэа","Этна","Везувий","Фудзияма"],
-["Какое животное самое громкое?","Синий кит","Рык льва","Как-де-мона","Гиббон"],
-["Где находится самый большой водопад по объёму?","Игуасу","Ниагарский","Виктория","Анхель"]
-],
-"Города": [
-["Самый большой город в мире по населению?","Токио","Шанхай","Дели","Нью-Йорк"],
-["Какой город называют «Вечным»?","Рим","Афины","Иерусалим","Каир"],
-["Какой город самый северный в мире?","Лонгйир","Норильск","Мурманск","Тромсё"],
-["Какой город самый южный в мире?","Пуэрто-Уильямс","Ушуайя","Пунта-Аренас","Порт-Стэнли"],
-["Какой город самый высокогорный в мире?","Ла-Ринконада","Эль-Альто","Кито","Лхаса"],
-["Какой город называют «Городом мостов»?","Гамбург","Венеция","Амстердам","Санкт-Петербург"],
-["Какой город расположен на двух континентах?","Стамбул","Каир","Москва","Тбилиси"],
-["Какой город самый густонаселённый?","Манила","Мумбаи","Дакка","Лагос"],
-["Какой город называют «Великим яблоком»?","Нью-Йорк","Лос-Анджелес","Чикаго","Бостон"],
-["Какой город самый старый в мире?","Дамаск","Иерихон","Библ","Афины"],
-["Какой город называют «Городом огней»?","Париж","Лас-Вегас","Токио","Дубай"],
-["Какой город расположен ниже уровня моря?","Баку","Амстердам","Новый Орлеан","Бангкок"],
-["Какой город самый зелёный в мире?","Сингапур","Ванкувер","Копенгаген","Осло"],
-["Какой город называют «Жемчужиной Адриатики»?","Дубровник","Венеция","Сплит","Бар"],
-["Какой город самый дорогой для жизни?","Сингапур","Цюрих","Гонконг","Париж"],
-["Какой город самый безопасный в мире?","Токио","Сингапур","Осака","Цюрих"],
-["Какой город называют «Городом каналов»?","Амстердам","Венеция","Брюгге","Сучжоу"],
-["Какой город самый ветреный в мире?","Веллингтон","Чикаго","Рейкьявик","Пунта-Аренас"],
-["Какой город расположен на 7 холмах?","Рим","Москва","Лиссабон","Стамбул"],
-["Какой город самый чистый в мире?","Калгари","Сингапур","Цюрих","Хельсинки"]
-],
-"Политика": [
-["Сколько стран в ООН?","193","195","200","180"],
-["Какая страна самая молодая в мире?","Южный Судан","Косово","Тимор-Лешти","Черногория"],
-["Какая страна имеет больше всего соседей?","Китай","Россия","Бразилия","Германия"],
-["Какая страна не имеет выхода к морю и окружена одной страной?","Лесото","Сан-Марино","Ватикан","Андорра"],
-["Какая страна имеет самую длинную границу?","Канада","Россия","Китай","Бразилия"],
-["Сколько стран в Африке?","54","48","60","45"],
-["Какая страна имеет больше всего островов?","Швеция","Финляндия","Норвегия","Индонезия"],
-["Какая страна самая длинная по форме?","Чили","Норвегия","Вьетнам","Мозамбик"],
-["Какая страна имеет 2 столицы?","ЮАР","Боливия","Нидерланды","Малайзия"],
-["Сколько штатов в США?","50","52","48","51"],
-["Какая страна самая маленькая в Южной Америке?","Суринам","Гайана","Уругвай","Эквадор"],
-["Какая страна имеет больше всего часовых поясов?","Франция","Россия","США","Великобритания"],
-["Какая страна самая маленькая в Африке?","Сейшелы","Сан-Томе","Гамбия","Джибути"],
-["Какая страна имеет больше всего вулканов?","Индонезия","Япония","Исландия","Филиппины"],
-["Какая страна самая большая на Карибах?","Куба","Доминикана","Гаити","Ямайка"],
-["Какая страна имеет больше всего соседей в Европе?","Германия","Франция","Австрия","Россия"],
-["Какая страна самая плоская?","Мальдивы","Катар","Кувейт","Бахрейн"],
-["Какая страна самая узкая?","Чили","Норвегия","Вьетнам","Палестина"],
-["Какая страна имеет больше всего озёр?","Канада","Финляндия","Россия","Швеция"],
-["Какая страна не входит ни в один континент?","Островные государства","Все страны на континентах","Антарктида","Нет такой"]
-]
-};
+// RVRS: [name, continent, length_km, empties_into, diff]
+const RVRS=[
+["Нил","Африка",6650,"Средиземное море","easy"],
+["Амазонка","Южная Америка",6400,"Атлантический океан","easy"],
+["Янцзы","Азия",6300,"Восточно-Китайское море","easy"],
+["Хуанхэ","Азия",5464,"Бохайский залив","medium"],
+["Лена","Азия",4400,"Море Лаптевых","medium"],
+["Меконг","Азия",4350,"Южно-Китайское море","hard"],
+["Конго","Африка",4700,"Атлантический океан","medium"],
+["Нигер","Африка",4180,"Гвинейский залив","medium"],
+["Парана","Южная Америка",4880,"Рио-де-ла-Плата","hard"],
+["Маккензи","Северная Америка",4241,"Море Бофора","hard"],
+["Обь","Азия",3650,"Обская губа","medium"],
+["Миссисипи","Северная Америка",3730,"Мексиканский залив","easy"],
+["Волга","Европа",3530,"Каспийское море","easy"],
+["Юкон","Северная Америка",3190,"Берингово море","hard"],
+["Инд","Азия",3180,"Аравийское море","medium"],
+["Дунай","Европа",2860,"Чёрное море","medium"],
+["Евфрат","Азия",2800,"Персидский залив","medium"],
+["Брахмапутра","Азия",2900,"Бенгальский залив","hard"],
+["Замбези","Африка",2574,"Индийский океан","hard"],
+["Ганг","Азия",2525,"Бенгальский залив","medium"],
+["Муррей","Австралия и Океания",2508,"Южный океан","hard"],
+["Ориноко","Южная Америка",2101,"Атлантический океан","hard"],
+["Оранжевая","Африка",2200,"Атлантический океан","hard"],
+["Колорадо","Северная Америка",2333,"Калифорнийский залив","medium"],
+["Тигр","Азия",1950,"Персидский залив","medium"],
+["Рейн","Европа",1230,"Северное море","medium"],
+["Сена","Европа",775,"Ла-Манш","medium"],
+["Темза","Европа",346,"Северное море","medium"],
+["Нева","Европа",74,"Финский залив","hard"],
+["Ирравади","Азия",2170,"Андаманское море","hard"],
+["Ниагара","Северная Америка",56,"Озеро Онтарио","hard"],
+];
 
-let gameState = {
-  usedIds: new Set(),
-  currentQuestions: [],
-  currentIndex: 0,
-  score: 0,
-  correctCount: 0,
-  wrongCount: 0,
-  gameStarted: false,
-  answered: false
-};
+// LKES: [name, location, continent, area_km2, diff]
+const LKES=[
+["Каспийское море","Россия/Иран/Казахстан","Азия",371000,"easy"],
+["Верхнее","США/Канада","Северная Америка",82103,"easy"],
+["Виктория","Танзания/Кения/Уганда","Африка",69485,"easy"],
+["Гурон","США/Канада","Северная Америка",59596,"medium"],
+["Мичиган","США","Северная Америка",57757,"medium"],
+["Танганьика","ДР Конго/Танзания","Африка",32893,"medium"],
+["Байкал","Россия","Азия",31722,"easy"],
+["Большое Медвежье","Канада","Северная Америка",31153,"hard"],
+["Малави (Ньяса)","Малави/Мозамбик","Африка",29600,"hard"],
+["Эри","США/Канада","Северная Америка",25667,"medium"],
+["Онтарио","США/Канада","Северная Америка",18960,"medium"],
+["Ладожское","Россия","Европа",17703,"medium"],
+["Маракайбо","Венесуэла","Южная Америка",13210,"hard"],
+["Онего","Россия","Европа",9700,"hard"],
+["Туркана","Кения","Африка",8665,"hard"],
+["Титикака","Перу/Боливия","Южная Америка",8372,"medium"],
+["Аральское море","Казахстан/Узбекистан","Азия",17160,"medium"],
+["Мёртвое море","Израиль/Иордания","Азия",810,"medium"],
+["Иссык-Куль","Кыргызстан","Азия",6236,"hard"],
+["Женевское","Швейцария/Франция","Европа",580,"hard"],
+["Боденское","Германия/Австрия/Швейцария","Европа",536,"hard"],
+["Балатон","Венгрия","Европа",594,"hard"],
+["Хубсугул","Монголия","Азия",2760,"hard"],
+["Эйр","Австралия","Австралия и Океания",9500,"hard"],
+["Чад","Нигер/Нигерия/Чад","Африка",1350,"hard"],
+];
 
-function loadUsedIds() {
-  try {
-    const saved = localStorage.getItem('shaker_quiz_used_ids');
-    if (saved) gameState.usedIds = new Set(JSON.parse(saved));
-  } catch(e) { gameState.usedIds = new Set(); }
+// ISLS: [name, country, ocean_sea, diff]
+const ISLS=[
+["Гренландия","Дания","Северный Ледовитый океан","easy"],
+["Мадагаскар","Мадагаскар","Индийский океан","easy"],
+["Хонсю","Япония","Тихий океан","medium"],
+["Борнео","Индонезия/Малайзия","Тихий океан","medium"],
+["Суматра","Индонезия","Индийский океан","medium"],
+["Великобритания","Великобритания","Атлантический океан","easy"],
+["Исландия","Исландия","Атлантический океан","medium"],
+["Куба","Куба","Карибское море","easy"],
+["Новая Гвинея","Индонезия/ПНГ","Тихий океан","medium"],
+["Сицилия","Италия","Средиземное море","medium"],
+["Сардиния","Италия","Средиземное море","hard"],
+["Корсика","Франция","Средиземное море","hard"],
+["Кипр","Кипр","Средиземное море","medium"],
+["Шри-Ланка","Шри-Ланка","Индийский океан","medium"],
+["Сахалин","Россия","Тихий океан","medium"],
+["Тасмания","Австралия","Тихий океан","medium"],
+["Гавайи","США","Тихий океан","easy"],
+["Канарские острова","Испания","Атлантический океан","medium"],
+["Мадейра","Португалия","Атлантический океан","hard"],
+["Азорские острова","Португалия","Атлантический океан","hard"],
+["Фарерские острова","Дания","Атлантический океан","hard"],
+["Шпицберген","Норвегия","Северный Ледовитый океан","hard"],
+["Мальдивы","Мальдивы","Индийский океан","medium"],
+["Сейшелы","Сейшелы","Индийский океан","hard"],
+["Фолклендские острова","Великобритания","Атлантический океан","hard"],
+["Галапагосские острова","Эквадор","Тихий океан","medium"],
+["Реюньон","Франция","Индийский океан","hard"],
+["Новая Каледония","Франция","Тихий океан","hard"],
+["Маврикий","Маврикий","Индийский океан","hard"],
+["Ява","Индонезия","Тихий океан","medium"],
+];
+
+// DSRT: [name, continent, area_km2, type, diff]
+const DSRT=[
+["Сахара","Африка",9200000,"горячая","easy"],
+["Аравийская","Азия",2330000,"горячая","medium"],
+["Гоби","Азия",1300000,"холодная","easy"],
+["Патагонская","Южная Америка",670000,"холодная","hard"],
+["Руб-эль-Хали","Азия",647500,"горячая","hard"],
+["Большой Бассейн","Северная Америка",492000,"холодная","hard"],
+["Каракумы","Азия",350000,"горячая","hard"],
+["Чиуауа","Северная Америка",362000,"горячая","hard"],
+["Такламакан","Азия",270000,"горячая","hard"],
+["Кызылкум","Азия",298000,"горячая","hard"],
+["Тар","Азия",200000,"горячая","hard"],
+["Калахари","Африка",900000,"горячая","medium"],
+["Намиб","Африка",81000,"горячая","hard"],
+["Атакама","Южная Америка",140000,"холодная","medium"],
+["Сонора","Северная Америка",310000,"горячая","hard"],
+["Мохаве","Северная Америка",65000,"горячая","hard"],
+["Симпсон","Австралия и Океания",143000,"горячая","hard"],
+["Большая Песчаная","Австралия и Океания",360000,"горячая","hard"],
+["Тибетское нагорье","Азия",2500000,"холодная","hard"],
+["Виктория (пустыня)","Австралия и Океания",422000,"горячая","hard"],
+];
+
+// ── ХАРДКОДНЫЕ ВОПРОСЫ (13 категорий) ──────────────────────────────────
+const FIXED=[
+// СТОЛИЦЫ
+{cat:"Столицы",diff:"hard",q:"Официальная столица Нидерландов — это...",opts:["Амстердам","Гаага","Роттердам","Утрехт"],a:0,fact:"Амстердам — официальная столица. Правительство заседает в Гааге."},
+{cat:"Столицы",diff:"hard",q:"В ЮАР три столицы. Законодательная — это...",opts:["Кейптаун","Претория","Йоханнесбург","Блумфонтейн"],a:0,fact:"ЮАР уникальна: исполнительная — Претория, законодательная — Кейптаун, судебная — Блумфонтейн."},
+{cat:"Столицы",diff:"hard",q:"Конституционная столица Боливии — это...",opts:["Сукре","Ла-Пас","Санта-Крус","Кочабамба"],a:0,fact:"Сукре — конституционная столица. Ла-Пас (~3640 м над уровнем моря) — правительственная."},
+{cat:"Столицы",diff:"medium",q:"Столица Бразилии — специально построенный город...",opts:["Бразилиа","Рио-де-Жанейро","Сан-Паулу","Салвадор"],a:0,fact:"Бразилиа заменила Рио-де-Жанейро в 1960 году. Спроектирована архитектором Оскаром Нимейером."},
+{cat:"Столицы",diff:"medium",q:"Астана — это столица...",opts:["Казахстана","Узбекистана","Кыргызстана","Туркменистана"],a:0,fact:"Астана (в 2019–2022 — Нур-Султан) стала столицей Казахстана в 1997 году вместо Алматы."},
+{cat:"Столицы",diff:"easy",q:"Столица Австралии — не Сидней! Это...",opts:["Канберра","Сидней","Мельбурн","Брисбен"],a:0,fact:"Канберра стала столицей в 1913 году как компромисс между Сиднеем и Мельбурном."},
+{cat:"Столицы",diff:"hard",q:"Столица Мьянмы была перенесена в Нейпьидо в...",opts:["2005 году","1999 году","2010 году","2000 году"],a:0,fact:"Столица перенесена в Нейпьидо в 2005 году. Новый город построен практически с нуля."},
+{cat:"Столицы",diff:"hard",q:"В какой стране столица называется так же, как и сама страна?",opts:["Сингапур","Австралия","Индия","Бразилия"],a:0,fact:"Город-государство Сингапур: столица и страна носят одно имя. Также Люксембург, Монако."},
+{cat:"Столицы",diff:"medium",q:"Столица Канады — не Торонто! Это...",opts:["Оттава","Торонто","Ванкувер","Монреаль"],a:0,fact:"Оттава — столица с 1857 года. Торонто — крупнейший город, но не столица."},
+{cat:"Столицы",diff:"hard",q:"Самая высокогорная столица мира?",opts:["Ла-Пас (Боливия)","Кито (Эквадор)","Богота (Колумбия)","Тхимпху (Бутан)"],a:0,fact:"Ла-Пас на высоте ~3640 м — правительственная столица Боливии."},
+// КОНТИНЕНТЫ
+{cat:"Континенты",diff:"easy",q:"Какой континент самый большой по площади?",opts:["Евразия","Африка","Северная Америка","Антарктида"],a:0,fact:"Евразия — 54,8 млн км² (~37% суши Земли)."},
+{cat:"Континенты",diff:"easy",q:"Какой континент самый маленький?",opts:["Австралия","Европа","Антарктида","Южная Америка"],a:0,fact:"Австралия — ~7,7 млн км². Это и самый маленький континент, и единственный, занятый одной страной."},
+{cat:"Континенты",diff:"medium",q:"Как называется пролив, разделяющий Европу и Азию у Стамбула?",opts:["Босфор","Дарданеллы","Гибралтар","Керченский"],a:0,fact:"Босфор шириной всего 700 м делит Стамбул на европейскую и азиатскую части."},
+{cat:"Континенты",diff:"medium",q:"Россия расположена на двух континентах. Граница проходит по...",opts:["Уральским горам","Кавказу","Волге","Днепру"],a:0,fact:"Урал и река Урал (Яик) — традиционная граница Европы и Азии."},
+{cat:"Континенты",diff:"hard",q:"Какой континент единственный без постоянного населения?",opts:["Антарктида","Австралия","Арктика","Гренландия"],a:0,fact:"Антарктида — только временные научные станции. Круглый год там около 1000–4000 учёных."},
+{cat:"Континенты",diff:"medium",q:"На каком континенте нет ни одного государства?",opts:["Антарктида","Австралия","Арктика","Гренландия"],a:0,fact:"Антарктида не принадлежит ни одному государству. Управляется Договором об Антарктике (1959 г.)."},
+{cat:"Континенты",diff:"hard",q:"Единственная страна, занимающая целый континент — это...",opts:["Австралия","Канада","Россия","США"],a:0,fact:"Австралия — единственное государство, занимающее целый континент."},
+{cat:"Континенты",diff:"medium",q:"Какой континент самый засушливый?",opts:["Антарктида","Австралия","Африка","Азия"],a:0,fact:"Антарктида — ледяная пустыня, осадков выпадает < 200 мм/год. Это суше многих горячих пустынь!"},
+{cat:"Континенты",diff:"easy",q:"Сколько континентов на Земле?",opts:["6","5","7","8"],a:0,fact:"Евразия, Африка, Северная Америка, Южная Америка, Австралия, Антарктида = 6 континентов."},
+// РЕКОРДЫ
+{cat:"Рекорды",diff:"easy",q:"Самый большой океан на Земле?",opts:["Тихий","Атлантический","Индийский","Северный Ледовитый"],a:0,fact:"Тихий океан — ~165 млн км², это больше, чем вся суша Земли вместе взятая!"},
+{cat:"Рекорды",diff:"easy",q:"Самая длинная река мира?",opts:["Нил","Амазонка","Янцзы","Миссисипи"],a:0,fact:"Нил — 6650 км. Амазонка — самая полноводная: несёт 20% всей пресной воды океана."},
+{cat:"Рекорды",diff:"easy",q:"Самая высокая гора?",opts:["Эверест","К2","Монблан","Аконкагуа"],a:0,fact:"Эверест — 8849 м. Если считать от центра Земли, то Чимборасо в Эквадоре даже выше!"},
+{cat:"Рекорды",diff:"easy",q:"Самое глубокое озеро мира?",opts:["Байкал","Каспийское","Танганьика","Виктория"],a:0,fact:"Байкал — 1642 м глубиной. В нём содержится ~20% всех мировых запасов пресной воды!"},
+{cat:"Рекорды",diff:"medium",q:"Глубочайшее место Мирового океана?",opts:["Марианская впадина","Желоб Тонга","Желоб Пуэрто-Рико","Зондский желоб"],a:0,fact:"Бездна Челленджера в Марианской впадине — 11 034 м. Эверест туда поместится с запасом 2 км!"},
+{cat:"Рекорды",diff:"medium",q:"Самая длинная горная система на суше?",opts:["Анды","Гималаи","Скалистые горы","Урал"],a:0,fact:"Анды — ~7500 км, 7 стран Южной Америки. Самая длинная горная цепь в мире."},
+{cat:"Рекорды",diff:"medium",q:"Самое низкое место на суше?",opts:["Берег Мёртвого моря","Долина Смерти","Котловина Каттара","Озеро Асаль"],a:0,fact:"Берег Мёртвого моря — 430 м ниже уровня моря. Вода такая солёная, что нельзя утонуть!"},
+{cat:"Рекорды",diff:"medium",q:"Самый высокий водопад мира?",opts:["Анхель","Виктория","Ниагара","Игуасу"],a:0,fact:"Анхель (Венесуэла) — 979 м! Открыт случайно лётчиком Джимми Анхелем в 1933 году."},
+{cat:"Рекорды",diff:"hard",q:"Самая длинная сухопутная граница в мире?",opts:["США — Канада","Россия — Казахстан","Китай — Монголия","Аргентина — Чили"],a:0,fact:"Граница США — Канада: 8891 км. Это самая длинная граница без единого военного поста!"},
+{cat:"Рекорды",diff:"hard",q:"Самое мелководное море мира?",opts:["Азовское","Балтийское","Северное","Жёлтое"],a:0,fact:"Азовское море — средняя глубина 7 м, максимальная — 14 м. Его можно перейти вброд в некоторых местах."},
+{cat:"Рекорды",diff:"medium",q:"Самый большой коралловый риф?",opts:["Большой Барьерный риф","Риф Белиза","Красноморский","Флоридский"],a:0,fact:"Большой Барьерный риф (Австралия) — 2300 км. Виден из космоса и является живым организмом!"},
+{cat:"Рекорды",diff:"hard",q:"Самый маленький океан?",opts:["Северный Ледовитый","Южный","Индийский","Атлантический"],a:0,fact:"Северный Ледовитый океан — ~14 млн км². Большую часть года покрыт льдом."},
+// НАСЕЛЕНИЕ
+{cat:"Население",diff:"easy",q:"Самая населённая страна мира?",opts:["Индия","Китай","США","Индонезия"],a:0,fact:"Индия в 2023 году обогнала Китай — теперь в ней живёт более 1,4 млрд человек!"},
+{cat:"Население",diff:"medium",q:"Самый населённый город мира по численности агломерации?",opts:["Токио","Шанхай","Нью-Йорк","Дели"],a:0,fact:"Токио — агломерация ~37 млн чел. Это больше, чем всё население Канады!"},
+{cat:"Население",diff:"medium",q:"Самая населённая страна Африки?",opts:["Нигерия","Эфиопия","Египет","ЮАР"],a:0,fact:"Нигерия — 206 млн чел. К 2050 году может стать 3-й по населению страной мира!"},
+{cat:"Население",diff:"hard",q:"В какой стране самая высокая плотность населения?",opts:["Монако","Бангладеш","Сингапур","Ватикан"],a:0,fact:"Монако — ~26 000 чел/км². Площадь страны меньше 2 км², но живёт 40 000 человек!"},
+{cat:"Население",diff:"medium",q:"Самая малонаселённая страна мира?",opts:["Ватикан","Науру","Тувалу","Сан-Марино"],a:0,fact:"Ватикан — около 800 жителей. Из них большинство — служители Католической церкви."},
+{cat:"Население",diff:"hard",q:"Страна с наибольшим числом эмигрантов (диаспора)?",opts:["Индия","Мексика","Китай","Россия"],a:0,fact:"Индийская диаспора — более 18 млн человек по всему миру, крупнейшая в мире."},
+{cat:"Население",diff:"medium",q:"Какая страна Южной Америки самая населённая?",opts:["Бразилия","Аргентина","Колумбия","Венесуэла"],a:0,fact:"Бразилия — 213 млн чел., 6-я по населению страна мира."},
+{cat:"Население",diff:"hard",q:"Где живёт половина населения Земли?",opts:["В Азии","В Азии и Африке","В Евразии","В 10 крупнейших городах"],a:0,fact:"В Азии живёт ~60% населения Земли. Только Китай + Индия = ~2,8 млрд чел."},
+// ГОРЫ
+{cat:"Горы",diff:"easy",q:"На каком континенте находится Эверест?",opts:["Азия","Африка","Европа","Южная Америка"],a:0,fact:"Эверест в Гималаях на границе Непала и Китая. Первое восхождение — 1953 год."},
+{cat:"Горы",diff:"easy",q:"Высшая точка Африки?",opts:["Килиманджаро","Кения","Рувензори","Камерун (гора)"],a:0,fact:"Килиманджаро (5895 м) в Танзании — потухший вулкан и высшая точка Африки."},
+{cat:"Горы",diff:"medium",q:"Высшая точка Европы?",opts:["Эльбрус","Монблан","Маттерхорн","Монте-Роза"],a:0,fact:"Эльбрус (5642 м) в России — потухший вулкан. Монблан (4808 м) — высочайшая вершина Альп."},
+{cat:"Горы",diff:"medium",q:"Высшая точка Южной Америки?",opts:["Аконкагуа","Охос-дель-Саладо","Чимборасо","Котопахи"],a:0,fact:"Аконкагуа (6961 м) в Аргентине — высшая точка Западного и Южного полушарий!"},
+{cat:"Горы",diff:"medium",q:"Высшая точка Северной Америки?",opts:["Денали","Логан","Орисаба","Попокатепетль"],a:0,fact:"Денали (6194 м) на Аляске. Ранее назывался Мак-Кинли — в честь президента США."},
+{cat:"Горы",diff:"medium",q:"На каком острове стоит вулкан Этна?",opts:["Сицилия","Сардиния","Корсика","Мальта"],a:0,fact:"Этна (3357 м) — самый активный вулкан Европы. Извергается несколько раз в год!"},
+{cat:"Горы",diff:"hard",q:"Как называется «крыша мира»?",opts:["Памир","Гималаи","Тибет","Каракорум"],a:0,fact:"Памир в Таджикистане — средняя высота плато 4000–6000 м. Здесь жизнь на высоте!"},
+{cat:"Горы",diff:"hard",q:"Какая гора дальше всего от центра Земли?",opts:["Чимборасо","Эверест","Аконкагуа","Денали"],a:0,fact:"Чимборасо в Эквадоре! Из-за сплюснутости Земли у экватора он дальше от центра, чем Эверест."},
+{cat:"Горы",diff:"medium",q:"В какой стране находится Фудзи?",opts:["Япония","Китай","Южная Корея","Тайвань"],a:0,fact:"Фудзи (3776 м) — потухший вулкан и главный символ Японии. Последнее извержение — 1707 год."},
+// РЕКИ
+{cat:"Реки",diff:"easy",q:"В какое море впадает Волга?",opts:["Каспийское","Чёрное","Азовское","Балтийское"],a:0,fact:"Волга (3530 км) — крупнейшая река Европы. Она не впадает в мировой океан!"},
+{cat:"Реки",diff:"medium",q:"Через сколько стран протекает Дунай?",opts:["10","8","12","6"],a:0,fact:"Дунай — через 10 стран! Это мировой рекорд. Протекает через Вену, Будапешт, Белград."},
+{cat:"Реки",diff:"medium",q:"На какой реке стоит Лондон?",opts:["Темза","Сена","Рейн","Медуэй"],a:0,fact:"Темза (346 км) — короткая, но знаменитая. Именно по ней викинги добрались до Лондона."},
+{cat:"Реки",diff:"easy",q:"Самая полноводная река мира?",opts:["Амазонка","Нил","Конго","Янцзы"],a:0,fact:"Амазонка несёт 20% всей пресной воды, впадающей в океан. Это 1/5 всей пресной воды мира!"},
+{cat:"Реки",diff:"medium",q:"На какой реке расположен водопад Виктория?",opts:["Замбези","Нил","Конго","Нигер"],a:0,fact:"Водопад Виктория (108 м) на реке Замбези — его рёв слышен за 40 км!"},
+{cat:"Реки",diff:"hard",q:"Куда впадает река Амур?",opts:["Охотское море","Японское море","Тихий океан","Берингово море"],a:0,fact:"Амур впадает в Амурский лиман, соединённый с Охотским морем. Длина — 2824 км."},
+{cat:"Реки",diff:"hard",q:"Какая река протекает через наибольшее число столиц?",opts:["Дунай","Рейн","Нил","Амазонка"],a:0,fact:"Дунай протекает через 4 столицы: Вену, Братиславу, Будапешт и Белград!"},
+{cat:"Реки",diff:"medium",q:"Нил берёт начало из озера...",opts:["Виктория","Танганьика","Малави","Чад"],a:0,fact:"Белый Нил вытекает из озера Виктория. Голубой Нил — из Эфиопского нагорья."},
+// ОЗЁРА
+{cat:"Озёра",diff:"easy",q:"Самое глубокое озеро мира?",opts:["Байкал","Каспийское","Танганьика","Виктория"],a:0,fact:"Байкал — 1642 м. Образовался 25 миллионов лет назад. В нём живут уникальные организмы!"},
+{cat:"Озёра",diff:"easy",q:"Самое большое озеро Африки?",opts:["Виктория","Танганьика","Малави","Чад"],a:0,fact:"Виктория — 69 485 км², 3-е по площади пресноводное озеро мира."},
+{cat:"Озёра",diff:"medium",q:"Высочайшее судоходное озеро мира?",opts:["Титикака","Атитлан","Маракайбо","Поопо"],a:0,fact:"Титикака (3812 м над уровнем моря) — на границе Перу и Боливии. Индейцы аймара живут здесь на плавучих тростниковых островах!"},
+{cat:"Озёра",diff:"medium",q:"Самое солёное озеро мира?",opts:["Мёртвое море","Большое Солёное","Ретба","Каспийское"],a:0,fact:"Мёртвое море — соль. ~33%. Это в 10 раз солонее океана. Там нельзя утонуть — вода выталкивает!"},
+{cat:"Озёра",diff:"medium",q:"Самое крупное озеро Европы?",opts:["Ладожское","Онежское","Балатон","Женевское"],a:0,fact:"Ладожское озеро (17 703 км²) — во Второй мировой Дорога Жизни шла именно по нему."},
+{cat:"Озёра",diff:"hard",q:"Почему Аральское море быстро мелеет?",opts:["Забор воды для орошения","Глобальное потепление","Подземные стоки","Испарение"],a:0,fact:"Советские оросительные каналы 1960-х осушили Арал. Это одна из крупнейших экокатастроф!"},
+{cat:"Озёра",diff:"hard",q:"Что общего у Каспийского, Мёртвого и Аральского морей?",opts:["Все три — бессточные озёра","Все в России","Все солёные","Все мелководные"],a:0,fact:"Все три не имеют стока в Мировой океан — это бессточные озёра, которые называют морями."},
+// ОСТРОВА
+{cat:"Острова",diff:"easy",q:"Самый большой остров мира?",opts:["Гренландия","Новая Гвинея","Борнео","Мадагаскар"],a:0,fact:"Гренландия (2,16 млн км²) принадлежит Дании. Покрыта льдом на 80%!"},
+{cat:"Острова",diff:"medium",q:"Какой стране принадлежит Гренландия?",opts:["Дании","Норвегии","Исландии","Канаде"],a:0,fact:"Гренландия — автономная территория Дании. США в 1946 и 2019 годах пытались её купить!"},
+{cat:"Острова",diff:"medium",q:"Канарские острова принадлежат...",opts:["Испании","Португалии","Марокко","Франции"],a:0,fact:"Канарские острова — автономное сообщество Испании, хотя находятся у берегов Африки."},
+{cat:"Острова",diff:"medium",q:"В каком океане расположены Мальдивы?",opts:["Индийский","Тихий","Атлантический","Северный Ледовитый"],a:0,fact:"Мальдивы — самая низкая страна мира (средняя высота 1,5 м). Угрожает затопление!"},
+{cat:"Острова",diff:"hard",q:"Фолклендские острова — предмет спора между...",opts:["Великобританией и Аргентиной","Чили и Великобританией","США и Аргентиной","Бразилией и Аргентиной"],a:0,fact:"В 1982 году из-за Фолклендских островов была война между Великобританией и Аргентиной."},
+{cat:"Острова",diff:"hard",q:"Где расположены Галапагосские острова?",opts:["Эквадор","Перу","Колумбия","Чили"],a:0,fact:"Галапагосы принадлежат Эквадору. Дарвин изучил здесь эволюцию в 1835 году!"},
+{cat:"Острова",diff:"medium",q:"Какой остров — самый населённый в мире?",opts:["Ява","Хонсю","Борнео","Мадагаскар"],a:0,fact:"Ява (Индонезия) — 141 млн чел. на 132 000 км². Это больше, чем всё население России!"},
+// ПУСТЫНИ
+{cat:"Пустыни",diff:"easy",q:"Где находится пустыня Сахара?",opts:["Африка","Азия","Австралия","Южная Америка"],a:0,fact:"Сахара (~9,2 млн км²) — крупнейшая горячая пустыня. Когда-то там было море!"},
+{cat:"Пустыни",diff:"medium",q:"Где находится пустыня Гоби?",opts:["Монголия/Китай","Казахстан","Индия","Пакистан"],a:0,fact:"Гоби (1,3 млн км²) — здесь зимой бывает -40°C! И летом +50°C. Крупнейшая пустыня Азии."},
+{cat:"Пустыни",diff:"medium",q:"Самая сухая пустыня Земли?",opts:["Атакама","Сахара","Гоби","Намиб"],a:0,fact:"Атакама (Чили): в некоторых районах дождя не было 400 лет! Там тренируют марсоходы."},
+{cat:"Пустыни",diff:"medium",q:"Где находится пустыня Намиб?",opts:["Намибия","ЮАР","Ботсвана","Ангола"],a:0,fact:"Намиб (~81 000 км²) — одна из старейших пустынь (55 млн лет). Дала название Намибии."},
+{cat:"Пустыни",diff:"hard",q:"Как называется главная пустыня Туркменистана?",opts:["Каракумы","Кызылкум","Такламакан","Гоби"],a:0,fact:"Каракумы («чёрные пески») занимают 80% территории Туркменистана. Там горит Дарваза — «Врата ада»."},
+{cat:"Пустыни",diff:"hard",q:"Какая пустыня самая большая в мире (включая холодные)?",opts:["Антарктическая","Сахара","Аравийская","Арктика"],a:0,fact:"Антарктида — крупнейшая пустыня (14,2 млн км²). Осадков < 200 мм/год — это пустыня по определению!"},
+// ФЛАГИ
+{cat:"Флаги",diff:"easy",q:"На флаге какой страны — кленовый лист?",opts:["Канада","США","Австралия","Новая Зеландия"],a:0,fact:"Кленовый лист — символ Канады с 1965 года. До этого флаг менялся несколько раз."},
+{cat:"Флаги",diff:"medium",q:"На флаге какой страны — карта этой страны?",opts:["Кипр","Мальта","Косово","Тунис"],a:0,fact:"Кипр — единственная страна, на флаге которой изображена карта её территории."},
+{cat:"Флаги",diff:"medium",q:"«Юнион Джек» — это флаг...",opts:["Великобритании","США","Австралии","Ирландии"],a:0,fact:"Юнион Джек объединяет кресты св. Георгия (Англия), Андрея (Шотландия) и Патрика (Ирландия)."},
+{cat:"Флаги",diff:"hard",q:"У какой страны единственный непрямоугольный флаг?",opts:["Непал","Швейцария","Ватикан","Кирибати"],a:0,fact:"Флаг Непала — два треугольника. Единственный нестандартный флаг в мире!"},
+{cat:"Флаги",diff:"hard",q:"Сколько скандинавских флагов имеют «скандинавский крест»?",opts:["5","4","3","6"],a:0,fact:"5 стран: Дания, Швеция, Норвегия, Финляндия, Исландия. Дания придумала этот крест в 1219 году."},
+{cat:"Флаги",diff:"medium",q:"Флаг Японии называется...",opts:["Хиномару","Одрисуру","Хандзи","Катана"],a:0,fact:"Хиномару («солнечный круг»). Один из древнейших флагов мира — используется с VII века!"},
+{cat:"Флаги",diff:"hard",q:"На флаге какой страны — кедр?",opts:["Ливан","Иордания","Кипр","Иран"],a:0,fact:"Кедр — символ Ливана, страны, где росли знаменитые кедровые леса древности."},
+{cat:"Флаги",diff:"medium",q:"Флаг какой страны стоит в левом верхнем углу австралийского флага?",opts:["Великобритании","Новой Зеландии","США","Ирландии"],a:0,fact:"«Юнион Джек» символизирует историческую связь Австралии с Великобританией."},
+{cat:"Флаги",diff:"hard",q:"Флаги какой страны — единственный квадратный среди всех стран мира?",opts:["Швейцарии","Ватикана","Исландии","Дании"],a:0,fact:"Флаги Швейцарии и Ватикана — квадратные. Но только Швейцария — полноправный член ООН."},
+// ПРИРОДА
+{cat:"Природа",diff:"easy",q:"Как называется Северное сияние?",opts:["Аврора Бореалис","Цунами","Торнадо","Муссон"],a:0,fact:"Аврора Бореалис — взаимодействие солнечного ветра с магнитосферой. Бывает даже зелёным, красным и фиолетовым!"},
+{cat:"Природа",diff:"medium",q:"Что такое «Эль-Ниньо»?",opts:["Потепление вод Тихого океана","Ураган в Карибском море","Сезон дождей в Индии","Холодное течение"],a:0,fact:"Эль-Ниньо вызывает засухи, наводнения и изменение климата по всей планете."},
+{cat:"Природа",diff:"medium",q:"Где находится Большой Барьерный риф?",opts:["Австралия","Бразилия","Индонезия","Мексика"],a:0,fact:"Большой Барьерный риф (2300 км) у берегов Квинсленда — единственный живой организм, видимый из космоса!"},
+{cat:"Природа",diff:"medium",q:"Что такое «цунами»?",opts:["Волны от подводных землетрясений","Тропический циклон","Извержение вулкана","Торнадо над водой"],a:0,fact:"Цунами может разогнаться до 800 км/ч — со скоростью самолёта! Высота — до 30 м."},
+{cat:"Природа",diff:"hard",q:"Граница между азиатской и австралийской фауной называется...",opts:["Линия Уоллеса","Линия Гумбольдта","Линия Дарвина","Экватор"],a:0,fact:"Линия Уоллеса проходит через Индонезийский архипелаг. По обе стороны — разные животные!"},
+{cat:"Природа",diff:"medium",q:"Самое тёплое море в мире?",opts:["Красное","Средиземное","Карибское","Аравийское"],a:0,fact:"Красное море — средняя температура ~25°C. И самое солёное среди «открытых» морей мира."},
+{cat:"Природа",diff:"hard",q:"Саргассово море уникально тем, что...",opts:["Не имеет берегов","Самое глубокое","Самое холодное","Без течений"],a:0,fact:"Саргассово море в Атлантике — единственное море без берегов. Его границы — только течения."},
+{cat:"Природа",diff:"medium",q:"Сколько океанов на Земле?",opts:["5","4","3","6"],a:0,fact:"Тихий, Атлантический, Индийский, Северный Ледовитый и Южный = 5. Южный выделен в 2000 году."},
+{cat:"Природа",diff:"medium",q:"Какой природный канал соединяет Средиземное и Красное моря?",opts:["Нет, их соединяет Суэцкий канал","Нил","Сахарская расщелина","Нильская долина"],a:0,fact:"Природного соединения нет! Их соединяет искусственный Суэцкий канал, открытый в 1869 году."},
+// ГОРОДА
+{cat:"Города",diff:"easy",q:"Самый населённый город мира?",opts:["Токио","Шанхай","Нью-Йорк","Мехико"],a:0,fact:"Токио — агломерация ~37 млн чел. Подземка перевозит 8 млн пассажиров в день!"},
+{cat:"Города",diff:"medium",q:"«Вечный город» — это...",opts:["Рим","Афины","Иерусалим","Каир"],a:0,fact:"Риму более 2700 лет. По легенде, основан Ромулом в 753 году до н.э."},
+{cat:"Города",diff:"easy",q:"Где находится Колизей?",opts:["Рим","Афины","Неаполь","Флоренция"],a:0,fact:"Колизей (72–80 гг. н.э.) вмещал 70 000 зрителей. Работает 2000 лет!"},
+{cat:"Города",diff:"medium",q:"Как раньше назывался Стамбул?",opts:["Константинополь","Карфаген","Александрия","Тир"],a:0,fact:"До 1453 — Константинополь (столица Византии). До этого — Византий. Менял имя трижды!"},
+{cat:"Города",diff:"medium",q:"Самый большой город Африки?",opts:["Лагос","Каир","Киншаса","Йоханнесбург"],a:0,fact:"Лагос (Нигерия) — более 15 млн чел. Один из самых быстрорастущих городов мира."},
+{cat:"Города",diff:"hard",q:"Какой город расположен на двух континентах?",opts:["Стамбул","Каир","Москва","Афины"],a:0,fact:"Стамбул разделён проливом Босфор на европейскую и азиатскую части. Единственный такой город!"},
+{cat:"Города",diff:"easy",q:"Где находится Эйфелева башня?",opts:["Париж","Брюссель","Лондон","Берлин"],a:0,fact:"Эйфелева башня (1889 г., 330 м). Сначала планировали снести, но стала символом Парижа!"},
+{cat:"Города",diff:"hard",q:"В каком городе находится Биг-Бен?",opts:["Лондон","Эдинбург","Манчестер","Бирмингем"],a:0,fact:"Биг-Бен — колокол Вестминстерского дворца в Лондоне. Построен в 1859 году."},
+{cat:"Города",diff:"medium",q:"На какой реке стоит Париж?",opts:["Сена","Луара","Рона","Рейн"],a:0,fact:"Сена (775 км) протекает через центр Парижа. Река на 100 км короче Темзы!"},
+// ПОЛИТИКА
+{cat:"Политика",diff:"medium",q:"Штаб-квартира ООН находится в...",opts:["Нью-Йорке","Женеве","Вене","Лондоне"],a:0,fact:"Штаб-квартира ООН в Нью-Йорке, основана в 1945 году после Второй мировой войны."},
+{cat:"Политика",diff:"medium",q:"Сколько государств-членов в ООН?",opts:["193","195","190","200"],a:0,fact:"ООН — 193 государства-члена. Не входят: Ватикан, Тайвань, Косово и некоторые другие."},
+{cat:"Политика",diff:"medium",q:"Сколько постоянных членов в Совете Безопасности ООН?",opts:["5","7","6","10"],a:0,fact:"США, Великобритания, Франция, Россия и Китай. Только у них есть право вето!"},
+{cat:"Политика",diff:"hard",q:"Первая страна, предоставившая женщинам право голоса?",opts:["Новая Зеландия","Австралия","Финляндия","Норвегия"],a:0,fact:"Новая Зеландия — 1893 год. Россия — 1917, США — 1920, Швейцария — лишь 1971!"},
+{cat:"Политика",diff:"hard",q:"Аляска была куплена США у России в...",opts:["1867 году","1812 году","1898 году","1920 году"],a:0,fact:"США купили Аляску в 1867 году за 7,2 млн долларов (~2 цента за акр). Выгодная сделка!"},
+{cat:"Политика",diff:"medium",q:"Гонконг с 1997 года входит в состав...",opts:["Китая","Великобритании","Тайваня","Является независимым"],a:0,fact:"В 1997 году Великобритания передала Гонконг Китаю после 156 лет колониального управления."},
+{cat:"Политика",diff:"medium",q:"Сколько звёзд на флаге США?",opts:["50","48","52","51"],a:0,fact:"50 звёзд = 50 штатов. Последняя добавлена в 1960 г. (Гавайи). 13 полос = 13 колоний."},
+{cat:"Политика",diff:"hard",q:"Французская Гвиана является...",opts:["Регионом Франции","Независимой страной","Владением Бразилии","Протекторатом ООН"],a:0,fact:"Французская Гвиана — заморский регион Франции в Южной Америке. Здесь находится космодром Куру!"},
+{cat:"Политика",diff:"hard",q:"Панамский канал был передан Панаме США в...",opts:["1999 году","1977 году","1990 году","2000 году"],a:0,fact:"США управляли каналом с 1914 года. Передали Панаме 31 декабря 1999 года."},
+];
+
+// ══════════════════════════════════════════════════════════════════════════
+//  ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
+// ══════════════════════════════════════════════════════════════════════════
+function rnd(arr, n) { return [...arr].sort(() => Math.random()-.5).slice(0, n); }
+function rnde(arr, excl, n) { return rnd(arr.filter(x => !excl.includes(x)), n); }
+
+function fmtN(n) {
+  // Форматирование числа с разделителем тысяч (пробел)
+  return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '\u202F');
+}
+function fmtArea(km2) {
+  if (km2 >= 1000000) return (km2/1000000).toFixed(1).replace('.',',') + ' млн км²';
+  return fmtN(km2) + ' км²';
+}
+function fmtPop(popM) {
+  if (popM >= 100) return '~' + Math.round(popM) + ' млн';
+  if (popM >= 1)   return '~' + popM.toFixed(1).replace('.',',') + ' млн';
+  return '~' + Math.round(popM * 1000) + ' тыс.';
 }
 
-function saveUsedIds() {
-  try {
-    localStorage.setItem('shaker_quiz_used_ids', JSON.stringify([...gameState.usedIds]));
-  } catch(e) {}
-}
+// Вариации формулировок вопросов
+const QB = ["Какая из этих стран наибольшая по площади?",
+            "Найди самую крупную по территории страну:",
+            "Укажи страну с наибольшей площадью:",
+            "Какая страна занимает наибольшую территорию?"];
+const QS = ["Какая из этих стран наименьшая по площади?",
+            "Найди самую маленькую по территории страну:",
+            "Укажи наименьшую из этих стран:"];
+const QP = ["Какая из этих стран наиболее населённая?",
+            "В какой из этих стран живёт больше всего людей?",
+            "Найди самую населённую страну из предложенных:",
+            "Где проживает наибольшее население?"];
+const QL = ["Какая из этих стран наименее населённая?",
+            "В какой из этих стран живёт меньше всего людей?",
+            "Найди наименее населённую страну:"];
+const QH = ["Какая из этих гор самая высокая?",
+            "Укажи наивысшую горную вершину из списка:",
+            "Найди самую высокую гору:"];
+const QR = ["Какая из этих рек самая длинная?",
+            "Найди самую протяжённую реку:",
+            "Укажи наидлиннейшую реку:"];
 
-function getQuestionId(cat, index) { return cat + '_' + index; }
+// ══════════════════════════════════════════════════════════════════════════
+//  ГЕНЕРАТОР БАНКА
+// ══════════════════════════════════════════════════════════════════════════
+function buildBank() {
+  const bank = [];
+  const caps  = CTRY.map(c => c[2]);
+  const names = CTRY.map(c => c[0]);
 
-function getUnusedQuestions(cat) {
-  const questions = ALL_QUESTIONS[cat] || [];
-  const unused = [];
-  questions.forEach((q, i) => {
-    const id = getQuestionId(cat, i);
-    if (!gameState.usedIds.has(id)) {
-      unused.push({ question: q[0], answer: q[1], options: [q[1], q[2], q[3], q[4]], cat: cat, id: id });
+  // ── СТОЛИЦЫ: 3 типа ────────────────────────────────────────────────────
+  CTRY.forEach(c => {
+    const wc1 = rnde(caps, [c[2]], 3);
+    if (wc1.length===3) bank.push({cat:"Столицы",diff:c[6],
+      q:`Какая столица ${c[1]}?`,opts:[c[2],...wc1],a:0,
+      fact:`${c[2]} — столица ${c[0]}.`});
+
+    const wc2 = rnde(names, [c[0]], 3);
+    if (wc2.length===3) bank.push({cat:"Столицы",diff:c[6],
+      q:`${c[2]} — столица какой страны?`,opts:[c[0],...wc2],a:0,
+      fact:`${c[2]} — столица ${c[0]}.`});
+
+    const wc3 = rnde(CONTS, [c[3]], 3);
+    if (wc3.length===3) bank.push({cat:"Континенты",diff:c[6],
+      q:`На каком континенте находится ${c[0]}?`,opts:[c[3],...wc3],a:0,
+      fact:`${c[0]} расположена в регионе: ${c[3]}.`});
+  });
+
+  // ── РЕКОРДЫ: площадь (наибольшая) ──────────────────────────────────────
+  for (let i=0; i<180; i++) {
+    const four = rnd(CTRY,4);
+    const sh   = [...four].sort(()=>Math.random()-.5);
+    const w    = [...four].sort((a,b)=>b[4]-a[4])[0];
+    const wi   = sh.indexOf(w);
+    bank.push({cat:"Рекорды",diff:"medium",
+      q:QB[i%QB.length],opts:sh.map(c=>c[0]),a:wi,
+      fact:`${w[0]} — самая большая: ${fmtArea(w[4])}.`});
+  }
+
+  // ── РЕКОРДЫ: площадь (наименьшая) ──────────────────────────────────────
+  for (let i=0; i<100; i++) {
+    const four = rnd(CTRY,4);
+    const sh   = [...four].sort(()=>Math.random()-.5);
+    const w    = [...four].sort((a,b)=>a[4]-b[4])[0];
+    const wi   = sh.indexOf(w);
+    bank.push({cat:"Рекорды",diff:"hard",
+      q:QS[i%QS.length],opts:sh.map(c=>c[0]),a:wi,
+      fact:`${w[0]} — наименьшая: ${fmtArea(w[4])}.`});
+  }
+
+  // ── РЕКОРДЫ: точная площадь страны ─────────────────────────────────────
+  CTRY.filter(c=>c[4]>5000).forEach(c=>{
+    const real = fmtArea(c[4]);
+    const factors = [0.25,0.4,0.6,0.75,1.6,2.5,4].sort(()=>Math.random()-.5);
+    const wrongs  = [];
+    for (const f of factors) {
+      if (wrongs.length>=3) break;
+      let w = Math.round(c[4]*f);
+      if (w>=1000000) w=Math.round(w/100000)*100000;
+      else if (w>=100000) w=Math.round(w/10000)*10000;
+      else if (w>=10000)  w=Math.round(w/1000)*1000;
+      else w=Math.round(w/500)*500;
+      const ws = fmtArea(w);
+      if (ws!==real && !wrongs.includes(ws)) wrongs.push(ws);
+    }
+    if (wrongs.length<3) return;
+    const templates = [
+      `Какова площадь ${c[1]}?`,
+      `Территория ${c[0]} составляет примерно...`,
+      `Сколько км² занимает ${c[0]}?`,
+    ];
+    bank.push({cat:"Рекорды",diff:c[6],
+      q:templates[Math.floor(Math.random()*templates.length)],
+      opts:[real,...wrongs],a:0,
+      fact:`Площадь ${c[0]} — ${real}.`});
+  });
+
+  // ── НАСЕЛЕНИЕ: наибольшее ──────────────────────────────────────────────
+  for (let i=0; i<150; i++) {
+    const four = rnd(CTRY,4);
+    const sh   = [...four].sort(()=>Math.random()-.5);
+    const w    = [...four].sort((a,b)=>b[5]-a[5])[0];
+    const wi   = sh.indexOf(w);
+    bank.push({cat:"Население",diff:"medium",
+      q:QP[i%QP.length],opts:sh.map(c=>c[0]),a:wi,
+      fact:`${w[0]} — ${fmtPop(w[5])}, самая населённая.`});
+  }
+
+  // ── НАСЕЛЕНИЕ: наименьшее ──────────────────────────────────────────────
+  for (let i=0; i<80; i++) {
+    const four = rnd(CTRY,4);
+    const sh   = [...four].sort(()=>Math.random()-.5);
+    const w    = [...four].sort((a,b)=>a[5]-b[5])[0];
+    const wi   = sh.indexOf(w);
+    bank.push({cat:"Население",diff:"hard",
+      q:QL[i%QL.length],opts:sh.map(c=>c[0]),a:wi,
+      fact:`${w[0]} — ${fmtPop(w[5])}, наименее населённая.`});
+  }
+
+  // ── НАСЕЛЕНИЕ: плотность ──────────────────────────────────────────────
+  for (let i=0; i<60; i++) {
+    const four = rnd(CTRY.filter(c=>c[4]>100),4);
+    const sh   = [...four].sort(()=>Math.random()-.5);
+    const w    = [...four].sort((a,b)=>(b[5]*1e6/b[4])-(a[5]*1e6/a[4]))[0];
+    const wi   = sh.indexOf(w);
+    const dens = Math.round(w[5]*1e6/w[4]);
+    bank.push({cat:"Население",diff:"hard",
+      q:"В какой из этих стран самая высокая плотность населения?",
+      opts:sh.map(c=>c[0]),a:wi,
+      fact:`${w[0]} — плотность ~${fmtN(dens)} чел/км².`});
+  }
+
+  // ── НАСЕЛЕНИЕ: точная численность ─────────────────────────────────────
+  CTRY.filter(c=>c[5]>=1).forEach(c=>{
+    const real = fmtPop(c[5]);
+    const factors=[0.3,0.5,0.7,2,3,5].sort(()=>Math.random()-.5);
+    const wrongs=[];
+    for (const f of factors) {
+      if (wrongs.length>=3) break;
+      const ws = fmtPop(c[5]*f);
+      if (ws!==real && !wrongs.includes(ws)) wrongs.push(ws);
+    }
+    if (wrongs.length<3) return;
+    const q = [`Сколько человек живёт в ${c[1]}?`,
+               `Численность населения ${c[0]} составляет примерно...`,
+               `Население ${c[0]}:`][Math.floor(Math.random()*3)];
+    bank.push({cat:"Население",diff:c[6],q,opts:[real,...wrongs],a:0,
+      fact:`В ${c[0]} проживает ${real} человек.`});
+  });
+
+  // ── КОНТИНЕНТЫ: НЕ в этом регионе ────────────────────────────────────
+  CONTS.forEach(cont=>{
+    const inC = CTRY.filter(c=>c[3]===cont);
+    const outC= CTRY.filter(c=>c[3]!==cont);
+    for (let i=0;i<30;i++){
+      if (inC.length<3||outC.length<1) break;
+      const out=rnd(outC,1)[0], ins=rnd(inC,3);
+      const sh=[out,...ins].sort(()=>Math.random()-.5);
+      const wi=sh.indexOf(out);
+      bank.push({cat:"Континенты",diff:"medium",
+        q:`Какая из этих стран НЕ находится в регионе «${cont}»?`,
+        opts:sh.map(c=>c[0]),a:wi,
+        fact:`${out[0]} — ${out[3]}, а не ${cont}.`});
     }
   });
-  return unused;
-}
 
-function shuffleArray(arr) {
-  const a = [...arr];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
-}
-
-function selectQuestions() {
-  let selected = [];
-  const basePerCat = Math.floor(TOTAL_QUESTIONS_PER_GAME / CATEGORIES.length);
-  let extraNeeded = TOTAL_QUESTIONS_PER_GAME - basePerCat * CATEGORIES.length;
-
-  for (let cat of CATEGORIES) {
-    const unused = getUnusedQuestions(cat);
-    if (unused.length === 0) continue;
-    const count = basePerCat + (extraNeeded > 0 ? 1 : 0);
-    const shuffled = shuffleArray(unused);
-    const toPick = shuffled.slice(0, Math.min(count, shuffled.length));
-    selected.push(...toPick);
-    if (extraNeeded > 0) extraNeeded--;
-  }
-
-  while (selected.length < TOTAL_QUESTIONS_PER_GAME) {
-    const availableCats = CATEGORIES.filter(c => getUnusedQuestions(c).length > 0);
-    if (availableCats.length === 0) break;
-    const cat = availableCats[Math.floor(Math.random() * availableCats.length)];
-    const unused = getUnusedQuestions(cat);
-    selected.push(unused[Math.floor(Math.random() * unused.length)]);
-  }
-
-  return shuffleArray(selected);
-}
-
-function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-}
-
-function showToast(msg) {
-  const toast = document.createElement('div');
-  toast.style.cssText = 'position:fixed;top:20px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.85);backdrop-filter:blur(10px);border-radius:10px;padding:10px 20px;font-size:14px;font-weight:600;z-index:1000;transition:transform 0.3s;white-space:nowrap;';
-  toast.textContent = msg;
-  document.body.appendChild(toast);
-  setTimeout(() => { toast.style.transform = 'translateX(-50%) translateY(-100px)'; setTimeout(() => toast.remove(), 300); }, 2500);
-}
-
-function updateMenuStats() {
-  let total = 0;
-  for (let cat of CATEGORIES) total += (ALL_QUESTIONS[cat] || []).length;
-  const used = gameState.usedIds.size;
-  const available = Math.max(0, total - used);
-  document.getElementById('total-played').textContent = Math.floor(used / TOTAL_QUESTIONS_PER_GAME);
-  document.getElementById('total-answered').textContent = used;
-  document.getElementById('total-available').textContent = available + '+';
-}
-
-function showMenu() {
-  updateMenuStats();
-  showScreen('screen-menu');
-}
-
-function startGame() {
-  const total = CATEGORIES.reduce((s,c)=>s+(ALL_QUESTIONS[c]||[]).length, 0);
-  const used = gameState.usedIds.size;
-  if (total - used < TOTAL_QUESTIONS_PER_GAME) {
-    showToast('⚠️ Все вопросы использованы! Сбросьте прогресс.');
-    return;
-  }
-
-  gameState.currentQuestions = selectQuestions();
-  gameState.currentIndex = 0;
-  gameState.score = 0;
-  gameState.correctCount = 0;
-  gameState.wrongCount = 0;
-  gameState.gameStarted = true;
-  gameState.answered = false;
-
-  gameState.currentQuestions.forEach(q => gameState.usedIds.add(q.id));
-  saveUsedIds();
-
-  showScreen('screen-quiz');
-  renderQuestion();
-}
-
-function renderQuestion() {
-  const q = gameState.currentQuestions[gameState.currentIndex];
-  const idx = gameState.currentIndex;
-  const total = gameState.currentQuestions.length;
-
-  document.getElementById('quiz-progress').textContent = `${idx + 1} / ${total}`;
-  document.getElementById('live-score').textContent = gameState.score;
-  document.getElementById('progress-fill').style.width = `${((idx + 1) / total) * 100}%`;
-
-  const emoji = CAT_EMOJIS[q.cat] || '📍';
-  document.getElementById('category-badge').innerHTML = `${emoji} ${q.cat}`;
-  document.getElementById('question-number').textContent = `Вопрос ${idx + 1} из ${total}`;
-  document.getElementById('question-text').textContent = q.question;
-
-  const shuffledOptions = shuffleArray(q.options);
-  const letters = ['A', 'B', 'C', 'D'];
-  const optionsHtml = shuffledOptions.map((opt, i) => `
-    <button class="option-btn" data-selected="${opt}" data-correct="${q.answer}">
-      <span class="option-letter">${letters[i]}</span>
-      <span>${opt}</span>
-    </button>
-  `).join('');
-
-  document.getElementById('options-list').innerHTML = optionsHtml;
-  document.getElementById('comment-area').innerHTML = '';
-  document.getElementById('next-btn').style.display = 'none';
-  gameState.answered = false;
-
-  document.getElementById('question-card').style.animation = 'none';
-  setTimeout(() => document.getElementById('question-card').style.animation = 'slideIn 0.3s ease', 10);
-}
-
-document.getElementById('options-list').addEventListener('click', (e) => {
-  const btn = e.target.closest('.option-btn');
-  if (!btn || gameState.answered) return;
-
-  gameState.answered = true;
-  const selected = btn.dataset.selected;
-  const correct = btn.dataset.correct;
-  const isCorrect = selected === correct;
-
-  // Найти кнопку с правильным ответом
-  const correctBtn = [...document.querySelectorAll('.option-btn')].find(b => b.dataset.correct === correct);
-  
-  // Отключить все кнопки
-  document.querySelectorAll('.option-btn').forEach(b => {
-    b.classList.add('disabled');
-    // Если это правильный ответ — подсветить зелёным
-    if (b.dataset.correct === correct) {
-      b.classList.add('correct');
-    }
+  // ── ГОРЫ ─────────────────────────────────────────────────────────────
+  const mtLocs = [...new Set(MNTS.map(m=>m[1]))];
+  MNTS.forEach(m=>{
+    const wl = rnde(mtLocs,[m[1]],3);
+    if (wl.length>=3) bank.push({cat:"Горы",diff:m[4],
+      q:`Где находится гора ${m[0]}?`,opts:[m[1],...wl.slice(0,3)],a:0,
+      fact:`${m[0]} (${fmtN(m[3])} м) расположена в ${m[1]}.`});
+    const wc=rnde(CONTS,[m[2]],3);
+    if (wc.length===3) bank.push({cat:"Горы",diff:m[4],
+      q:`На каком континенте находится гора ${m[0]}?`,opts:[m[2],...wc],a:0,
+      fact:`${m[0]} (${fmtN(m[3])} м) — ${m[2]}.`});
   });
-  
-  // Если игрок выбрал неверно — его кнопка красная
-  if (!isCorrect) {
-    btn.classList.add('wrong');
+  for (let i=0;i<80;i++){
+    const four=rnd(MNTS,4), sh=[...four].sort(()=>Math.random()-.5);
+    const w=[...four].sort((a,b)=>b[3]-a[3])[0], wi=sh.indexOf(w);
+    bank.push({cat:"Горы",diff:"hard",
+      q:QH[i%QH.length],opts:sh.map(m=>m[0]),a:wi,
+      fact:`${w[0]} — ${fmtN(w[3])} м, самая высокая.`});
   }
 
-  // Обновить счёт
-  if (isCorrect) { gameState.score++; gameState.correctCount++; }
-  else { gameState.wrongCount++; }
-  document.getElementById('live-score').textContent = gameState.score;
-
-  // Показать комментарий с фактом
-  const fact = getFact(correct);
-  const commentPool = isCorrect ? correctComments : wrongComments;
-  const joke = commentPool[Math.floor(Math.random() * commentPool.length)];
-  const commentClass = isCorrect ? 'correct-comment' : 'wrong-comment';
-  
-  document.getElementById('comment-area').innerHTML = `
-    <div class="comment-box ${commentClass}">
-      <div class="comment-title">
-        ${isCorrect ? '✅ Верно!' : '❌ Неверно. Правильный ответ: ' + correct}
-      </div>
-      <div class="comment-text">${fact}</div>
-      ${!isCorrect ? `<div style="margin-top:6px;font-size:12px;opacity:0.8">💡 ${joke}</div>` : ''}
-    </div>
-  `;
-  
-  document.getElementById('next-btn').style.display = 'block';
-});
-
-function nextQuestion() {
-  gameState.currentIndex++;
-  if (gameState.currentIndex >= gameState.currentQuestions.length) {
-    endGame();
-    return;
+  // ── РЕКИ ─────────────────────────────────────────────────────────────
+  const rvMouths=[...new Set(RVRS.map(r=>r[3]))];
+  RVRS.forEach(r=>{
+    const wc=rnde(CONTS,[r[1]],3);
+    if (wc.length===3) bank.push({cat:"Реки",diff:r[4],
+      q:`На каком континенте протекает река ${r[0]}?`,opts:[r[1],...wc],a:0,
+      fact:`${r[0]} (${fmtN(r[2])} км) протекает в ${r[1]}.`});
+    const wm=rnde(rvMouths,[r[3]],3);
+    if (wm.length>=3) bank.push({cat:"Реки",diff:r[4],
+      q:`Куда впадает река ${r[0]}?`,opts:[r[3],...wm.slice(0,3)],a:0,
+      fact:`${r[0]} (${fmtN(r[2])} км) впадает в ${r[3]}.`});
+  });
+  for (let i=0;i<80;i++){
+    const four=rnd(RVRS,4), sh=[...four].sort(()=>Math.random()-.5);
+    const w=[...four].sort((a,b)=>b[2]-a[2])[0], wi=sh.indexOf(w);
+    bank.push({cat:"Реки",diff:"medium",
+      q:QR[i%QR.length],opts:sh.map(r=>r[0]),a:wi,
+      fact:`${w[0]} — ${fmtN(w[2])} км, самая длинная.`});
   }
-  renderQuestion();
+
+  // ── ОЗЁРА ────────────────────────────────────────────────────────────
+  const lkLocs=[...new Set(LKES.map(l=>l[1]))];
+  LKES.forEach(l=>{
+    const wl=rnde(lkLocs,[l[1]],3);
+    if (wl.length>=3) bank.push({cat:"Озёра",diff:l[4],
+      q:`Где находится озеро ${l[0]}?`,opts:[l[1],...wl.slice(0,3)],a:0,
+      fact:`Озеро ${l[0]} — ${l[1]}. Площадь: ${fmtN(l[3])} км².`});
+  });
+  for (let i=0;i<50;i++){
+    const four=rnd(LKES,4), sh=[...four].sort(()=>Math.random()-.5);
+    const w=[...four].sort((a,b)=>b[3]-a[3])[0], wi=sh.indexOf(w);
+    bank.push({cat:"Озёра",diff:"medium",
+      q:"Какое из этих озёр самое большое по площади?",
+      opts:sh.map(l=>l[0]),a:wi,
+      fact:`${w[0]} — ${fmtN(w[3])} км², самое большое.`});
+  }
+
+  // ── ОСТРОВА ──────────────────────────────────────────────────────────
+  const oceans=["Тихий океан","Атлантический океан","Индийский океан","Северный Ледовитый океан","Средиземное море","Карибское море"];
+  ISLS.forEach(i=>{
+    const wn=rnde(names,[i[1]],3);
+    if (wn.length===3) bank.push({cat:"Острова",diff:i[3],
+      q:`Кому принадлежит ${i[0]}?`,opts:[i[1],...wn],a:0,
+      fact:`${i[0]} принадлежит ${i[1]}.`});
+    const wo=rnde(oceans,[i[2]],3);
+    if (wo.length===3) bank.push({cat:"Острова",diff:i[3],
+      q:`В каком океане/море расположен ${i[0]}?`,opts:[i[2],...wo],a:0,
+      fact:`${i[0]} — ${i[2]}.`});
+  });
+
+  // ── ПУСТЫНИ ──────────────────────────────────────────────────────────
+  const allContsD=[...CONTS,"Антарктида"];
+  DSRT.forEach(d=>{
+    const wc=rnde(allContsD,[d[1]],3);
+    if (wc.length===3) bank.push({cat:"Пустыни",diff:d[4],
+      q:`На каком континенте находится пустыня ${d[0]}?`,opts:[d[1],...wc],a:0,
+      fact:`${d[0]} — ${d[3]} пустыня в ${d[1]}, ~${fmtN(d[2])} км².`});
+  });
+  for (let i=0;i<40;i++){
+    const four=rnd(DSRT,4), sh=[...four].sort(()=>Math.random()-.5);
+    const w=[...four].sort((a,b)=>b[2]-a[2])[0], wi=sh.indexOf(w);
+    bank.push({cat:"Пустыни",diff:"hard",
+      q:"Какая из этих пустынь самая большая по площади?",
+      opts:sh.map(d=>d[0]),a:wi,
+      fact:`${w[0]} — ~${fmtN(w[2])} км², самая большая.`});
+  }
+
+  // ── ХАРДКОДНЫЕ ──────────────────────────────────────────────────────
+  bank.push(...FIXED);
+  return bank;
 }
 
-function endGame() {
-  const total = gameState.currentQuestions.length;
-  const pct = Math.round((gameState.score / total) * 100);
-  let emoji, title, subtitle;
-  if (pct >= 90) { emoji='🏆'; title='Невероятно!'; subtitle='Ты настоящий географ!'; }
-  else if (pct >= 70) { emoji='🌟'; title='Отлично!'; subtitle='Знания на высоте!'; }
-  else if (pct >= 50) { emoji='😊'; title='Неплохо!'; subtitle='Есть куда расти!'; }
-  else if (pct >= 30) { emoji='🤔'; title='Можно лучше!'; subtitle='Почитай атлас на досуге!'; }
-  else { emoji='📚'; title='Время учиться!'; subtitle='География ждёт тебя!'; }
+// ══════════════════════════════════════════════════════════════════════════
+//  ЧЕРЕДОВАНИЕ КАТЕГОРИЙ
+// ══════════════════════════════════════════════════════════════════════════
+function buildRotatedPool(bank) {
+  const byCat = {};
+  CAT_ORDER.forEach(c => byCat[c] = []);
+  bank.forEach(q => { if (byCat[q.cat]) byCat[q.cat].push(q); });
+  CAT_ORDER.forEach(c => byCat[c].sort(() => Math.random()-.5));
 
-  document.getElementById('results-emoji').textContent = emoji;
-  document.getElementById('results-title').textContent = title;
-  document.getElementById('results-subtitle').textContent = subtitle;
-  document.getElementById('results-score-big').textContent = `${gameState.score}/${total}`;
-  document.getElementById('results-detail').textContent = `Точность: ${pct}%`;
-  document.getElementById('res-correct').textContent = gameState.correctCount;
-  document.getElementById('res-wrong').textContent = gameState.wrongCount;
-
-  showScreen('screen-results');
-  if (pct >= 70) launchConfetti();
+  const picked = [];
+  let ci = 0;
+  while (picked.length < GAME_SIZE) {
+    let added = false;
+    for (let t = 0; t < CAT_ORDER.length; t++) {
+      const cat = CAT_ORDER[(ci+t) % CAT_ORDER.length];
+      if (byCat[cat] && byCat[cat].length > 0) {
+        picked.push(byCat[cat].pop());
+        ci = (CAT_ORDER.indexOf(cat)+1) % CAT_ORDER.length;
+        added = true;
+        break;
+      }
+    }
+    if (!added) break;
+  }
+  return picked.reverse(); // reverse: pop() даёт вопросы в порядке категорий
 }
 
-function launchConfetti() {
-  const colors = ['#f5576c','#ffd200','#43e97b','#4facfe','#f093fb','#fa709a'];
-  for (let i = 0; i < 30; i++) {
-    setTimeout(() => {
-      const piece = document.createElement('div');
-      piece.className = 'confetti-piece';
-      piece.style.left = Math.random() * 100 + 'vw';
-      piece.style.background = colors[Math.floor(Math.random() * colors.length)];
-      piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
-      piece.style.width = (Math.random() * 6 + 6) + 'px';
-      piece.style.height = (Math.random() * 6 + 6) + 'px';
-      document.body.appendChild(piece);
-      setTimeout(() => piece.remove(), 1500);
-    }, i * 40);
+// ══════════════════════════════════════════════════════════════════════════
+//  ИГРОВАЯ ЛОГИКА
+// ══════════════════════════════════════════════════════════════════════════
+const GAME_SIZE = 50;
+let pool=[], current=null, answered=false;
+let correct=0, wrong=0, streak=0, bestStreak=0, bankSize=0;
+
+// PWA
+let deferredPrompt=null;
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;document.getElementById('banner').classList.add('on');});
+function installPWA(){if(!deferredPrompt)return;deferredPrompt.prompt();deferredPrompt.userChoice.then(()=>{deferredPrompt=null;closeBanner();});}
+function closeBanner(){document.getElementById('banner').classList.remove('on');}
+if('serviceWorker'in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
+
+// Shake detection
+let lx=null,ly=null,lz=null,shLock=null;
+function enableMotion(){
+  if(typeof DeviceMotionEvent!=='undefined'&&typeof DeviceMotionEvent.requestPermission==='function'){
+    DeviceMotionEvent.requestPermission().then(r=>{if(r==='granted')window.addEventListener('devicemotion',onMotion);}).catch(()=>{});
+  }else{window.addEventListener('devicemotion',onMotion);}
+}
+function onMotion(e){
+  const a=e.accelerationIncludingGravity;if(!a)return;
+  const {x,y,z}=a;
+  if(lx===null){lx=x;ly=y;lz=z;return;}
+  const d=Math.abs(x-lx)+Math.abs(y-ly)+Math.abs(z-lz);
+  lx=x;ly=y;lz=z;
+  if(d>17&&!shLock){shLock=setTimeout(()=>shLock=null,1000);handleBtn();}
+}
+document.getElementById('cupWrap').addEventListener('click',enableMotion,{once:true});
+const vib=p=>{if('vibrate'in navigator)navigator.vibrate(p);};
+
+function initPool(){
+  const bank=buildBank();
+  bankSize=bank.length;
+  document.getElementById('bankBadge').textContent=`📚 ${fmtN(bankSize)} вопросов`;
+  pool=buildRotatedPool(bank);
+}
+
+function restart(){
+  correct=wrong=streak=bestStreak=0;
+  answered=false;current=null;
+  initPool();updateUI();
+  document.getElementById('overlay').classList.remove('on');
+  document.getElementById('empty').style.display='block';
+  document.getElementById('qc').style.display='none';
+  setBtn('🎰 Потрясти!',false);
+  document.getElementById('hint').textContent='Нажми на кубик или потряси телефон!';
+  document.getElementById('catInd').textContent='🎲 Потряси, чтобы начать!';
+}
+
+function updateUI(){
+  document.getElementById('sv0').textContent=correct;
+  document.getElementById('sv1').textContent=wrong;
+  document.getElementById('sv2').textContent=streak;
+  const done=GAME_SIZE-pool.length;
+  const pct=Math.round(done/GAME_SIZE*100);
+  document.getElementById('pf').style.width=pct+'%';
+  document.getElementById('plbl1').textContent=`${done} / ${GAME_SIZE}`;
+  document.getElementById('plbl2').textContent=pct+'%';
+}
+function setBtn(txt,dis){const b=document.getElementById('mbtn');b.textContent=txt;b.disabled=dis;}
+
+function handleBtn(){
+  const btn=document.getElementById('mbtn');
+  if(btn.disabled)return;
+  if(answered){
+    if(pool.length===0){showResults();return;}
+    answered=false;doShake();
+  }else{
+    if(pool.length===0){showResults();return;}
+    doShake();
   }
 }
 
-function resetProgress() {
-  if (confirm('Сбросить весь прогресс? Все вопросы снова станут доступны.')) {
-    gameState.usedIds = new Set();
-    saveUsedIds();
-    updateMenuStats();
-    showToast('🗑 Прогресс сброшен!');
+function doShake(){
+  const cup=document.getElementById('cup'), ring=document.getElementById('ring');
+  setBtn('🎰 Потрясти!',true);
+  vib([25,15,40]);
+  cup.classList.remove('sh');ring.classList.remove('pulse');
+  void cup.offsetWidth;
+  cup.classList.add('sh');ring.classList.add('pulse');
+  setTimeout(()=>{
+    cup.classList.remove('sh');ring.classList.remove('pulse');
+    showQuestion();
+    setBtn('🎰 Потрясти!',false);
+  },800);
+}
+
+// Иконки категорий
+const CAT_ICONS={
+  "Столицы":"🏛️","Континенты":"🗺️","Рекорды":"🏆","Население":"👥",
+  "Горы":"⛰️","Реки":"🌊","Озёра":"💧","Острова":"🏝️",
+  "Пустыни":"🏜️","Флаги":"🚩","Природа":"🌿","Города":"🏙️","Политика":"⚖️"
+};
+
+function showQuestion(){
+  current=pool.pop();
+  answered=false;
+  updateUI();
+
+  // Обновляем индикатор категории
+  const icon=CAT_ICONS[current.cat]||'🌍';
+  document.getElementById('catInd').textContent=`${icon} Категория: ${current.cat}`;
+
+  document.getElementById('empty').style.display='none';
+  document.getElementById('qc').style.display='block';
+  document.getElementById('fb').className='fb';
+  document.getElementById('fb').textContent='';
+  document.getElementById('hint').textContent='↑ Потряси для следующего вопроса';
+
+  document.getElementById('qcat').textContent=icon+' '+current.cat;
+  const de=document.getElementById('qdiff');
+  const dm={easy:['easy','⭐ Лёгкий'],medium:['medium','⭐⭐ Средний'],hard:['hard','⭐⭐⭐ Сложный']};
+  de.className='dtag '+dm[current.diff][0];
+  de.textContent=dm[current.diff][1];
+  document.getElementById('qtext').textContent=current.q;
+
+  // Перетасовываем варианты, сохраняя правильный ответ
+  const origOpts=[...current.opts];
+  const sh=[...origOpts].sort(()=>Math.random()-.5);
+  const correctText=current.opts[current.a];
+  const newA=sh.indexOf(correctText);
+
+  const og=document.getElementById('opts');
+  og.innerHTML='';
+  sh.forEach((txt,idx)=>{
+    const b=document.createElement('button');
+    b.className='opt';b.textContent=txt;b.dataset.i=idx;
+    b.onclick=()=>pick(b,idx,newA);
+    og.appendChild(b);
+  });
+
+  const card=document.getElementById('card');
+  card.className='card new';
+  setTimeout(()=>card.className='card',400);
+  document.querySelector('.card-wrap').scrollTop=0;
+}
+
+function pick(btn,idx,correctIdx){
+  if(answered)return;
+  answered=true;
+  document.querySelectorAll('.opt').forEach(b=>b.disabled=true);
+  const ok=idx===correctIdx;
+  const fb=document.getElementById('fb');
+  if(ok){
+    btn.classList.add('ok');
+    correct++;streak++;
+    if(streak>bestStreak)bestStreak=streak;
+    fb.className='fb ok on';
+    fb.textContent='✅ '+current.fact;
+    vib([40,20,70]);
+    if(streak>=3){showBadge('🔥 Серия × '+streak+'!');confetti();}
+  }else{
+    btn.classList.add('no');
+    wrong++;streak=0;
+    fb.className='fb no on';
+    fb.textContent='❌ Верно: «'+current.opts[current.a]+'». '+current.fact;
+    vib([90,40,90]);
+    document.querySelectorAll('.opt').forEach(b=>{if(+b.dataset.i===correctIdx)b.classList.add('ok');});
+  }
+  updateUI();
+  setBtn(pool.length===0?'🏆 Результаты':'➡️ Следующий вопрос',false);
+}
+
+function showBadge(txt){
+  const b=document.getElementById('sbadge');
+  b.textContent=txt;b.className='sbadge';
+  void b.offsetWidth;b.className='sbadge pop';
+}
+
+function showResults(){
+  const tot=correct+wrong;
+  const pct=tot?Math.round(correct/tot*100):0;
+  const score=Math.max(0,correct*10-wrong*3);
+  let e='😅',t='Не сдавайся!';
+  if(pct>=90){e='🏆';t='Ты — гений географии!';}
+  else if(pct>=75){e='🥇';t='Отличный результат!';}
+  else if(pct>=60){e='🌍';t='Хорошая работа!';}
+  else if(pct>=40){e='🗺️';t='Есть куда расти!';}
+  document.getElementById('re').textContent=e;
+  document.getElementById('rt').textContent=t;
+  document.getElementById('rs').textContent=`Пройдено: ${tot} вопросов из ${GAME_SIZE}`;
+  document.getElementById('rscore').textContent=score;
+  document.getElementById('rpct').textContent=pct+'%';
+  document.getElementById('rbest').textContent=bestStreak;
+  document.getElementById('overlay').classList.add('on');
+  if(pct>=60){vib([50,30,50,30,100]);confetti(50);}
+}
+
+function confetti(n=22){
+  const cl=['#ffd166','#4dffb0','#ff6b6b','#aad4f5','#f7971e','#fff','#c77dff'];
+  for(let i=0;i<n;i++){
+    setTimeout(()=>{
+      const el=document.createElement('div');
+      el.className='conf';
+      el.style.cssText=`left:${Math.random()*100}vw;top:-12px;`+
+        `width:${Math.random()*8+5}px;height:${Math.random()*8+5}px;`+
+        `background:${cl[Math.floor(Math.random()*cl.length)]};`+
+        `animation-duration:${Math.random()*2+1.5}s;`+
+        `animation-delay:${Math.random()*.4}s;`+
+        `border-radius:${Math.random()>.5?'50%':'3px'};`;
+      document.body.appendChild(el);
+      setTimeout(()=>el.remove(),3200);
+    },i*55);
   }
 }
 
-window.addEventListener('DOMContentLoaded', () => {
-  loadUsedIds();
-  updateMenuStats();
-});
-document.addEventListener('dblclick', e => e.preventDefault());
+document.addEventListener('touchmove',e=>{if(e.touches.length===1)e.preventDefault();},{passive:false});
+initPool();
+updateUI();
 </script>
 </body>
 </html>
